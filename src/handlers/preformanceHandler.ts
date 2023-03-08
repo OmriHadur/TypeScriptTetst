@@ -1,6 +1,6 @@
 import IRequest from "../mediator/interfaces/request";
 import Result from "../mediator/Data/result";
-import Stopwatch from "../mediator/Data/stopwatch";
+import Stopwatch from "../general/stopwatch";
 import IMediator from "../mediator/interfaces/mediator";
 import IRequestHandler from "../mediator/interfaces/requestHandler";
 

@@ -7,6 +7,8 @@ import TestUnitMessege from "./messeges/testUnitMessege";
 import Unit from "./mediator/Data/unit";
 const filesFolder = './dist/handlers';
 const requireFolder = '../handlers/';
+const functionsFoler = './dist/functions';
+const reqFolder = "../functions/";
 
 const a = async () => {
     const messegesHandlers = await getMessegesHandlers(filesFolder, requireFolder);

@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import Dictionary from './Data/dictionary';
+import Dictionary from '../general/dictionary';
 
 export default async function (handlersFolder: string, requireFolder: string): Promise<Dictionary<any[]>> {
     const messegesHandlers = new Dictionary<any[]>();

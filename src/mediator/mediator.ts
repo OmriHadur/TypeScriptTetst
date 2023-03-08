@@ -1,6 +1,6 @@
-import Dictionary from "./Data/dictionary";
 import IRequest from "./interfaces/request";
 import Result from "./Data/result";
+import Dictionary from "../general/dictionary";
 
 export default class Mediator {
     handlers: Dictionary<any>;

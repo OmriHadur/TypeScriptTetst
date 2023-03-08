@@ -1,6 +1,6 @@
 import IMediator from "./interfaces/mediator";
 import { HandlingPriority } from "./handlingPriority";
-import Dictionary from "./Data/dictionary";
+import Dictionary from "../general/dictionary"
 
 export default async function (messegesHandlers: Dictionary<any[]>) {
     const generalHandlers = messegesHandlers["*"];

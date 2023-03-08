@@ -1,0 +1,62 @@
+{
+    "types": {
+        "create": {
+            "email": "string",
+            "password": "string",
+            "name": "string"
+        },
+        "alter": {
+            "password": "string",
+            "name": "string"
+        },
+        "entity": {
+            "email": "string",
+            "name": "string",
+            "hashedPassword": "string",
+            "createdAt": "date",
+            "alteredAt": "date"
+        },
+        "resource": {
+            "id": "string",
+            "email": "string",
+            "name": "string",
+            "token": "string"
+        }
+    },
+    "mapping": {
+        "createToEntity": {
+            "hashedPassword": "encrypt(input.password)",
+            "createdAt": "now()",
+            "alteredAt": "now()"
+        },
+        "alterToEntity": {
+            "hashedPassword": "encrypt(input.password)",
+            "alteredAt": "now()"
+        },
+        "toResource": {
+            "id": "input._id",
+            "token": "createToken(input)"
+        }
+    },
+    "validations": {
+        "create": {
+            "email": {
+                "isRequired": true,
+                "isValidEmail": true,
+                "isUserExist": "!(await Users.findOne({email:input.email}))"
+            },
+            "password": {
+                "isRequired": true,
+                "hasMinimumLength": 5,
+                "hasUpperCase": true
+            }
+        },
+        "alter": {
+            "password": {
+                "isRequired": true,
+                "hasMinimumLength": 5,
+                "hasUpperCase": true
+            }
+        }
+    }
+}
