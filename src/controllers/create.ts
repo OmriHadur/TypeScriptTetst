@@ -1,16 +1,13 @@
-import ValidationError from "../Errors/validationError";
+import ApiDefinition from "../data/apiDefinition";
+import IMediator from "../mediator/interfaces/mediator";
+import CreateResourceRequest from "../messeges/createResourceRequest";
 
-export default function (api: any) {
+export default function (api: ApiDefinition, mediator: IMediator) {
     return async (req: any, res: any, next: any) => {
-        const errors = await api.validateCreate(req.body);
-        if (errors.length > 0)
-            next(new ValidationError(errors));
-        else {
-            const entityData = await api.mapCreateToEntity(req.body);
-            let entity = new api.module(entityData);
-            entity = await entity.save();
-            const resource = await api.mapEntityToResource(entity);
-            res.status(201).json(resource);
-        }
+        const result = await mediator.send(new CreateResourceRequest(api, req.body));
+        if (result.isSuccess())
+            res.status(201).json(result.value);
+        else
+            next(result.errors);
     }
 }

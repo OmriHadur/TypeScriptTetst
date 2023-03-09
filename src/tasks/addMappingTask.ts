@@ -15,6 +15,11 @@ export default function (apiDefinitions: ApiDefinition[]) {
         const resourceScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.toResource);
         apiDefinition.mapEntityToResource =
             (entity: any) => map(entity, apiDefinition.types.resource, resourceScripts);
+
+        apiDefinition.mapEntitiesToResources = async (entities: any[]) => {
+            const resourceMapping = entities.map(async (entity: any) => await apiDefinition.mapEntityToResource(entity));
+            return await Promise.all(resourceMapping);
+        }
     });
 }
 

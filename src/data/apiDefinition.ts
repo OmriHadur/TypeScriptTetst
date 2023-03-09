@@ -11,6 +11,7 @@ export default class ApiDefinition {
     mapCreateToEntity?: any;
     mapAlterToEntity?: any;
     mapEntityToResource?: any;
+    mapEntitiesToResources?: any;
     validateCreate?: any;
     validateReplace?: any;
     validateUpdate?: any;

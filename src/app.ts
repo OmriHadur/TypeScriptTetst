@@ -7,19 +7,30 @@ import { init } from "./helpers/apisContext";
 import addAllRoutes from "./tasks/addAllRoutesTask";
 import addMappingTask from "./tasks/addMappingTask";
 import addValidationsTask from "./tasks/addValidationsTask";
+import getMessegesHandlers from "./mediator/getMessegesHandlers";
+import getMessegesHandling from "./mediator/getMessegesHandling";
+import Mediator from "./mediator/mediator";
 
-const functionsFolder = './dist/functions';
-const functionsImportFolder = "../functions/";
+const asyncFunction = async () => {
+    const functionsFolder = './dist/functions';
+    const functionsImportFolder = "../functions/";
+    const filesFolder = './dist/handlers';
+    const requireFolder = '../handlers/';
 
-const apiDefinitions = apiDefinitionsFactory("Api/");
-init(apiDefinitions, functionsFolder, functionsImportFolder).then(() => {
+    const apiDefinitions = apiDefinitionsFactory("Api/");
+
+    const messegesHandlers = await getMessegesHandlers(filesFolder, requireFolder);
+    const handlers = await getMessegesHandling(messegesHandlers);
+    const mediator = new Mediator(handlers);
+
+    await init(apiDefinitions, functionsFolder, functionsImportFolder);
     addMappingTask(apiDefinitions);
     addValidationsTask(apiDefinitions);
     const app = express();
 
     app.use(bodyParser.json());
 
-    const router = addAllRoutes(apiDefinitions);
+    const router = addAllRoutes(apiDefinitions, mediator);
 
     app.use(router);
 
@@ -35,4 +46,5 @@ init(apiDefinitions, functionsFolder, functionsImportFolder).then(() => {
             app.listen(3000);
         })
         .catch(err => console.log(err));
-});
+};
+asyncFunction();

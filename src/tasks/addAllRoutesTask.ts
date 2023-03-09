@@ -1,10 +1,12 @@
 import express from 'express';
+import ApiDefinition from '../data/apiDefinition';
+import IMediator from '../mediator/interfaces/mediator';
 import crudRoutes from "../routes/crud";
 
-export default function (modulesData: any) {
+export default function (apiDefinitions: ApiDefinition[], mediator: IMediator) {
     const router = express.Router();
-    modulesData.forEach((moduleData: any) => {
-        crudRoutes(router, moduleData);
+    apiDefinitions.forEach((apiDefinition: ApiDefinition) => {
+        crudRoutes(router, apiDefinition, mediator);
     });
     return router;
 };
