@@ -43,7 +43,7 @@
             "email": {
                 "isRequired": true,
                 "isValidEmail": true,
-                "isUserExist": "!(await Users.findOne({email:input.email}))"
+                "isUserExist": "isNoEntity(Users,{email:input.email})"
             },
             "password": {
                 "isRequired": true,

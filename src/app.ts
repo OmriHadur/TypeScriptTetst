@@ -2,19 +2,19 @@ import express from "express";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import apiDefinitionsFactory from "./factories/apiDefinitionsFactory";
-import * as apisContext from "./helpers/apisContext";
+import { init } from "./helpers/apisContext";
 
-import addAllRoutes from "./routes/AllRoutes";
-import mappingTask from "./tasks/mappingTask";
-import validationsTask from "./tasks/validationsTask";
+import addAllRoutes from "./tasks/addAllRoutesTask";
+import addMappingTask from "./tasks/addMappingTask";
+import addValidationsTask from "./tasks/addValidationsTask";
 
 const functionsFolder = './dist/functions';
 const functionsImportFolder = "../functions/";
 
 const apiDefinitions = apiDefinitionsFactory("Api/");
-apisContext.init(apiDefinitions, functionsFolder, functionsImportFolder).then(() => {
-    mappingTask(apiDefinitions);
-    validationsTask(apiDefinitions);
+init(apiDefinitions, functionsFolder, functionsImportFolder).then(() => {
+    addMappingTask(apiDefinitions);
+    addValidationsTask(apiDefinitions);
     const app = express();
 
     app.use(bodyParser.json());

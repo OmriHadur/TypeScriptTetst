@@ -1,7 +1,8 @@
+import ApiDefinition from "../data/apiDefinition";
 import * as apisContext from "../helpers/apisContext"
 import * as scriptsBuilder from '../helpers/scriptsBuilder';
 
-export default function (apiDefinitions: any[]) {
+export default function (apiDefinitions: ApiDefinition[]) {
     apiDefinitions.forEach(apiDefinition => {
         const createScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.createToEntity);
         apiDefinition.mapCreateToEntity =

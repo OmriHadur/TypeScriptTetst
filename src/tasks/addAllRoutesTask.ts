@@ -1,5 +1,5 @@
 import express from 'express';
-import crudRoutes from "./crud";
+import crudRoutes from "../routes/crud";
 
 export default function (modulesData: any) {
     const router = express.Router();

@@ -9,7 +9,7 @@ export function definitionToScript(definition: any) {
     return scripts;
 };
 
-export function stringToScript(scriptAsString: any) {
+export function stringToScript(scriptAsString: string) {
     if (scriptAsString.includes('await'))
         scriptAsString = "async function run(){return " + scriptAsString + ";} run();"
     return new vm.Script(scriptAsString);

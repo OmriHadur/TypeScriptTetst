@@ -1,3 +1,5 @@
+import ApiDefinition from "../data/apiDefinition";
+import ValidationsDefinition from "../data/validationsDefinition";
 import PropertyValidationError from "../Errors/propertyValidationError";
 import validationFactory from "../factories/validationFactory";
 import * as apisContext from '../helpers/apisContext';
@@ -5,11 +7,11 @@ import * as scriptsBuilder from '../helpers/scriptsBuilder';
 
 const validationsFunctions = validationFactory();
 
-export default function (apiDefinitions: any[]) {
+export default function (apiDefinitions: ApiDefinition[]) {
     apiDefinitions.forEach(apiDefinition => addApiValidation(apiDefinition));
 }
 
-function addApiValidation(apiDefinition: any) {
+function addApiValidation(apiDefinition: ApiDefinition) {
     const createValidation = apiDefinition.validations.create;
     apiDefinition.validateCreate = getValidation(createValidation, true);
 
@@ -18,7 +20,7 @@ function addApiValidation(apiDefinition: any) {
     apiDefinition.validateUpdate = getValidation(alterValidation, false);
 }
 
-function getValidation(validationDefinition: any, isValidateUndefined: any) {
+function getValidation(validationDefinition: ValidationsDefinition, isValidateUndefined: boolean) {
     const validationFunctions = {};
     Object.entries(validationDefinition).forEach(([propertyName, propertyValidations]) =>
         AddPropertyValidations(propertyValidations, validationFunctions, isValidateUndefined, propertyName));
@@ -37,17 +39,17 @@ async function getErrors(validationFunctions: any, resource: any) {
     return errors;
 }
 
-function AddPropertyValidations(propertyValidations: any, validationFunctions: any, isValidateUndefined: any, propertyName: any) {
+function AddPropertyValidations(propertyValidations: any, validationFunctions: any, isValidateUndefined: boolean, propertyName: string) {
     Object.entries(propertyValidations).forEach(([validationName, validationArg]) => {
         const validationFunction = validationsFunctions[validationName];
         const propertyValidationFunction = validationFunction ?
             getPropertyFunction(isValidateUndefined, propertyName, validationFunction, validationArg) :
-            getScriptFunction(validationArg);
+            getScriptFunction(validationArg as string);
         validationFunctions[propertyName + "." + validationName] = propertyValidationFunction
     });
 }
 
-function getPropertyFunction(isValidateUndefined: any, propertyName: any, validationFunction: any, validationArg: any) {
+function getPropertyFunction(isValidateUndefined: boolean, propertyName: string, validationFunction: any, validationArg: any) {
     return (input: any) => {
         if (!isValidateUndefined && !input[propertyName])
             return true;
@@ -55,7 +57,7 @@ function getPropertyFunction(isValidateUndefined: any, propertyName: any, valida
     };
 }
 
-function getScriptFunction(validationScript: any) {
+function getScriptFunction(validationScript: string) {
     const script = scriptsBuilder.stringToScript(validationScript);
     return (input: any) => {
         const scriptContext = { ...apisContext.get(), input: input };

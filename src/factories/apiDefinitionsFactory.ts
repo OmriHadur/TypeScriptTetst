@@ -1,18 +1,19 @@
 import * as fs from 'fs';
 import mongoose from 'mongoose';
+import ApiDefinition from '../data/apiDefinition';
 const Scheme = mongoose.Schema;
 
 const encoding = 'utf8';
 
-export default function (root: string) {
-    const files = fs.readdirSync(root);
-    const apiJDefinitions: any = [];
+export default function (apiFolder: string): ApiDefinition[] {
+    const files = fs.readdirSync(apiFolder);
+    const apiJDefinitions: ApiDefinition[] = [];
     files.forEach(fileName => {
-        const apiDefinition = fileNameToObject(root, fileName);
+        const apiDefinition = fileNameToObject(apiFolder, fileName);
         const route = fileName.substring(0, fileName.length - 5);
         apiDefinition.route = route;
-        const module = entityToModule(apiDefinition.types.entity, route);
-        apiJDefinitions.push({ ...apiDefinition, module });
+        apiDefinition.module = entityToModule(apiDefinition.types.entity, route);
+        apiJDefinitions.push(apiDefinition);
     });
     return apiJDefinitions;
 };
