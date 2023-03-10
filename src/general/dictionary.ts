@@ -1,4 +1,4 @@
 
 export default class Dictionary<T> {
-    [key: string]: T;
+	[key: string]: T;
 }

@@ -1,7 +1,7 @@
 export default class Error {
-    messege: string;
+	messege: string;
 
-    constructor(messege: string) {
-        this.messege = messege;
-    }
+	constructor(messege: string) {
+		this.messege = messege;
+	}
 }

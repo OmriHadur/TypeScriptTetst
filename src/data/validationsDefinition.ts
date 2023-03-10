@@ -1,5 +1,5 @@
 
 export default class ValidationsDefinition {
-    create?: any;
-    alter?: any;
+	create?: any;
+	alter?: any;
 }
