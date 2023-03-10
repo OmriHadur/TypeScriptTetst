@@ -1,12 +1,8 @@
 export default class Result<TValue> {
-    errors: Error[];
+    error?: Error;
     value?: TValue;
 
-    constructor() {
-        this.errors = [];
-    }
+    isFailed = () => this.error
 
-    isFailed = () => this.errors.length > 0;
-
-    isSuccess = () => this.errors.length == 0 && this.value != null;
+    isSuccess = () => this.error == null && this.value != null;
 }

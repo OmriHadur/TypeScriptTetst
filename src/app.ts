@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request } from "express";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import apiDefinitionsFactory from "./factories/apiDefinitionsFactory";

@@ -1,21 +1,37 @@
 
-import getbyIdController from "../controllers/getbyId";
-import getAllController from "../controllers/getAll";
-import alterByIdontroller from "../controllers/alterById";
-import createController from "../controllers/create";
-import deleteAllController from "../controllers/deleteAll";
 import ApiDefinition from "../data/apiDefinition";
 import { Router } from "express";
-import deleteByIdController from "../controllers/deleteById";
 import IMediator from "../mediator/interfaces/mediator";
+import sendToMediator from "../controllers/sendToMediator";
+import CreateResourceRequest from "../messeges/createResourceRequest";
+import { ExpressRequest } from "../types/apiRelated";
+import GetAllResourcesRequest from "../messeges/getAllResourcesRequest";
+import GetResourceByIdRequest from "../messeges/getResourceByIdRequest";
+import DeleteAllResourcesRequest from "../messeges/deleteAllResourcesRequest";
+import AlterResourceRequest from "../messeges/alterResourceRequest";
+import DeleteResourceByIdRequest from "../messeges/deleteResourceByIdRequest";
 
-export default function (router: Router, apiDefinition: ApiDefinition, mediator: IMediator) {
-    const route = apiDefinition.route;
-    router.get('/' + route, getAllController(apiDefinition, mediator));
-    router.get('/' + route + '/:id', getbyIdController(apiDefinition));
-    router.put('/' + route + '/:id', alterByIdontroller(apiDefinition, true));
-    router.patch('/' + route + '/:id', alterByIdontroller(apiDefinition, false));
-    router.post('/' + route, createController(apiDefinition, mediator));
-    router.delete('/' + route, deleteAllController(apiDefinition));
-    router.delete('/' + route + '/:id', deleteByIdController(apiDefinition));
+export default function (router: Router, api: ApiDefinition, mediator: IMediator) {
+    const route = api.route;
+
+    router.get('/' + route,
+        sendToMediator(mediator, () => new GetAllResourcesRequest(api)));
+
+    router.get('/' + route + '/:id',
+        sendToMediator(mediator, (req: ExpressRequest) => new GetResourceByIdRequest(api, req.params.id)));
+
+    router.put('/' + route + '/:id',
+        sendToMediator(mediator, (req: ExpressRequest) => new AlterResourceRequest(api, true, req.params.id, req.body)));
+
+    router.patch('/' + route + '/:id',
+        sendToMediator(mediator, (req: ExpressRequest) => new AlterResourceRequest(api, false, req.params.id, req.body)));
+
+    router.post('/' + route,
+        sendToMediator(mediator, (req: ExpressRequest) => new CreateResourceRequest(api, req.body), 201));
+
+    router.delete('/' + route,
+        sendToMediator(mediator, () => new DeleteAllResourcesRequest(api)));
+
+    router.delete('/' + route + '/:id',
+        sendToMediator(mediator, (req: ExpressRequest) => new DeleteResourceByIdRequest(api, req.params.id)));
 }
