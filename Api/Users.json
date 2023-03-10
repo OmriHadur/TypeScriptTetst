@@ -41,21 +41,21 @@
     "validations": {
         "create": {
             "email": {
-                "isRequired": true,
-                "isValidEmail": true,
-                "isUserExist": "isNoEntity(Users,{email:input.email})"
+                "required": true,
+                "validEmail": true,
+                "userExist": "isNoEntity(users,{email:input.email})"
             },
             "password": {
-                "isRequired": true,
-                "hasMinimumLength": 5,
-                "hasUpperCase": true
+                "required": true,
+                "minimumLength": 5,
+                "upperCase": true
             }
         },
         "alter": {
             "password": {
-                "isRequired": true,
-                "hasMinimumLength": 5,
-                "hasUpperCase": true
+                "required": true,
+                "minimumLength": 5,
+                "upperCase": true
             }
         }
     }

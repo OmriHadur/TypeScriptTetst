@@ -1,0 +1,44 @@
+{
+    "types": {
+        "create": {
+            "email": "string",
+            "password": "string"
+        },
+        "alter": {},
+        "entity": {
+            "email": "string",
+            "createdAt": "date"
+        },
+        "resource": {
+            "id": "string",
+            "token": "string"
+        }
+    },
+    "mapping": {
+        "createToEntity": {
+            "createdAt": "now()",
+            "alteredAt": "now()"
+        },
+        "alterToEntity": {},
+        "toResource": {
+            "id": "input._id",
+            "token": "createToken(await getEntity(users,{email:input.email}))"
+        }
+    },
+    "validations": {
+        "create": {
+            "variables": {
+                "user": "getEntity(users,{email:input.email})"
+            },
+            "email": {
+                "required": true,
+                "validEmail": true
+            },
+            "password": {
+                "required": true
+            },
+            "wrongEmailOrPassword": "isMatch(user?.hashedPassword,input.password)"
+        },
+        "alter": {}
+    }
+}
