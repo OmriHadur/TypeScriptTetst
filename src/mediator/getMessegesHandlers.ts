@@ -16,7 +16,7 @@ const addFiles = async (messegesHandlers: Dictionary<any[]>, filesFolder: string
             messegesHandlers[messegeType] = messegesHandlers[messegeType] ?? [];
             messegesHandlers[messegeType].push(handlerInstance.handle);
         }
-        else
+        else if (!fileName.endsWith(".map"))
             addFiles(messegesHandlers, filesFolder + fileName, requireFolder + fileName + "/");
     };
 

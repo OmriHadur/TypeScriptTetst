@@ -12,7 +12,7 @@ export default class Mediator {
     async send<TRequest extends IRequest<TValue>, TValue>(request: TRequest): Promise<Result<TValue>> {
         const typeName = request.constructor.name;
         const handler = this.handlers[typeName];
-        let result = new Result<TValue>();
+        const result = new Result<TValue>();
         const handleFunctin = handler(request, result, this);
         await handleFunctin();
         return result;

@@ -6,8 +6,10 @@ const files = fs.readdirSync(root);
 export default function () {
     const functions: any = {};
     files.forEach(fileName => {
-        const functionFile = require("../validations/" + fileName);
-        Object.entries(functionFile).forEach(([key, func]) => functions[key] = func);
+        if (fileName.endsWith('.js')) {
+            const functionFile = require("../validations/" + fileName);
+            Object.entries(functionFile).forEach(([key, func]) => functions[key] = func);
+        }
     });
     return functions;
 }
