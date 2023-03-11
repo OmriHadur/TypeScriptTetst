@@ -1,0 +1,25 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"dependsOn": ["clean", "tsc_build"]
+		},
+		{
+			"label": "clean",
+			"type": "shell",
+			"command": "rimraf ./dist",
+			"presentation": {
+				"reveal": "silent"
+			}
+		},
+		{
+			"label": "tsc_build",
+			"type": "shell",
+			"command": "tsc",
+			"presentation": {
+				"reveal": "silent"
+			}
+		}
+	]
+}
