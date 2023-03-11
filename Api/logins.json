@@ -18,7 +18,6 @@
     },
     "mapping": {
         "createToEntity": {
-            "email": "input.email",
             "createdAt": "functions.now()"
         },
         "alterToEntity": {

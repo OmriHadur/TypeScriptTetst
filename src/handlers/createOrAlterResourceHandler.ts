@@ -1,10 +1,10 @@
 import IRequestHandler from "../mediator/interfaces/requestHandler";
-import CreateOrReplaceResourceRequest from "../messeges/createOrReplaceResourceRequest";
+import CreateOrAlterResourceRequest from "../messeges/createOrAlterResourceRequest";
 
-export default class CreateOrReplaceResourceHandler implements IRequestHandler<CreateOrReplaceResourceRequest, any> {
-	messegeType = CreateOrReplaceResourceRequest.name;
+export default class CreateOrAlterResourceHandler implements IRequestHandler<CreateOrAlterResourceRequest, any> {
+	messegeType = CreateOrAlterResourceRequest.name;
 
-	async handle(request: CreateOrReplaceResourceRequest): Promise<any | Error> {
+	async handle(request: CreateOrAlterResourceRequest): Promise<any | Error> {
 		let entity = request.entity;
 		if (!entity) {
 			const entityData = await request.api.mapCreateToEntity(request.resource);
@@ -13,7 +13,7 @@ export default class CreateOrReplaceResourceHandler implements IRequestHandler<C
 		else {
 			const entityRepalce = await request.api.mapAlterToEntity(request.resource);
 			Object.entries(entityRepalce).forEach(([key, value]) => {
-				if (value)
+				if (value || request.isReplace)
 					entity[key] = value;
 			});
 		}

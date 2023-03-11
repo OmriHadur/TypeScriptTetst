@@ -28,6 +28,9 @@ const map = async (input: any, entityType: any, scripts: any) => {
 	const context = { ...apisContext.get(), input: input };
 	for (let propertyScript in scripts)
 		output[propertyScript] = await scriptsBuilder.runScript(scripts[propertyScript], context)
+	for (let property in entityType)
+		if (!output[property])
+			output[property] = input[property];
 	return output;
 };
 

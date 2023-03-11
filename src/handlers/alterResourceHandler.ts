@@ -11,7 +11,8 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 			return new NotFoundError(request.id);
 		const entityRepalce = await request.api.mapAlterToEntity(request.resource);
 		Object.entries(entityRepalce).forEach(([key, value]) => {
-			if (value || request.isReplace) entity[key] = value;
+			if (value || request.isReplace)
+				entity[key] = value;
 		});
 		entity = await entity.save();
 		return request.api.mapEntityToResource(entity);

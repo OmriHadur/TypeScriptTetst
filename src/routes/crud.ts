@@ -10,7 +10,7 @@ import GetResourceByIdRequest from "../messeges/getResourceByIdRequest";
 import DeleteAllResourcesRequest from "../messeges/deleteAllResourcesRequest";
 import AlterResourceRequest from "../messeges/alterResourceRequest";
 import DeleteResourceByIdRequest from "../messeges/deleteResourceByIdRequest";
-import CreateOrReplaceResourceRequest from "../messeges/createOrReplaceResourceRequest";
+import CreateOrAlterResourceRequest from "../messeges/createOrAlterResourceRequest";
 
 export default function (router: Router, api: ApiDefinition, mediator: IMediator) {
 	const route = api.route;
@@ -32,7 +32,12 @@ export default function (router: Router, api: ApiDefinition, mediator: IMediator
 
 	router.put('/' + route,
 		sendToMediator(mediator,
-			(req: ExpressRequest) => new CreateOrReplaceResourceRequest(api, req.body),
+			(req: ExpressRequest) => new CreateOrAlterResourceRequest(api, true, req.body),
+			(req) => req.entity ? 200 : 201));
+
+	router.patch('/' + route,
+		sendToMediator(mediator,
+			(req: ExpressRequest) => new CreateOrAlterResourceRequest(api, false, req.body),
 			(req) => req.entity ? 200 : 201));
 
 	router.delete('/' + route,

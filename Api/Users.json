@@ -23,11 +23,9 @@
     },
     "mapping": {
         "createToEntity": {
-            "email": "input.email",
             "createdAt": "functions.now()"
         },
         "alterToEntity": {
-            "name": "input.name",
             "hashedPassword": "functions.encrypt(input.password)",
             "alteredAt": "functions.now()"
         },
