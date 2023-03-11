@@ -1,11 +1,13 @@
 import IMediator from "../mediator/interfaces/mediator";
-import { GetRequestFunction } from "../types/apiRelated";
+import { GetRequestFunction, GetStatusCode } from "../types/apiRelated";
 
-export default function (mediator: IMediator, getRequest: GetRequestFunction, statusCode: number = 200) {
+export default function (mediator: IMediator, getRequest: GetRequestFunction, statusCode: GetStatusCode = () => 200) {
 	return async (req: any, res: any, next: any) => {
-		const result = await mediator.send(getRequest(req));
-		if (result.isSuccess())
-			res.status(statusCode).json(result.value);
+		const request = getRequest(req);
+		const result = await mediator.send(request);
+		if (result.isSuccess()) {
+			res.status(statusCode(request)).json(result.value);
+		}
 		else
 			next(result.error);
 	}

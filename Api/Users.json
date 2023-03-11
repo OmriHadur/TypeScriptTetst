@@ -1,9 +1,7 @@
 {
     "types": {
         "create": {
-            "email": "string",
-            "password": "string",
-            "name": "string"
+            "email": "string"
         },
         "alter": {
             "password": "string",
@@ -25,30 +23,24 @@
     },
     "mapping": {
         "createToEntity": {
-            "hashedPassword": "encrypt(input.password)",
-            "createdAt": "now()",
-            "alteredAt": "now()"
+            "email": "input.email",
+            "createdAt": "functions.now()"
         },
         "alterToEntity": {
-            "hashedPassword": "encrypt(input.password)",
-            "alteredAt": "now()"
+            "name": "input.name",
+            "hashedPassword": "functions.encrypt(input.password)",
+            "alteredAt": "functions.now()"
         },
         "toResource": {
             "id": "input._id",
-            "token": "createToken(input)"
+            "token": "functions.createToken(input)"
         }
     },
     "validations": {
         "create": {
             "email": {
                 "required": true,
-                "validEmail": true,
-                "userExist": "isNoEntity(users,{email:input.email})"
-            },
-            "password": {
-                "required": true,
-                "minimumLength": 5,
-                "upperCase": true
+                "validEmail": true
             }
         },
         "alter": {
@@ -56,6 +48,10 @@
                 "required": true,
                 "minimumLength": 5,
                 "upperCase": true
+            },
+            "name": {
+                "required": true,
+                "minimumLength": 2
             }
         }
     }

@@ -11,5 +11,5 @@ export default class Result<TValue> {
 
 	isFailed = () => this.error
 
-	isSuccess = () => this.error == null && this.value != null;
+	isSuccess = () => this.error == null;
 }

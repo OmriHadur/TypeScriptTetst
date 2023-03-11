@@ -1,5 +1,5 @@
 
 export function now() {
-	() => Date.now();
+	return Date.now();
 }
 

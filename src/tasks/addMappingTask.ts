@@ -4,9 +4,9 @@ import * as scriptsBuilder from '../helpers/scriptsBuilder';
 
 export default function (apiDefinitions: ApiDefinition[]) {
 	apiDefinitions.forEach(apiDefinition => {
-		const createScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.createToEntity);
+		const createScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.createAndAlterToEntity);
 		apiDefinition.mapCreateToEntity =
-			(createResource: any) => map(createResource, apiDefinition.types.create, createScripts);
+			(createResource: any) => map(createResource, apiDefinition.types.createAndAlter, createScripts);
 
 		const alterScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.alterToEntity);
 		apiDefinition.mapAlterToEntity =
@@ -28,9 +28,6 @@ const map = async (input: any, entityType: any, scripts: any) => {
 	const context = { ...apisContext.get(), input: input };
 	for (let propertyScript in scripts)
 		output[propertyScript] = await scriptsBuilder.runScript(scripts[propertyScript], context)
-	for (let property in entityType)
-		if (!output[property])
-			output[property] = input[property];
 	return output;
 };
 

@@ -11,12 +11,13 @@ export default function (apiDefinitions: ApiDefinition[]) {
 }
 
 function addApiValidation(apiDefinition: ApiDefinition) {
-	const createValidation = apiDefinition.validations.create;
-	const createType = apiDefinition.types.create;
-	apiDefinition.validateCreate = getValidation(createValidation, createType, true);
+	const createAndAlterValidation = apiDefinition.validations.createAndAlter;
+	const createAndAlterType = apiDefinition.types.createAndAlter;
+	const alterType = apiDefinition.types.alter;
+	apiDefinition.validateCreate = getValidation(createAndAlterValidation, createAndAlterType, true);
 
 	const alterValidation = apiDefinition.validations.alter;
-	const alterType = apiDefinition.types.alter;
+
 	apiDefinition.validateReplace = getValidation(alterValidation, alterType, true);
 	apiDefinition.validateUpdate = getValidation(alterValidation, alterType, false);
 }
@@ -49,11 +50,11 @@ function AddPropertyValidations(propertyValidations: any, validationFunctions: a
 
 async function validateResource(validationFunctions: any, variables: any, resource: any) {
 	const errors = [];
-
-	const context = { ...apisContext.get(), input: resource };
+	const variablesValue: any = {};
+	const context = { ...apisContext.get(), input: resource, variables: variablesValue };
 	for (let [variablename, func] of Object.entries(variables)) {
 		const value = await (func as any)(context);
-		context[variablename] = value;
+		variablesValue[variablename] = value;
 	}
 	for (let [validationName, func] of Object.entries(validationFunctions)) {
 		const isValid = await (func as any)(context);

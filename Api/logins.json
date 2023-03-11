@@ -1,13 +1,15 @@
 {
     "types": {
         "create": {
-            "email": "string",
+            "email": "string"
+        },
+        "alter": {
             "password": "string"
         },
-        "alter": {},
         "entity": {
             "email": "string",
-            "createdAt": "date"
+            "createdAt": "date",
+            "alteredAt": "date"
         },
         "resource": {
             "id": "string",
@@ -16,29 +18,32 @@
     },
     "mapping": {
         "createToEntity": {
-            "createdAt": "now()",
-            "alteredAt": "now()"
+            "email": "input.email",
+            "createdAt": "functions.now()"
         },
-        "alterToEntity": {},
+        "alterToEntity": {
+            "alteredAt": "functions.now()"
+        },
         "toResource": {
             "id": "input._id",
-            "token": "createToken(await getEntity(users,{email:input.email}))"
+            "token": "functions.createToken(await modules.users.findOne({email:input.email}))"
         }
     },
     "validations": {
         "create": {
-            "variables": {
-                "user": "getEntity(users,{email:input.email})"
-            },
             "email": {
                 "required": true,
                 "validEmail": true
+            }
+        },
+        "alter": {
+            "variables": {
+                "user": "modules.users.findOne({email:input.email})"
             },
             "password": {
                 "required": true
             },
-            "wrongEmailOrPassword": "isMatch(user?.hashedPassword,input.password)"
-        },
-        "alter": {}
+            "wrongEmailOrPassword": "functions.isMatch(variables.user?.hashedPassword,input.password)"
+        }
     }
 }
