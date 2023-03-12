@@ -8,17 +8,17 @@ export default class LogginMessegeHandler<
 {
 	private isFull: boolean = false;
 
-	handle = async (
-		request: TRequest,
-		next: Function
-	): Promise<TValue | Error> => {
+	handle = async (request: TRequest, next: Function): Promise<TValue | Error> => {
 		const name = request.constructor.name;
-		if (this.isFull) console.log(name + ":" + JSON.stringify(request));
-		else console.log(name + " started");
+		if (this.isFull)
+			console.log(name + ":" + JSON.stringify(request));
+		else
+			console.log(name + " started");
 
 		const value = await next();
 
-		if (value instanceof Error) console.log(name + " errors: " + value.message);
+		if (value instanceof Error)
+			console.log(name + " errors: " + value.message);
 		else {
 			if (this.isFull)
 				console.log(name + " finished, result: " + JSON.stringify(value.value));

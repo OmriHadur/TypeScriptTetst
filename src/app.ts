@@ -10,20 +10,21 @@ import addValidationsTask from "./tasks/addValidationsTask";
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
 import getMessegesHandling from "./mediator/getMessegesHandling";
 import Mediator from "./mediator/mediator";
+import { readFolder } from "./factories/folderReader";
+import dataSchemeFactory from "./factories/dataSchemeFactory";
 
 const asyncFunction = async () => {
-	const functionsFolder = './dist/functions';
-	const functionsImportFolder = "../functions/";
-	const filesFolder = './dist/handlers';
-	const requireFolder = '../handlers/';
+	const configs = readFolder("Configs/");
+	const distFolder = readFolder("./dist", "../");
 
-	const apiDefinitions = apiDefinitionsFactory("Api/");
+	const schemes = dataSchemeFactory(configs.data);
+	const apiDefinitions = apiDefinitionsFactory(configs.api,schemes);
 
-	const messegesHandlers = await getMessegesHandlers(filesFolder, requireFolder);
+	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const handlers = await getMessegesHandling(messegesHandlers);
 	const mediator = new Mediator(handlers);
 
-	await init(apiDefinitions, functionsFolder, functionsImportFolder);
+	await init(apiDefinitions, distFolder.functions);
 	addMappingTask(apiDefinitions);
 	addValidationsTask(apiDefinitions);
 	const app = express();

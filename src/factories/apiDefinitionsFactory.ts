@@ -1,30 +1,25 @@
-import * as fs from 'fs';
 import mongoose from 'mongoose';
 import ApiDefinition from '../data/apiDefinition';
+import Dictionary from '../general/dictionary';
 const Scheme = mongoose.Schema;
 
-const encoding = 'utf8';
-
-export default function (apiFolder: string): ApiDefinition[] {
-	const files = fs.readdirSync(apiFolder);
+export default function (apiFolder: Dictionary<any>, schemes: Dictionary<any>): ApiDefinition[] {
 	const apiJDefinitions: ApiDefinition[] = [];
-	files.forEach(fileName => {
-		const apiDefinition = fileNameToObject(apiFolder, fileName) as ApiDefinition;
-		const route = fileName.substring(0, fileName.length - 5);
-		apiDefinition.route = route;
-		apiDefinition.module = entityToModule(apiDefinition.types.entity, route);
+	Object.entries(apiFolder).forEach(([apiRoute, apiDefinition]) => {
+		apiDefinition.route = apiRoute;
+		const entity: Dictionary<string> = apiDefinition.types.entity;
+		Object.entries(entity).forEach(([key, value]) => {
+			if (schemes[value])
+				entity[key] = schemes[value];
+		});
+		apiDefinition.module = entityToModule(apiRoute, entity);
 		addCreateUnionAlter(apiDefinition);
 		apiJDefinitions.push(apiDefinition);
 	});
 	return apiJDefinitions;
 };
 
-function fileNameToObject(root: string, fileName: string) {
-	const file = fs.readFileSync(root + fileName, encoding);
-	return JSON.parse(file);
-}
-
-function entityToModule(entityDefinition: any, route: string) {
+function entityToModule(route: string, entityDefinition: any) {
 	const scheme = new Scheme(entityDefinition);
 	return mongoose.model(route, scheme);
 }

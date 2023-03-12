@@ -12,7 +12,7 @@ export default function (apiDefinitions: ApiDefinition[]) {
 		apiDefinition.mapAlterToEntity =
 			(alterResource: any) => map(alterResource, apiDefinition.types.alter, alterScripts);
 
-		const resourceScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.toResource);
+		const resourceScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.entityToResource);
 		apiDefinition.mapEntityToResource =
 			(entity: any) => map(entity, apiDefinition.types.resource, resourceScripts);
 

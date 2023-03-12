@@ -1,0 +1,51 @@
+{
+	"types": {
+		"create": {
+			"barcode": "string"
+		},
+		"alter": {
+			"info": "productInfo",
+			"measurements": "measurements",
+			"ImageUrl": "string",
+			"price": "number"
+		},
+		"entity": {
+			"barcode": "string",
+			"info": "productInfo",
+			"measurements": "measurements",
+			"ImageUrl": "string",
+			"price": "number"
+		},
+		"resource": {
+			"id": "string",
+			"barcode": "string",
+			"info": "productInfo",
+			"measurements": "measurements",
+			"ImageUrl": "string",
+			"price": "number"
+		}
+	},
+	"mapping": {
+		"createToEntity": {
+			"createdAt": "functions.now()"
+		},
+		"alterToEntity": {
+			"alteredAt": "functions.now()"
+		},
+		"entityToResource": {
+			"id": "input._id"
+		}
+	},
+	"validations": {
+		"create": {
+			"variables": {},
+			"barcode": {
+				"required": true,
+				"lengthExact": 13
+			}
+		},
+		"alter": {
+			"variables": {}
+		}
+	}
+}

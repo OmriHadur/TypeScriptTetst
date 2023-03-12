@@ -1,0 +1,6 @@
+{
+	"size": "number",
+	"isWeighable": "boolean",
+	"unitOfMeasurement": "string",
+	"quantityInterval": "number"
+}

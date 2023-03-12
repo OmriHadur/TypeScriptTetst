@@ -23,7 +23,7 @@
         "alterToEntity": {
             "alteredAt": "functions.now()"
         },
-        "toResource": {
+        "entityToResource": {
             "id": "input._id",
             "token": "functions.createToken(await modules.users.findOne({email:input.email}))"
         }

@@ -14,7 +14,8 @@ export default class CreateResourceValidator implements IRequestHandler<CreateRe
 		if (entity)
 			return new AlreadyExistError();
 		const errors = await request.api.validateCreate(request.resource);
-		if (errors.length > 0) return new ValidationError(errors);
+		if (errors.length > 0)
+			return new ValidationError(errors);
 		return next();
 	}
 }

@@ -29,7 +29,7 @@
             "hashedPassword": "functions.encrypt(input.password)",
             "alteredAt": "functions.now()"
         },
-        "toResource": {
+        "entityToResource": {
             "id": "input._id",
             "token": "functions.createToken(input)"
         }
