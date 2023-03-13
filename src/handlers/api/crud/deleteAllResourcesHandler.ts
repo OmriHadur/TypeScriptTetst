@@ -1,5 +1,5 @@
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import DeleteAllResourcesRequest from "../../../messeges/deleteAllResourcesRequest";
+import DeleteAllResourcesRequest from "../../../messeges/api/crud/deleteAllResourcesRequest";
 
 export default class CreateResourceHandler
 	implements IRequestHandler<DeleteAllResourcesRequest, any>

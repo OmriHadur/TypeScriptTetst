@@ -3,14 +3,14 @@ import ApiDefinition from "../data/apiDefinition";
 import { Router } from "express";
 import IMediator from "../mediator/interfaces/mediator";
 import sendToMediator from "../controllers/sendToMediator";
-import CreateResourceRequest from "../messeges/createResourceRequest";
+import GetAllResourcesRequest from "../messeges/api/crud/getAllResourcesRequest";
 import { ExpressRequest } from "../types/apiRelated";
-import GetAllResourcesRequest from "../messeges/getAllResourcesRequest";
-import GetResourceByIdRequest from "../messeges/getResourceByIdRequest";
-import DeleteAllResourcesRequest from "../messeges/deleteAllResourcesRequest";
-import AlterResourceRequest from "../messeges/alterResourceRequest";
-import DeleteResourceByIdRequest from "../messeges/deleteResourceByIdRequest";
-import CreateOrAlterResourceRequest from "../messeges/createOrAlterResourceRequest";
+import GetResourceByIdRequest from "../messeges/api/crud/getResourceByIdRequest";
+import AlterResourceRequest from "../messeges/api/crud/alterResourceRequest";
+import CreateResourceRequest from "../messeges/api/crud/createResourceRequest";
+import CreateOrAlterResourceRequest from "../messeges/api/crud/createOrAlterResourceRequest";
+import DeleteAllResourcesRequest from "../messeges/api/crud/deleteAllResourcesRequest";
+import DeleteResourceByIdRequest from "../messeges/api/crud/deleteResourceByIdRequest";
 
 export default function (router: Router, api: ApiDefinition, mediator: IMediator) {
 	const route = api.route;

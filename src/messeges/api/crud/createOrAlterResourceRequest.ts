@@ -1,5 +1,6 @@
-import ApiDefinition from "../data/apiDefinition";
-import IRequest from "../mediator/interfaces/request";
+import ApiDefinition from "../../../data/apiDefinition";
+import IRequest from "../../../mediator/interfaces/request";
+
 
 export default class CreateOrAlterResourceRequest implements IRequest<any> {
     entity?: any;

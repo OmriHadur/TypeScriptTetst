@@ -2,7 +2,7 @@ import AlreadyExistError from "../../../Errors/alreadyExistError";
 import ValidationError from "../../../Errors/validationError";
 import { HandlingPriority } from "../../../mediator/handlingPriority";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import CreateResourceRequest from "../../../messeges/createResourceRequest";
+import CreateResourceRequest from "../../../messeges/api/crud/createResourceRequest";
 import { getExistEntity } from "../../../helpers/getExistEntity";
 
 export default class CreateResourceValidator implements IRequestHandler<CreateResourceRequest, any> {

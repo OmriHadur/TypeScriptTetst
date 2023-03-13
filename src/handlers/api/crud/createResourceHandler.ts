@@ -1,5 +1,5 @@
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import CreateResourceRequest from "../../../messeges/createResourceRequest";
+import CreateResourceRequest from "../../../messeges/api/crud/createResourceRequest";
 
 export default class CreateResourceHandler implements IRequestHandler<CreateResourceRequest, any> {
 	messegeType = CreateResourceRequest.name;

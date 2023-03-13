@@ -1,6 +1,6 @@
 import NotFoundError from "../../../Errors/notFoundError";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import AlterResourceRequest from "../../../messeges/alterResourceRequest";
+import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 
 
 export default class AlterResourceHandler implements IRequestHandler<AlterResourceRequest, any> {

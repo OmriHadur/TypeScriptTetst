@@ -2,7 +2,7 @@ import ValidationError from "../../../Errors/validationError";
 import { HandlingPriority } from "../../../mediator/handlingPriority";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import { getExistEntity } from "../../../helpers/getExistEntity";
-import CreateOrAlterResourceRequest from "../../../messeges/createOrAlterResourceRequest";
+import CreateOrAlterResourceRequest from "../../../messeges/api/crud/createOrAlterResourceRequest";
 
 export default class CreateOrAlterResourceValidator implements IRequestHandler<CreateOrAlterResourceRequest, any> {
 	messegeType = CreateOrAlterResourceRequest.name;

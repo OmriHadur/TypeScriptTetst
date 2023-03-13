@@ -1,7 +1,7 @@
 import NotFoundError from "../../../Errors/notFoundError";
 import Unit from "../../../mediator/Data/unit";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import DeleteResourceByIdRequest from "../../../messeges/deleteResourceByIdRequest";
+import DeleteResourceByIdRequest from "../../../messeges/api/crud/deleteResourceByIdRequest";
 
 export default class DeleteResourceByIdHandler
 	implements IRequestHandler<DeleteResourceByIdRequest, Unit>
