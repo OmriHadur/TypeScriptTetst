@@ -1,6 +1,6 @@
-import NotFoundError from "../Errors/notFoundError";
-import IRequestHandler from "../mediator/interfaces/requestHandler";
-import GetResourceByIdRequest from "../messeges/getResourceByIdRequest";
+import NotFoundError from "../../../Errors/notFoundError";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
+import GetResourceByIdRequest from "../../../messeges/getResourceByIdRequest";
 
 export default class GetResourceByIdHandler
 	implements IRequestHandler<GetResourceByIdRequest, any>

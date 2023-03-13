@@ -1,5 +1,5 @@
-import IRequestHandler from "../mediator/interfaces/requestHandler";
-import GetAllResourcesRequest from "../messeges/getAllResourcesRequest";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
+import GetAllResourcesRequest from "../../../messeges/getAllResourcesRequest";
 
 export default class CreateResourceHandler
 	implements IRequestHandler<GetAllResourcesRequest, any[]>

@@ -1,5 +1,5 @@
-import IRequest from "../mediator/interfaces/request";
-import IRequestHandler from "../mediator/interfaces/requestHandler";
+import IRequest from "../../../mediator/interfaces/request";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 
 export default class LogginMessegeHandler<
 	TRequest extends IRequest<TValue>,

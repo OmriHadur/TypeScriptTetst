@@ -1,6 +1,6 @@
-import IRequest from "../mediator/interfaces/request";
-import Stopwatch from "../general/stopwatch";
-import IRequestHandler from "../mediator/interfaces/requestHandler";
+import IRequest from "../../../mediator/interfaces/request";
+import Stopwatch from "../../../general/stopwatch";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 
 export default class PreformanceHandler<
 	TRequest extends IRequest<TValue>,

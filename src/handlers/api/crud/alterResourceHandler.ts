@@ -1,6 +1,7 @@
-import NotFoundError from "../Errors/notFoundError";
-import IRequestHandler from "../mediator/interfaces/requestHandler";
-import AlterResourceRequest from "../messeges/alterResourceRequest";
+import NotFoundError from "../../../Errors/notFoundError";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
+import AlterResourceRequest from "../../../messeges/alterResourceRequest";
+
 
 export default class AlterResourceHandler implements IRequestHandler<AlterResourceRequest, any> {
 	messegeType = AlterResourceRequest.name;

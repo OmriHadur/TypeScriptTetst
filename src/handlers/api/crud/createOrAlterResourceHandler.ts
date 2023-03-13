@@ -1,5 +1,5 @@
-import IRequestHandler from "../mediator/interfaces/requestHandler";
-import CreateOrAlterResourceRequest from "../messeges/createOrAlterResourceRequest";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
+import CreateOrAlterResourceRequest from "../../../messeges/createOrAlterResourceRequest";
 
 export default class CreateOrAlterResourceHandler implements IRequestHandler<CreateOrAlterResourceRequest, any> {
 	messegeType = CreateOrAlterResourceRequest.name;
