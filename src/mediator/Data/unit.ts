@@ -1,3 +1,5 @@
 export default class Unit {
-    static Instance = new Unit();
+    private static instance = new Unit();
+    
+    static Instance = Unit.instance;
 }

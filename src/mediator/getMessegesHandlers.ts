@@ -12,7 +12,7 @@ function addHandlers(handlersFolder: Dictionary<any>, handlers: Dictionary<any[]
 			const handlerInstance = new value.default();
 			const messegeType = handlerInstance.messegeType ?? "*";
 			handlers[messegeType] = handlers[messegeType] ?? [];
-			handlers[messegeType].push(handlerInstance.handle);
+			handlers[messegeType].push(handlerInstance);
 		}
 		else
 			addHandlers(value, handlers);

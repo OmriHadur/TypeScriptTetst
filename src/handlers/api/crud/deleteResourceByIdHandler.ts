@@ -8,9 +8,10 @@ export default class DeleteResourceByIdHandler
 {
 	messegeType = DeleteResourceByIdRequest.name;
 
-	async handle(request: DeleteResourceByIdRequest): Promise<any | Error> {
+	async handle(request: DeleteResourceByIdRequest): Promise<Unit | Error> {
 		const found = await request.api.module.findByIdAndDelete(request.id);
 		if (!found)
 			return new NotFoundError(request.id);
+		return Unit.Instance;
 	}
 }

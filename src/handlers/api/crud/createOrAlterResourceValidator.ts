@@ -10,14 +10,14 @@ export default class CreateOrAlterResourceValidator implements IRequestHandler<C
 
 	async handle(request: CreateOrAlterResourceRequest, next: Function): Promise<any | Error> {
 		request.entity = await getExistEntity(request);
-		const validator = CreateOrAlterResourceValidator.getValidator(request);
+		const validator = this.getValidator(request);
 		const errors = await validator(request.resource);
 		if (errors.length > 0)
 			return new ValidationError(errors);
 		return next();
 	}
 
-	static getValidator(request: CreateOrAlterResourceRequest) {
+	getValidator(request: CreateOrAlterResourceRequest) {
 		if (request.entity == null)
 			return request.api.validateCreate;
 		return request.isReplace ?

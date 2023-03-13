@@ -1,32 +1,35 @@
-import express, { Request } from "express";
+import express from "express";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import apiDefinitionsFactory from "./factories/apiDefinitionsFactory";
-import { init } from "./helpers/apisContext";
 
 import addAllRoutes from "./tasks/addAllRoutesTask";
-import addMappingTask from "./tasks/addMappingTask";
-import addValidationsTask from "./tasks/addValidationsTask";
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
 import getMessegesHandling from "./mediator/getMessegesHandling";
 import Mediator from "./mediator/mediator";
 import { readFolder } from "./factories/folderReader";
 import dataSchemeFactory from "./factories/dataSchemeFactory";
+import ApiDefinition from "./data/apiDefinition";
+import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
+import ApiContex from "./data/apiContex";
+import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqeust";
+import AddApiMappingReqeust from "./messeges/bootstrap/addApiMappingReqeust";
+import AddApiValidationsReqeust from "./messeges/bootstrap/addApiValidationsReqeust";
 
 const asyncFunction = async () => {
-	const configs = readFolder("Configs/");
+
 	const distFolder = readFolder("./dist", "../");
-
-	const schemes = dataSchemeFactory(configs.data);
-	const apiDefinitions = apiDefinitionsFactory(configs.api,schemes);
-
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const handlers = await getMessegesHandling(messegesHandlers);
 	const mediator = new Mediator(handlers);
 
-	await init(apiDefinitions, distFolder.functions);
-	addMappingTask(apiDefinitions);
-	addValidationsTask(apiDefinitions);
+	const configs = readFolder("Configs/");
+	const schemes = dataSchemeFactory(configs.data);
+	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, schemes));
+	const apiContex: ApiContex = await mediator.sendValue(new GetApiContexReqeust(apiDefinitions, distFolder.functions));
+
+	await mediator.send(new AddApiMappingReqeust(apiDefinitions, apiContex));
+	await mediator.send(new AddApiValidationsReqeust(apiDefinitions, apiContex));
+
 	const app = express();
 
 	app.use(bodyParser.json());

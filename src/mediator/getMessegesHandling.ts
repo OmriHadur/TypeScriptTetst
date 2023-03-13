@@ -1,6 +1,7 @@
 import IMediator from "./interfaces/mediator";
 import { HandlingPriority } from "./handlingPriority";
 import Dictionary from "../general/dictionary"
+import Unit from "./Data/unit";
 
 export default async function (messegesHandlers: Dictionary<any[]>) {
 	const generalHandlers = messegesHandlers["*"];
@@ -13,8 +14,8 @@ export default async function (messegesHandlers: Dictionary<any[]>) {
 		handlers = handlers.sort(handler => handler.priority ?? HandlingPriority.Handeling);
 
 		messegesHandling[messegeType] = (messege: any, mediator: IMediator) =>
-			handlers.reduce((prevFunc, nextFunc) =>
-				() => nextFunc(messege, prevFunc, mediator), undefined);
+			handlers.reduce((prevHandler, nextHandler) =>
+				() => nextHandler.handle(messege, prevHandler, mediator), () => Unit.Instance);
 	}
 	return messegesHandling;
 };

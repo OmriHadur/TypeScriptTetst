@@ -17,4 +17,8 @@ export default class Mediator {
 		const value = await handleFunctin();
 		return new Result<TValue>(value);
 	}
+	
+	async sendValue<TRequest extends IRequest<TValue>, TValue>(request: TRequest): Promise<TValue> {
+		return (await this.send(request)).value as TValue;
+	}
 }
