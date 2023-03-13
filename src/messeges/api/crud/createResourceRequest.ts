@@ -1,10 +1,11 @@
 import ApiDefinition from "../../../data/apiDefinition";
-import IRequest from "../../../mediator/interfaces/request";
+import Request from "../../../mediator/interfaces/request";
 
 
-export default class CreateResourceRequest implements IRequest<any> {
+export default class CreateResourceRequest extends Request<any> {
     constructor(
         public api: ApiDefinition,
         public resource: any) {
+        super();
     }
 }

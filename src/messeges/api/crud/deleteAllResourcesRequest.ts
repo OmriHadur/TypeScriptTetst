@@ -1,8 +1,9 @@
 import ApiDefinition from "../../../data/apiDefinition";
 import Unit from "../../../mediator/Data/unit";
-import IRequest from "../../../mediator/interfaces/request";
+import Request from "../../../mediator/interfaces/request";
 
-export default class DeleteAllResourcesRequest implements IRequest<Unit> {
+export default class DeleteAllResourcesRequest extends Request<Unit> {
     constructor(public api: ApiDefinition) {
+        super();
     }
 }

@@ -1,8 +1,6 @@
 import express from "express";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-
-import addAllRoutes from "./tasks/addAllRoutesTask";
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
 import Mediator from "./mediator/mediator";
 import { readFolder } from "./factories/folderReader";
@@ -12,6 +10,7 @@ import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
 import ApiContex from "./data/apiContex";
 import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqeust";
 import ApiDefinitionTaskReqeust from "./messeges/bootstrap/apiDefinitionTaskReqeust";
+import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
 
 const asyncFunction = async () => {
 
@@ -30,9 +29,7 @@ const asyncFunction = async () => {
 
 	app.use(bodyParser.json());
 
-	const router = addAllRoutes(apiDefinitions, mediator);
-
-	app.use(router);
+	await mediator.send(new AddRoutesReqeust(app, apiDefinitions));
 
 	app.use((error: any, req: any, res: any, next: any) => {
 		const status = error.status || 500;

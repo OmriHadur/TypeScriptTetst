@@ -29,7 +29,7 @@ export default class AddApiMappingHandler
 
         apiDefinition.mapEntitiesToResources = async (entities: any[]) => {
             const resourceMapping = entities.map(async (entity: any) => await apiDefinition.mapEntityToResource(entity));
-            await Promise.all(resourceMapping);
+            return await Promise.all(resourceMapping);
         }
     }
 

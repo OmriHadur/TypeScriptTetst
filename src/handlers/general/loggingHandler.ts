@@ -1,3 +1,4 @@
+import ApiDefinition from "../../data/apiDefinition";
 import Result from "../../mediator/Data/result";
 import IRequest from "../../mediator/interfaces/request";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
@@ -7,25 +8,33 @@ export default class LogginMessegeHandler<
 	TValue
 > implements IRequestHandler<TRequest, TValue>
 {
-	private isFull: boolean = false;
+	private isFull: boolean = true;
 
 	preHandling(request: TRequest): void {
-		const name = request.constructor.name;
+		let prefix = this.prefix(request);
 		if (this.isFull)
-			console.log(name + ":" + JSON.stringify(request));
+			console.log(prefix + JSON.stringify(request, (key, value) => {
+				if (value?.route)
+					return value.route;
+				return value;
+			}));
 		else
-			console.log(name + " started");
+			console.log(prefix + " started");
 	}
 
 	postHandling?(request: TRequest, result: Result<TValue>): void {
-		const name = request.constructor.name;
+		let prefix = this.prefix(request);
 		if (result.error)
-			console.log(name + " errors: " + result.error.message);
+			console.log(prefix + " errors: " + result.error.message);
 		else {
 			if (this.isFull)
-				console.log(name + " finished, result: " + JSON.stringify(result.value));
+				console.log(prefix + " finished, result: " + JSON.stringify(result.value));
 			else
-				console.log(name + " finished");
+				console.log(prefix + " finished");
 		}
+	}
+
+	private prefix(request: TRequest) {
+		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.id}: `;
 	}
 }
