@@ -4,7 +4,6 @@ import mongoose from 'mongoose';
 
 import addAllRoutes from "./tasks/addAllRoutesTask";
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
-import getMessegesHandling from "./mediator/getMessegesHandling";
 import Mediator from "./mediator/mediator";
 import { readFolder } from "./factories/folderReader";
 import dataSchemeFactory from "./factories/dataSchemeFactory";
@@ -12,23 +11,20 @@ import ApiDefinition from "./data/apiDefinition";
 import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
 import ApiContex from "./data/apiContex";
 import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqeust";
-import AddApiMappingReqeust from "./messeges/bootstrap/addApiMappingReqeust";
-import AddApiValidationsReqeust from "./messeges/bootstrap/addApiValidationsReqeust";
+import ApiDefinitionTaskReqeust from "./messeges/bootstrap/apiDefinitionTaskReqeust";
 
 const asyncFunction = async () => {
 
 	const distFolder = readFolder("./dist", "../");
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
-	const handlers = await getMessegesHandling(messegesHandlers);
-	const mediator = new Mediator(handlers);
+	const mediator = new Mediator(messegesHandlers);
 
 	const configs = readFolder("Configs/");
 	const schemes = dataSchemeFactory(configs.data);
 	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, schemes));
 	const apiContex: ApiContex = await mediator.sendValue(new GetApiContexReqeust(apiDefinitions, distFolder.functions));
 
-	await mediator.send(new AddApiMappingReqeust(apiDefinitions, apiContex));
-	await mediator.send(new AddApiValidationsReqeust(apiDefinitions, apiContex));
+	await mediator.send(new ApiDefinitionTaskReqeust(apiDefinitions, apiContex));
 
 	const app = express();
 

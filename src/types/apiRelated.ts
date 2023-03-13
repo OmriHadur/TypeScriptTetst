@@ -8,8 +8,4 @@ export type ExpressRequest = {
     params: any;
 }
 
-export type Resource = {
-    id: string;
-}
-
 export type GetStatusCode = (request: any) => number;

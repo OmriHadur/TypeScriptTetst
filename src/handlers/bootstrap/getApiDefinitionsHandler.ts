@@ -4,6 +4,7 @@ import IRequestHandler from "../../mediator/interfaces/requestHandler";
 
 import mongoose from 'mongoose';
 import GetApiDefinitionsReqeust from "../../messeges/bootstrap/getApiDefinitionsReqeust";
+import Result from "../../mediator/Data/result";
 const Scheme = mongoose.Schema;
 
 export default class GetApiDefinitionsHandler
@@ -11,12 +12,12 @@ export default class GetApiDefinitionsHandler
 {
     messegeType = GetApiDefinitionsReqeust.name;
 
-    async handle(request: GetApiDefinitionsReqeust): Promise<any | Error> {
+    async handle(request: GetApiDefinitionsReqeust, result: Result<ApiDefinition[]>): Promise<any> {
         const apiJDefinitions: ApiDefinition[] = [];
         Object.entries(request.apiFolder).forEach(([apiRoute, apiDefinition]) =>
             this.addApiDefinition(apiDefinition, apiRoute, request.schemes, apiJDefinitions)
         );
-        return apiJDefinitions;
+        result.value = apiJDefinitions;
     }
 
     private addApiDefinition(apiDefinition: any, apiRoute: string, schemes: Dictionary<any>, apiJDefinitions: ApiDefinition[]) {

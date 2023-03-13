@@ -1,5 +1,6 @@
 import ApiContex from "../../data/apiContex";
 import Dictionary from "../../general/dictionary";
+import Result from "../../mediator/Data/result";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import GetApiContexReqeust from "../../messeges/bootstrap/getApiContexReqeust";
 
@@ -8,7 +9,7 @@ export default class GetApiContexHandler
 {
     messegeType = GetApiContexReqeust.name;
 
-    async handle(request: GetApiContexReqeust): Promise<ApiContex | Error> {
+    async handle(request: GetApiContexReqeust, result: Result<ApiContex>): Promise<void> {
         const modules: any = {};
         for (let apiDefinition of request.apiDefinitions)
             modules[apiDefinition.route!] = apiDefinition.module;
@@ -16,7 +17,7 @@ export default class GetApiContexHandler
         const functions: any = {};
         this.addFunctions(request.functionsFolder, functions);
 
-        return { ...modules, ...functions, modules: modules, functions: functions, };
+        result.value = new ApiContex(modules, functions);
     }
 
     private addFunctions(functionsFolder: Dictionary<any>, functions: Dictionary<Function>) {

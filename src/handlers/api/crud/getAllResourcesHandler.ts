@@ -1,3 +1,4 @@
+import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import GetAllResourcesRequest from "../../../messeges/api/crud/getAllResourcesRequest";
 
@@ -6,8 +7,8 @@ export default class CreateResourceHandler
 {
 	messegeType = GetAllResourcesRequest.name;
 
-	async handle(request: GetAllResourcesRequest): Promise<any[] | Error> {
+	async handle(request: GetAllResourcesRequest, result: Result<any[]>): Promise<void> {
 		const entities = await request.api.module.find();
-		return request.api.mapEntitiesToResources(entities);
+		result.value = await request.api.mapEntitiesToResources(entities);
 	}
 }

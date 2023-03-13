@@ -1,11 +1,15 @@
 import IRequest from "./request";
-import { HandlingPriority } from "../handlingPriority";
 import IMediator from "./mediator";
+import Result from "../Data/result";
 
 export default interface IRequestHandler<TRequest extends IRequest<TValue>, TValue> {
 	messegeType?: string;
 
-	priority?: HandlingPriority;
+	preHandling?(request: TRequest): void;
 
-	handle(messege: TRequest, next: Function, mediator: IMediator): Promise<TValue | Error>;
+	validate?(messege: TRequest, mediator: IMediator): Promise<Error | void>;
+
+	handle?(messege: TRequest, result: Result<TValue>, mediator: IMediator): Promise<void>;
+
+	postHandling?(request: TRequest, result: Result<TValue>): void;
 }

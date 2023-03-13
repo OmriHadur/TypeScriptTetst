@@ -1,4 +1,5 @@
 import NotFoundError from "../../../Errors/notFoundError";
+import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 
@@ -6,16 +7,16 @@ import AlterResourceRequest from "../../../messeges/api/crud/alterResourceReques
 export default class AlterResourceHandler implements IRequestHandler<AlterResourceRequest, any> {
 	messegeType = AlterResourceRequest.name;
 
-	async handle(request: AlterResourceRequest): Promise<any> {
+	async handle(request: AlterResourceRequest, result: Result<any>): Promise<void> {
 		let entity = await request.api.module.findById(request.id);
 		if (!entity)
-			return new NotFoundError(request.id);
+			result.error = new NotFoundError(request.id);
 		const entityRepalce = await request.api.mapAlterToEntity(request.resource);
 		Object.entries(entityRepalce).forEach(([key, value]) => {
 			if (value || request.isReplace)
 				entity[key] = value;
 		});
 		entity = await entity.save();
-		return request.api.mapEntityToResource(entity);
+		result.value = await request.api.mapEntityToResource(entity);
 	}
 }

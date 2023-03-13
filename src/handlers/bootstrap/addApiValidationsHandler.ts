@@ -2,21 +2,20 @@ import ApiContex from "../../data/apiContex";
 import ApiDefinition from "../../data/apiDefinition";
 import Unit from "../../mediator/Data/unit";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import AddApiValidationsReqeust from "../../messeges/bootstrap/addApiValidationsReqeust";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import PropertyValidationError from "../../Errors/propertyValidationError";
 import validationFactory from "../../factories/validationFactory";
+import ApiDefinitionTaskReqeust from "../../messeges/bootstrap/apiDefinitionTaskReqeust";
 
 const validationsFunctions = validationFactory();
 
 export default class AddApiValidationsHandler
-    implements IRequestHandler<AddApiValidationsReqeust, Unit>
+    implements IRequestHandler<ApiDefinitionTaskReqeust, Unit>
 {
-    messegeType = AddApiValidationsReqeust.name;
+    messegeType = ApiDefinitionTaskReqeust.name;
 
-    async handle(request: AddApiValidationsReqeust): Promise<Unit | Error> {
+    async handle(request: ApiDefinitionTaskReqeust): Promise<void> {
         request.apiDefinitions.forEach(apiDefinition => this.addApiValidation(apiDefinition, request.apiContex));
-        return Unit.Instance;
     }
 
 

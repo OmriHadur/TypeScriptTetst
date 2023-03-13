@@ -1,15 +1,10 @@
 export default class Result<TValue> {
-	error?: Error;
-	value?: TValue;
+	public error?: Error;
+	public value?: TValue;
 
-	constructor(value: (Error | TValue)) {
-		if (value instanceof Error)
-			this.error = value;
-		else
-			this.value = value;
-	}
+	isError = (): boolean => this.error != null;
 
-	isFailed = () => this.error
+	isSuccess = (): boolean => this.error == null && this.value != null;
 
-	isSuccess = () => this.error == null;
+	isResult = (): boolean => this.error != null || this.value != null;
 }

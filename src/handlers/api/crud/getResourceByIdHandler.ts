@@ -1,4 +1,5 @@
 import NotFoundError from "../../../Errors/notFoundError";
+import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import GetResourceByIdRequest from "../../../messeges/api/crud/getResourceByIdRequest";
 
@@ -7,11 +8,11 @@ export default class GetResourceByIdHandler
 {
 	messegeType = GetResourceByIdRequest.name;
 
-	async handle(request: GetResourceByIdRequest): Promise<any | Error> {
+	async handle(request: GetResourceByIdRequest, result: Result<any>): Promise<void> {
 		const entity = await request.api.module.findById(request.id);
 		if (entity)
-			return request.api.mapEntityToResource(entity);
+			result.value = await request.api.mapEntityToResource(entity);
 		else
-			return new NotFoundError(request.id);
+			result.error = new NotFoundError(request.id);
 	}
 }

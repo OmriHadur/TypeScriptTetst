@@ -1,11 +1,11 @@
+import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import CreateOrAlterResourceRequest from "../../../messeges/api/crud/createOrAlterResourceRequest";
-
 
 export default class CreateOrAlterResourceHandler implements IRequestHandler<CreateOrAlterResourceRequest, any> {
 	messegeType = CreateOrAlterResourceRequest.name;
 
-	async handle(request: CreateOrAlterResourceRequest): Promise<any | Error> {
+	async handle(request: CreateOrAlterResourceRequest, result: Result<any>): Promise<void> {
 		let entity = request.entity;
 		if (!entity) {
 			const entityData = await request.api.mapCreateToEntity(request.resource);
@@ -19,6 +19,6 @@ export default class CreateOrAlterResourceHandler implements IRequestHandler<Cre
 			});
 		}
 		entity = await entity.save();
-		return request.api.mapEntityToResource(entity);
+		result.value = await request.api.mapEntityToResource(entity);
 	}
 }
