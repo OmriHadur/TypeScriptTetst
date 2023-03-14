@@ -14,7 +14,11 @@ export default class AddApiValidationsHandler
 
     async handle(request: AddApiValidationsTaskReqeust): Promise<void> {
         const functions = getFunctions(request.validationFunctions);
-        request.apiDefinitions.forEach(apiDefinition => this.addApiValidation(apiDefinition, request.apiContex, functions));
+        request.apiDefinitions.forEach(api => {
+            for (let nestedApi of api.nestedApis)
+                this.addApiValidation(nestedApi, request.apiContex, functions);
+            this.addApiValidation(api, request.apiContex, functions);
+        });
     }
 
     addApiValidation(apiDefinition: ApiDefinition, apiContex: ApiContex, functions: any) {

@@ -11,7 +11,9 @@
 			"quantity": "number"
 		},
 		"resource": {
-			"id": "string"
+			"id": "string",
+			"barcode": "string",
+			"quantity": "number"
 		}
 	},
 	"mapping": {
@@ -23,10 +25,17 @@
 	},
 	"validations": {
 		"create": {
-			"variables": {}
+			"variables": {},
+			"barcode": {
+				"required": true,
+				"lengthExact": 13
+			}
 		},
 		"alter": {
-			"variables": {}
+			"variables": {},
+			"quantity": {
+				"positive": true
+			}
 		}
 	}
 }

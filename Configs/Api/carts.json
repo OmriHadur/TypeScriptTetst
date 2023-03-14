@@ -3,7 +3,7 @@
 		"create": {},
 		"alter": {},
 		"entity": {
-			"items": ["cartItem"]
+			"cartItems": ["cartItem"]
 		},
 		"resource": {
 			"id": "string"

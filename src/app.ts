@@ -29,7 +29,7 @@ const asyncFunction = async () => {
 
 	await mediator.send(new AddApiMappingTaskReqeust(apiDefinitions, apiContex));
 	await mediator.send(new AddApiValidationsTaskReqeust(apiDefinitions, apiContex, distFolder.validations));
-
+	
 	const app = express();
 
 	app.use(bodyParser.json());

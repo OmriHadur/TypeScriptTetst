@@ -11,25 +11,35 @@ export default class AddApiMappingHandler
     messegeType = AddApiMappingTaskReqeust.name;
 
     async handle(request: AddApiMappingTaskReqeust): Promise<void> {
-        request.apiDefinitions.forEach(api => this.addApiMapping(api, request.apiContex));
+        request.apiDefinitions.forEach(api => {
+            for (let nestedApi of api.nestedApis)
+                this.addApiMapping(nestedApi, request.apiContex);
+            this.addApiMapping(api, request.apiContex);
+        });
     }
 
-    async addApiMapping(apiDefinition: ApiDefinition, apiContex: ApiContex) {
-        const createScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.createAndAlterToEntity);
-        apiDefinition.mapCreateToEntity =
-            (createResource: any) => this.map(createResource, apiDefinition.types.createAndAlter, createScripts, apiContex);
+    async addApiMapping(api: ApiDefinition, apiContex: ApiContex) {
+        const createScripts = scriptsBuilder.definitionToScript(api.mapping.createAndAlterToEntity);
+        api.mapCreateToEntity =
+            (createResource: any) => this.map(createResource, api.types.createAndAlter, createScripts, apiContex);
 
-        const alterScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.alterToEntity);
-        apiDefinition.mapAlterToEntity =
-            (alterResource: any) => this.map(alterResource, apiDefinition.types.alter, alterScripts, apiContex);
+        const alterScripts = scriptsBuilder.definitionToScript(api.mapping.alterToEntity);
+        api.mapAlterToEntity =
+            (alterResource: any) => this.map(alterResource, api.types.alter, alterScripts, apiContex);
 
-        const resourceScripts = scriptsBuilder.definitionToScript(apiDefinition.mapping.entityToResource);
-        apiDefinition.mapEntityToResource =
-            (entity: any) => this.map(entity, apiDefinition.types.resource, resourceScripts, apiContex);
+        const resourceScripts = scriptsBuilder.definitionToScript(api.mapping.entityToResource);
+        api.mapEntityToResource =
+            async (entity: any) => {
+                const resource = await this.map(entity, api.types.resource, resourceScripts, apiContex)
+                await this.mapNested(api, resource, entity);
+                return resource;
+            };
 
-        apiDefinition.mapEntitiesToResources = async (entities: any[]) => {
-            const resourceMapping = entities.map(async (entity: any) => await apiDefinition.mapEntityToResource(entity));
-            return await Promise.all(resourceMapping);
+        api.mapEntitiesToResources = async (entities: any[]) => {
+            const resources = [entities.length];
+            for (let i = 0; i < entities.length; i++)
+                resources[i] = await api.mapEntityToResource(entities[i]);
+            return resources;
         }
     }
 
@@ -43,4 +53,10 @@ export default class AddApiMappingHandler
                 output[property] = input[property];
         return output;
     };
+
+    async mapNested(api: ApiDefinition, resource: any, entity: any) {
+        if (api.nestedApis)
+            for (let nestedApi of api.nestedApis)
+                resource[nestedApi.route] = await nestedApi.mapEntitiesToResources(entity[nestedApi.route]);
+    }
 }

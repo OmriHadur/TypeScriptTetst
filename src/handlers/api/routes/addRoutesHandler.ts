@@ -6,7 +6,7 @@ import AddApiRoutesReqeust from "../../../messeges/api/routes/addApiRoutesReqeus
 import AddRoutesReqeust from "../../../messeges/api/routes/addRoutesReqeust";
 import Unit from "../../../mediator/Data/unit";
 
-export default class GetRouterHandler
+export default class AddRoutesHandler
 	implements IRequestHandler<AddRoutesReqeust, Unit>
 {
 	messegeType = AddRoutesReqeust.name;
