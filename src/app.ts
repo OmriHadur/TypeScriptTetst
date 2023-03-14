@@ -9,8 +9,9 @@ import ApiDefinition from "./data/apiDefinition";
 import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
 import ApiContex from "./data/apiContex";
 import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqeust";
-import ApiDefinitionTaskReqeust from "./messeges/bootstrap/apiDefinitionTaskReqeust";
 import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
+import AddApiMappingTaskReqeust from "./messeges/bootstrap/addApiMappingTaskReqeust";
+import AddApiValidationsTaskReqeust from "./messeges/bootstrap/addApiValidationsTaskReqeust";
 
 const asyncFunction = async () => {
 
@@ -23,7 +24,8 @@ const asyncFunction = async () => {
 	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, schemes));
 	const apiContex: ApiContex = await mediator.sendValue(new GetApiContexReqeust(apiDefinitions, distFolder.functions));
 
-	await mediator.send(new ApiDefinitionTaskReqeust(apiDefinitions, apiContex));
+	await mediator.send(new AddApiMappingTaskReqeust(apiDefinitions, apiContex));
+	await mediator.send(new AddApiValidationsTaskReqeust(apiDefinitions, apiContex, distFolder.validations));
 
 	const app = express();
 

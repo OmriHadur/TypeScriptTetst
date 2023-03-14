@@ -4,40 +4,38 @@ import Unit from "../../mediator/Data/unit";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import PropertyValidationError from "../../Errors/propertyValidationError";
-import validationFactory from "../../factories/validationFactory";
-import ApiDefinitionTaskReqeust from "../../messeges/bootstrap/apiDefinitionTaskReqeust";
-
-const validationsFunctions = validationFactory();
+import AddApiValidationsTaskReqeust from "../../messeges/bootstrap/addApiValidationsTaskReqeust";
+import getFunctions from "../../helpers/getFunctions";
 
 export default class AddApiValidationsHandler
-    implements IRequestHandler<ApiDefinitionTaskReqeust, Unit>
+    implements IRequestHandler<AddApiValidationsTaskReqeust, Unit>
 {
-    messegeType = ApiDefinitionTaskReqeust.name;
+    messegeType = AddApiValidationsTaskReqeust.name;
 
-    async handle(request: ApiDefinitionTaskReqeust): Promise<void> {
-        request.apiDefinitions.forEach(apiDefinition => this.addApiValidation(apiDefinition, request.apiContex));
+    async handle(request: AddApiValidationsTaskReqeust): Promise<void> {
+        const functions = getFunctions(request.validationFunctions);
+        request.apiDefinitions.forEach(apiDefinition => this.addApiValidation(apiDefinition, request.apiContex, functions));
     }
 
-
-    addApiValidation(apiDefinition: ApiDefinition, apiContex: ApiContex) {
+    addApiValidation(apiDefinition: ApiDefinition, apiContex: ApiContex, functions: any) {
         const createAndAlterValidation = apiDefinition.validations.createAndAlter;
         const createAndAlterType = apiDefinition.types.createAndAlter;
         const alterType = apiDefinition.types.alter;
-        apiDefinition.validateCreate = this.getValidation(createAndAlterValidation, apiContex, createAndAlterType, true);
+        apiDefinition.validateCreate = this.getValidation(createAndAlterValidation, apiContex, createAndAlterType, true, functions);
 
         const alterValidation = apiDefinition.validations.alter;
 
-        apiDefinition.validateReplace = this.getValidation(alterValidation, apiContex, alterType, true);
-        apiDefinition.validateUpdate = this.getValidation(alterValidation, apiContex, alterType, false);
+        apiDefinition.validateReplace = this.getValidation(alterValidation, apiContex, alterType, true, functions);
+        apiDefinition.validateUpdate = this.getValidation(alterValidation, apiContex, alterType, false, functions);
     }
 
-    getValidation(validationDefinition: any, apiContex: ApiContex, typeDefinition: any, isValidateUndefined: boolean) {
+    getValidation(validationDefinition: any, apiContex: ApiContex, typeDefinition: any, isValidateUndefined: boolean, functions: any) {
         const validationFunctions: any = {};
         const variables: any = {};
         for (let [propertyOrValidationName, value] of Object.entries(validationDefinition)) {
             const isProperty = typeDefinition[propertyOrValidationName] != null;
             if (isProperty)
-                this.AddPropertyValidations(value, validationFunctions, isValidateUndefined, propertyOrValidationName);
+                this.AddPropertyValidations(functions, value, validationFunctions, isValidateUndefined, propertyOrValidationName);
             else if (propertyOrValidationName == 'variables') {
                 for (let [variableName, variableScript] of Object.entries(value as any))
                     variables[variableName] = this.getScriptFunction(variableScript as string);
@@ -47,9 +45,9 @@ export default class AddApiValidationsHandler
         return async (resource: any) => await this.validateResource(validationFunctions, apiContex, variables, resource);
     }
 
-    AddPropertyValidations(propertyValidations: any, validationFunctions: any, isValidateUndefined: boolean, propertyName: string) {
+    AddPropertyValidations(functions: any, propertyValidations: any, validationFunctions: any, isValidateUndefined: boolean, propertyName: string) {
         Object.entries(propertyValidations).forEach(([validationName, validationArg]) => {
-            const validationFunction = validationsFunctions[validationName];
+            const validationFunction = functions[validationName];
             const propertyValidationFunction = validationFunction ?
                 this.getPropertyFunction(isValidateUndefined, propertyName, validationFunction, validationArg) :
                 this.getScriptFunction(validationArg as string);

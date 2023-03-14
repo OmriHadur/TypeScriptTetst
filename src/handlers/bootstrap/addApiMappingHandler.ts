@@ -3,14 +3,14 @@ import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import ApiContex from "../../data/apiContex";
 import ApiDefinition from "../../data/apiDefinition";
-import ApiDefinitionTaskReqeust from "../../messeges/bootstrap/apiDefinitionTaskReqeust";
+import AddApiMappingTaskReqeust from "../../messeges/bootstrap/addApiMappingTaskReqeust";
 
 export default class AddApiMappingHandler
-    implements IRequestHandler<ApiDefinitionTaskReqeust, Unit>
+    implements IRequestHandler<AddApiMappingTaskReqeust, Unit>
 {
-    messegeType = ApiDefinitionTaskReqeust.name;
+    messegeType = AddApiMappingTaskReqeust.name;
 
-    async handle(request: ApiDefinitionTaskReqeust): Promise<void> {
+    async handle(request: AddApiMappingTaskReqeust): Promise<void> {
         request.apiDefinitions.forEach(api => this.addApiMapping(api, request.apiContex));
     }
 

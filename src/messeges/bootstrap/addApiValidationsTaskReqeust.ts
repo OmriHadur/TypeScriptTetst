@@ -4,8 +4,8 @@ import Unit from "../../mediator/Data/unit"
 import Request from "../../mediator/interfaces/request"
 
 
-export default class ApiDefinitionTaskReqeust extends Request<Unit> {
-    constructor(public apiDefinitions: ApiDefinition[], public apiContex: ApiContex) {
+export default class AddApiValidationsTaskReqeust extends Request<Unit> {
+    constructor(public apiDefinitions: ApiDefinition[], public apiContex: ApiContex, public validationFunctions: any) {
         super();
     }
 }
