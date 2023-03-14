@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
 import Mediator from "./mediator/mediator";
-import { readFolder } from "./factories/folderReader";
+import folderFactory from "./factories/folderFactory";
 import dataSchemeFactory from "./factories/dataSchemeFactory";
 import ApiDefinition from "./data/apiDefinition";
 import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
@@ -12,16 +12,19 @@ import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqe
 import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
 import AddApiMappingTaskReqeust from "./messeges/bootstrap/addApiMappingTaskReqeust";
 import AddApiValidationsTaskReqeust from "./messeges/bootstrap/addApiValidationsTaskReqeust";
+import GetNestedApiDefinitionsReqeust from "./messeges/bootstrap/getNestedApiDefinitionsReqeust";
+import Dictionary from "./general/dictionary";
 
 const asyncFunction = async () => {
 
-	const distFolder = readFolder("./dist", "../");
+	const distFolder = folderFactory("./dist", "../");
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const mediator = new Mediator(messegesHandlers);
 
-	const configs = readFolder("Configs/");
-	const schemes = dataSchemeFactory(configs.data);
-	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, schemes));
+	const configs = folderFactory("Configs/");
+	const dataSchemes = dataSchemeFactory(configs.data);
+	const nested: Dictionary<ApiDefinition[]> = await mediator.sendValue(new GetNestedApiDefinitionsReqeust(configs.api, dataSchemes));
+	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, dataSchemes, nested));
 	const apiContex: ApiContex = await mediator.sendValue(new GetApiContexReqeust(apiDefinitions, distFolder.functions));
 
 	await mediator.send(new AddApiMappingTaskReqeust(apiDefinitions, apiContex));

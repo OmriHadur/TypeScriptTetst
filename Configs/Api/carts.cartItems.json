@@ -1,0 +1,32 @@
+{
+	"types": {
+		"create": {
+			"barcode": "string"
+		},
+		"alter": {
+			"quantity": "number"
+		},
+		"entity": {
+			"barcode": "string",
+			"quantity": "number"
+		},
+		"resource": {
+			"id": "string"
+		}
+	},
+	"mapping": {
+		"createToEntity": {},
+		"alterToEntity": {},
+		"entityToResource": {
+			"id": "input._id"
+		}
+	},
+	"validations": {
+		"create": {
+			"variables": {}
+		},
+		"alter": {
+			"variables": {}
+		}
+	}
+}

@@ -15,6 +15,7 @@ export default class ApiDefinition {
 	validateCreate?: any;
 	validateReplace?: any;
 	validateUpdate?: any;
+	nestedApis: ApiDefinition[];
 
 	constructor(route: string,
 		types: TypesDefinition,
@@ -24,5 +25,6 @@ export default class ApiDefinition {
 		this.types = types;
 		this.mapping = mapping;
 		this.validations = validations;
+		this.nestedApis = [];
 	}
 }

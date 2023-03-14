@@ -1,0 +1,31 @@
+{
+	"types": {
+		"create": {},
+		"alter": {},
+		"entity": {
+			"items": ["cartItem"]
+		},
+		"resource": {
+			"id": "string"
+		}
+	},
+	"mapping": {
+		"createToEntity": {
+			"createdAt": "functions.now()"
+		},
+		"alterToEntity": {
+			"alteredAt": "functions.now()"
+		},
+		"entityToResource": {
+			"id": "input._id"
+		}
+	},
+	"validations": {
+		"create": {
+			"variables": {}
+		},
+		"alter": {
+			"variables": {}
+		}
+	}
+}

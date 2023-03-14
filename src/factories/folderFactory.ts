@@ -2,7 +2,11 @@ import * as fs from 'fs';
 
 const encoding = 'utf8';
 
-export function readFolder(folder: string, absFolder: string = folder) {
+export default function (folder: string, absFolder: string = folder) {
+    return readFolder(folder, absFolder);
+}
+
+function readFolder(folder: string, absFolder: string) {
     const itemsNames = fs.readdirSync(folder) as string[];
     const items: any = {};
     itemsNames.forEach(itemName => {

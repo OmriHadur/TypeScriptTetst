@@ -1,45 +1,24 @@
 import ApiDefinition from "../../data/apiDefinition";
-import Dictionary from "../../general/dictionary";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
-
-import mongoose from 'mongoose';
 import GetApiDefinitionsReqeust from "../../messeges/bootstrap/getApiDefinitionsReqeust";
 import Result from "../../mediator/Data/result";
-const Scheme = mongoose.Schema;
-
+import IMediator from "../../mediator/interfaces/mediator";
+import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
 export default class GetApiDefinitionsHandler
     implements IRequestHandler<GetApiDefinitionsReqeust, ApiDefinition[]>
 {
     messegeType = GetApiDefinitionsReqeust.name;
 
-    async handle(request: GetApiDefinitionsReqeust, result: Result<ApiDefinition[]>): Promise<any> {
+    async handle(request: GetApiDefinitionsReqeust, result: Result<ApiDefinition[]>, mediator: IMediator): Promise<any> {
         const apiJDefinitions: ApiDefinition[] = [];
-        Object.entries(request.apiFolder).forEach(([apiRoute, apiDefinition]) =>
-            this.addApiDefinition(apiDefinition, apiRoute, request.schemes, apiJDefinitions)
-        );
+        for (let [apiRoute, jsonApiDefinition] of Object.entries(request.apiFolder)) {
+            if (!apiRoute.includes('.')) {
+                const apiRequest = new GetApiDefinitionReqeust(jsonApiDefinition, apiRoute, request.dataSchemes);
+                const apiDefinition: ApiDefinition = await mediator.sendValue(apiRequest);
+                apiDefinition.nestedApis = request.nested[apiDefinition.route] ?? [];
+                apiJDefinitions.push(apiDefinition);
+            }
+        };
         result.value = apiJDefinitions;
-    }
-
-    private addApiDefinition(apiDefinition: any, apiRoute: string, schemes: Dictionary<any>, apiJDefinitions: ApiDefinition[]) {
-        apiDefinition.route = apiRoute;
-        const entity: Dictionary<string> = apiDefinition.types.entity;
-        Object.entries(entity).forEach(([key, value]) => {
-            if (schemes[value])
-                entity[key] = schemes[value];
-        });
-        apiDefinition.module = this.entityToModule(apiRoute, entity);
-        this.addCreateUnionAlter(apiDefinition);
-        apiJDefinitions.push(apiDefinition);
-    }
-
-    private entityToModule(route: string, entityDefinition: any) {
-        const scheme = new Scheme(entityDefinition);
-        return mongoose.model(route, scheme);
-    }
-
-    private addCreateUnionAlter(apiDefinition: ApiDefinition) {
-        apiDefinition.types.createAndAlter = { ...apiDefinition.types.create, ...apiDefinition.types.alter };
-        apiDefinition.validations.createAndAlter = { ...apiDefinition.validations.create, ...apiDefinition.validations.alter };
-        apiDefinition.mapping.createAndAlterToEntity = { ...apiDefinition.mapping.createToEntity, ...apiDefinition.mapping.alterToEntity };
     }
 }

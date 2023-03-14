@@ -2,8 +2,9 @@ import IRequest from "./interfaces/request";
 import Result from "./Data/result";
 import Dictionary from "../general/dictionary";
 import Unit from "./Data/unit";
+import IMediator from "./interfaces/mediator";
 
-export default class Mediator {
+export default class Mediator implements IMediator {
 	handlers: Dictionary<any[]>;
 	generalHandlers: any[];
 
