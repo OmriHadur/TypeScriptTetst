@@ -1,0 +1,10 @@
+@HOST = http://localhost:3000
+
+PATCH {{HOST}}/users/ HTTP/1.1
+content-type: application/json
+
+{
+    "email": "bv.hadur@gmail.com",
+    "password":"A123456",
+    "name":"nameA"
+}

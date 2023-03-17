@@ -1,0 +1,25 @@
+@host = http://localhost:3000
+@user_email = test@gmail.com
+@user_password = A12345678
+
+# @name create
+
+POST {{ host }}/users
+Content-Type: application/json
+
+{
+  "email": "{{ user_email}}",
+  "password": "{{ user_password }}",
+  "name": "name"
+}
+
+### Get
+@id = {{create.response.body.id}}
+
+# @name get
+GET {{ host }}/users/{{ id }}
+
+### delete
+
+# @name delete
+DELETE  {{ host }}/users/{{ id }}
