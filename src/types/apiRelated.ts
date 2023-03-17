@@ -6,6 +6,7 @@ export type GetRequestFunction = (req: ExpressRequest) => IRequest<any>;
 export type ExpressRequest = {
     body: any;
     params: any;
+    query: any;
 }
 
 export type GetStatusCode = (request: any) => number;
