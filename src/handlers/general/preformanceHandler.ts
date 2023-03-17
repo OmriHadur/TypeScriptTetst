@@ -10,16 +10,16 @@ export default class PreformanceHandler<
 	private stopwatchs: any = {};
 
 	preHandling(request: TRequest): void {
-		this.stopwatchs[request.id] = new Stopwatch();
+		this.stopwatchs[request.requestId] = new Stopwatch();
 	}
 
 	postHandling?(request: TRequest): void {
-		const elapsedTime = this.stopwatchs[request.id].stop();
+		const elapsedTime = this.stopwatchs[request.requestId].stop();
 		console.log(this.prefix(request) + `took ${elapsedTime} ms`);
-		delete this.stopwatchs[request.id];
+		delete this.stopwatchs[request.requestId];
 	}
 
 	private prefix(request: TRequest) {
-		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.id}: `;
+		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.requestId}: `;
 	}
 }

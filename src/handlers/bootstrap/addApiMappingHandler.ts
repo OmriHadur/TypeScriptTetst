@@ -19,9 +19,9 @@ export default class AddApiMappingHandler
     }
 
     async addApiMapping(api: ApiDefinition, apiContex: ApiContex) {
-        const createScripts = scriptsBuilder.definitionToScript(api.mapping.createAndAlterToEntity);
+        const createScripts = scriptsBuilder.definitionToScript(api.mapping.createToEntity);
         api.mapCreateToEntity =
-            (createResource: any) => this.map(createResource, api.types.createAndAlter, createScripts, apiContex);
+            (createResource: any) => this.map(createResource, api.types.create, createScripts, apiContex);
 
         const alterScripts = scriptsBuilder.definitionToScript(api.mapping.alterToEntity);
         api.mapAlterToEntity =

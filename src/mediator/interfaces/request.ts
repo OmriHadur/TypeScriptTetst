@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export default class Request<TValue> {
-    public id: string;
+    public requestId: string;
 
     constructor() {
-        this.id = uuidv4();
+        this.requestId = uuidv4();
     }
 }

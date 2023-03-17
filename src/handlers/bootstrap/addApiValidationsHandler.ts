@@ -22,13 +22,10 @@ export default class AddApiValidationsHandler
     }
 
     addApiValidation(apiDefinition: ApiDefinition, apiContex: ApiContex, functions: any) {
-        const createAndAlterValidation = apiDefinition.validations.createAndAlter;
-        const createAndAlterType = apiDefinition.types.createAndAlter;
-        const alterType = apiDefinition.types.alter;
-        apiDefinition.validateCreate = this.getValidation(createAndAlterValidation, apiContex, createAndAlterType, true, functions);
+        apiDefinition.validateCreate = this.getValidation(apiDefinition.validations.create, apiContex, apiDefinition.types.create, true, functions);
 
         const alterValidation = apiDefinition.validations.alter;
-
+        const alterType = apiDefinition.types.alter;
         apiDefinition.validateReplace = this.getValidation(alterValidation, apiContex, alterType, true, functions);
         apiDefinition.validateUpdate = this.getValidation(alterValidation, apiContex, alterType, false, functions);
     }

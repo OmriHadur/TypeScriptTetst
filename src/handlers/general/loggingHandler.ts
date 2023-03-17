@@ -35,6 +35,6 @@ export default class LogginMessegeHandler<
 	}
 
 	private prefix(request: TRequest) {
-		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.id}: `;
+		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.requestId}: `;
 	}
 }

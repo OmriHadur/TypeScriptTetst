@@ -20,18 +20,11 @@ export default class GetApiDefinitionHandler
                 entity[key] = request.dataSchemes[value];
         });
         apiDefinition.module = this.entityToModule(apiDefinition.route, entity);
-        this.addCreateUnionAlter(apiDefinition);
         result.value = apiDefinition;
     }
 
     private entityToModule(route: string, entityDefinition: any) {
         const scheme = new Scheme(entityDefinition);
         return mongoose.model(route, scheme);
-    }
-
-    private addCreateUnionAlter(apiDefinition: ApiDefinition) {
-        apiDefinition.types.createAndAlter = { ...apiDefinition.types.create, ...apiDefinition.types.alter };
-        apiDefinition.validations.createAndAlter = { ...apiDefinition.validations.create, ...apiDefinition.validations.alter };
-        apiDefinition.mapping.createAndAlterToEntity = { ...apiDefinition.mapping.createToEntity, ...apiDefinition.mapping.alterToEntity };
     }
 }

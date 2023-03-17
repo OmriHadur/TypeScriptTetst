@@ -9,3 +9,10 @@ export type ExpressRequest = {
 }
 
 export type GetStatusCode = (request: any) => number;
+
+export enum AlterOperation {
+    Create,
+    ReplaceOrCreate,
+    Replace,
+    Update
+}
