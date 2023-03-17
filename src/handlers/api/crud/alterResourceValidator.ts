@@ -11,12 +11,12 @@ export default class AlterResourceValidator
 	messegeType = AlterResourceRequest.name;
 
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
-		for (let validator of this.getValidators(request)) {
+		for (let validator of this.getValidators(request.operation, request.api)) {
 			const errors = await validator(request.resource);
 			if (errors.length > 0)
 				return new ValidationError(errors);
 		}
-
+		
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			request.entity = await this.getExistEntity(request);
 			if (request.entity && request.operation == AlterOperation.Create)
@@ -35,17 +35,17 @@ export default class AlterResourceValidator
 		return request.api.module.findOne(predicate);
 	}
 
-	getValidators = function* getValidators(request: AlterResourceRequest) {
-		switch (request.operation) {
+	getValidators = function* getValidators(operation: AlterOperation, api: any) {
+		switch (operation) {
 			case AlterOperation.Create:
 			case AlterOperation.ReplaceOrCreate:
-				yield request.api.validateCreate;
-				yield request.api.validateReplace;
+				yield api.validateCreate;
+				yield api.validateReplace;
 				break;
 			case AlterOperation.Replace:
-				yield request.api.validateReplace;
+				yield api.validateReplace;
 			case AlterOperation.Update:
-				yield request.api.validateUpdate;
+				yield api.validateUpdate;
 		}
 	}
 }

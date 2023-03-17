@@ -6,7 +6,8 @@
 			"cartItems": ["cartItem"]
 		},
 		"resource": {
-			"id": "string"
+			"id": "string",
+			"itemsCount": "number"
 		}
 	},
 	"mapping": {
@@ -17,7 +18,8 @@
 			"alteredAt": "functions.now()"
 		},
 		"entityToResource": {
-			"id": "input._id"
+			"id": "input._id",
+			"itemsCount": "functions.sum(input.cartItems,'quantity')"
 		}
 	},
 	"validations": {

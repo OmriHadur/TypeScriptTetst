@@ -11,11 +11,20 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 		let entity = request.entity;
 
 		if (this.isShouldCreate(request))
-			entity = await this.create(request, entity);
+			entity = await this.create(request);
 		await this.alter(request, entity);
 
 		entity = await entity.save();
 		result.value = await request.api.mapEntityToResource(entity);
+	}
+
+	private isShouldCreate(request: AlterResourceRequest) {
+		return request.operation == AlterOperation.Create || (request.operation == AlterOperation.ReplaceOrCreate && !request.entity);
+	}
+
+	private async create(request: AlterResourceRequest) {
+		const entityData = await request.api.mapCreateToEntity(request.resource);
+		return new request.api.module(entityData);
 	}
 
 	private async alter(request: AlterResourceRequest, entity: any) {
@@ -24,14 +33,5 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 			if (!(request.operation == AlterOperation.Update && !value))
 				entity[key] = value;
 		});
-	}
-
-	private async create(request: AlterResourceRequest, entity: any) {
-		const entityData = await request.api.mapCreateToEntity(request.resource);
-		return new request.api.module(entityData);
-	}
-
-	private isShouldCreate(request: AlterResourceRequest) {
-		return request.operation == AlterOperation.Create || (request.operation == AlterOperation.ReplaceOrCreate && !request.entity);
 	}
 }
