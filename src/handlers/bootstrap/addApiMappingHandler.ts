@@ -31,7 +31,7 @@ export default class AddApiMappingHandler
         api.mapEntityToResource =
             async (user: any, entity: any) => {
                 const resource = await this.map(user, entity, api.types.resource, resourceScripts, apiContex)
-                await this.mapNested(api, resource, entity);
+                await this.mapNested(user, api, resource, entity);
                 return resource;
             };
 
@@ -47,18 +47,23 @@ export default class AddApiMappingHandler
 
     async map(user: any, input: any, entityType: any, scripts: any, apisContext: ApiContex) {
         const output: any = {};
-        const context = { ...apisContext, user: user, input: input };
-        for (let propertyScript in scripts)
-            output[propertyScript] = await scriptsBuilder.runScript(scripts[propertyScript], context)
+        const variablesValue: any = {};
+        const context = { ...apisContext, user: user, input: input, variables: variablesValue };
+        for (let [variablename, script] of Object.entries(scripts.variables)) {
+            const value = await scriptsBuilder.runScript(script, context)
+            variablesValue[variablename] = value;
+        }
+        for (let propertyScript in scripts.properties)
+            output[propertyScript] = await scriptsBuilder.runScript(scripts.properties[propertyScript], context)
         for (let property in entityType)
             if (!output[property])
                 output[property] = input[property];
         return output;
     };
 
-    async mapNested(api: ApiDefinition, resource: any, entity: any) {
+    async mapNested(user: any, api: ApiDefinition, resource: any, entity: any) {
         if (api.nestedApis)
             for (let nestedApi of api.nestedApis)
-                resource[nestedApi.route] = await nestedApi.mapEntitiesToResources(entity[nestedApi.route]);
+                resource[nestedApi.route] = await nestedApi.mapEntitiesToResources(user, entity[nestedApi.route]);
     }
 }

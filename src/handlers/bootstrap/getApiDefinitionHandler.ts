@@ -1,7 +1,7 @@
 import ApiDefinition from "../../data/apiDefinition";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 import Result from "../../mediator/Data/result";
 import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
 import TypesDefinition from "../../data/typesDefinition";

@@ -8,16 +8,20 @@
 		},
 		"entity": {
 			"barcode": "string",
+			"product": "products",
 			"quantity": "number"
 		},
 		"resource": {
 			"id": "string",
 			"barcode": "string",
+			"product": "products",
 			"quantity": "number"
 		}
 	},
 	"mapping": {
-		"createToEntity": {},
+		"createToEntity": {
+			"product": "modules.products.findOne({barcode:input.barcode})"
+		},
 		"alterToEntity": {},
 		"entityToResource": {
 			"id": "input._id"
@@ -25,11 +29,14 @@
 	},
 	"validations": {
 		"create": {
-			"variables": {},
+			"variables": {
+				"product": "modules.products.findOne({barcode:input.barcode})"
+			},
 			"barcode": {
 				"required": true,
 				"lengthExact": 13
-			}
+			},
+			"productNotExist": "variables.product"
 		},
 		"alter": {
 			"variables": {},

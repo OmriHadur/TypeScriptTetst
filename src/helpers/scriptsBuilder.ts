@@ -1,10 +1,18 @@
 import vm from "node:vm";
+import Dictionary from "../general/dictionary";
+
+const variables = 'variables';
 
 export function definitionToScript(definition: any) {
-	const scripts: any = {};
+	const scripts: any = { variables: {}, properties: {} };
+
 	Object.keys(definition).forEach((property) => {
-		const script = definition[property];
-		scripts[property] = stringToScript(script);
+		const value = definition[property];
+		if (property == variables) {
+			for (let [variableName, variableScript] of Object.entries(value as Dictionary<string>))
+				scripts.variables[variableName] = stringToScript(variableScript);
+		} else
+			scripts.properties[property] = stringToScript(value);
 	});
 	return scripts;
 }

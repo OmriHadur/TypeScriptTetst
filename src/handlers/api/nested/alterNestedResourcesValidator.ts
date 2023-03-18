@@ -13,9 +13,12 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 		if (!request.parentEntity)
 			return new NotFoundError(request.parentId);
 
-		const errors = [];
-		for (let validator of this.getValidators(request.operation, request.nestedApi))
-			errors.push(await validator(request.user, request.resource));
+		let errors: any[] = [];
+		for (let validator of this.getValidators(request.operation, request.nestedApi)) {
+			const validatorErrors = await validator(request.user, request.resource);
+			errors = errors.concat(validatorErrors);
+		}
+
 		if (errors.length > 0)
 			return new ValidationError(errors);
 

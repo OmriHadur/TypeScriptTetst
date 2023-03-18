@@ -10,7 +10,6 @@
 		},
 		"resource": {
 			"id": "string",
-			"TEST": "string",
 			"itemsCount": "number"
 		}
 	},
@@ -24,7 +23,6 @@
 		},
 		"entityToResource": {
 			"id": "input._id",
-			"TEST": "input.userId",
 			"itemsCount": "functions.sum(input.cartItems,'quantity')"
 		}
 	},
