@@ -13,12 +13,12 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 		if (!request.parentEntity)
 			return new NotFoundError(request.parentId);
 
-		for (let validator of this.getValidators(request.operation, request.nestedApi)) {
-			const errors = await validator(request.resource);
-			if (errors.length > 0)
-				return new ValidationError(errors);
-		}
-
+		const errors = [];
+		for (let validator of this.getValidators(request.operation, request.nestedApi))
+			errors.push(await validator(request.resource));
+		if (errors.length > 0)
+			return new ValidationError(errors);
+			
 		request.nestedEntities = request.parentEntity[request.nestedApi.route];
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			request.entity = await this.getExistEntity(request);
