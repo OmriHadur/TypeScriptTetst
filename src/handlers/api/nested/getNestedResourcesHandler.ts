@@ -8,6 +8,6 @@ export default class GetNestedResourcesHandler implements IRequestHandler<GetNes
 
 	async handle(request: GetNestedResourcesRequest, result: Result<any[]>): Promise<void> {
 		const parentEntity = await request.parentApi.module.findById(request.parentId);
-		result.value = await request.parentApi.mapEntityToResource(parentEntity);
+		result.value = await request.parentApi.mapEntityToResource(request.user, parentEntity);
 	}
 }

@@ -15,7 +15,7 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 		await this.alter(request, entity);
 
 		entity = await entity.save();
-		result.value = await request.api.mapEntityToResource(entity);
+		result.value = await request.api.mapEntityToResource(request.user, entity);
 	}
 
 	private isShouldCreate(request: AlterResourceRequest) {
@@ -23,12 +23,12 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 	}
 
 	private async create(request: AlterResourceRequest) {
-		const entityData = await request.api.mapCreateToEntity(request.resource);
+		const entityData = await request.api.mapCreateToEntity(request.user, request.resource);
 		return new request.api.module(entityData);
 	}
 
 	private async alter(request: AlterResourceRequest, entity: any) {
-		const entityRepalce = await request.api.mapAlterToEntity(request.resource);
+		const entityRepalce = await request.api.mapAlterToEntity(request.user, request.resource);
 		Object.entries(entityRepalce).forEach(([key, value]) => {
 			if (!(request.operation == AlterOperation.Update && !value))
 				entity[key] = value;

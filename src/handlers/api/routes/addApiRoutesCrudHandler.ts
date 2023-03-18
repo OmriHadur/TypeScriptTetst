@@ -9,8 +9,7 @@ import GetResourceByIdRequest from "../../../messeges/api/crud/getResourceByIdRe
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import DeleteAllResourcesRequest from "../../../messeges/api/crud/deleteAllResourcesRequest";
 import DeleteResourceByIdRequest from "../../../messeges/api/crud/deleteResourceByIdRequest";
-import sendToMediator from "../../../helpers/sendApiReqeustToMediator";
-import GetResourcePropertyRequest from "../../../messeges/api/crud/getResourcePropertyRequest";
+import sendToMediator from "../../../controllers/sendToMediator";
 
 export default class AddApiRoutesCrudHandler
 	implements IRequestHandler<AddApiRoutesReqeust, Unit>

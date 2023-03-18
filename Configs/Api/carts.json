@@ -1,15 +1,16 @@
 {
 	"types": {
-		"create": {
-			"userId": "string"
-		},
+		"create": {},	
 		"alter": {},
 		"entity": {
-			"userId": "string",
-			"cartItems": ["cartItem"]
+			"userId!": "string",
+			"cartItems": ["cartItem"],
+			"createdAt": "date",
+			"alteredAt": "date"
 		},
 		"resource": {
 			"id": "string",
+			"TEST": "string",
 			"itemsCount": "number"
 		}
 	},
@@ -23,6 +24,7 @@
 		},
 		"entityToResource": {
 			"id": "input._id",
+			"TEST": "input.userId",
 			"itemsCount": "functions.sum(input.cartItems,'quantity')"
 		}
 	},

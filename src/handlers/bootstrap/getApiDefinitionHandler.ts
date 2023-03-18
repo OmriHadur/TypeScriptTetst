@@ -1,10 +1,10 @@
 import ApiDefinition from "../../data/apiDefinition";
-import Dictionary from "../../general/dictionary";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 
 import mongoose, { Types } from 'mongoose';
 import Result from "../../mediator/Data/result";
 import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
+import TypesDefinition from "../../data/typesDefinition";
 const Scheme = mongoose.Schema;
 
 export default class GetApiDefinitionHandler
@@ -13,14 +13,28 @@ export default class GetApiDefinitionHandler
     messegeType = GetApiDefinitionReqeust.name;
 
     async handle(request: GetApiDefinitionReqeust, result: Result<ApiDefinition>): Promise<any> {
-        const apiDefinition = { ...request.apiJsonDefinition, route: request.route };
-        const entity: Dictionary<string> = apiDefinition.types.entity!;
-        Object.entries(entity).forEach(([key, value]) => {
-            if (request.dataSchemes[value])
-                entity[key] = request.dataSchemes[value];
-        });
-        apiDefinition.module = this.entityToModule(apiDefinition.route, entity);
+        const apiDefinition = { ...request.apiJsonDefinition, route: request.route } as ApiDefinition;
+
+        const scheme: any = this.map(apiDefinition.types, request.dataSchemes);
+        apiDefinition.module = this.entityToModule(apiDefinition.route, scheme);
         result.value = apiDefinition;
+    }
+
+    private map(types: TypesDefinition, dataSchemes: any) {
+        const scheme: any = {};
+        types.unique = Object.keys(types.create);
+
+        Object.entries(types.entity).forEach(([key, value]) => {
+            if (key.endsWith('!')) {
+                delete types.entity[key];
+                key = key.slice(0, -1);
+                if (!types.unique?.includes(key))
+                    types.unique!.push(key);
+            }
+            types.entity[key] = value;
+            scheme[key] = dataSchemes[value] ? dataSchemes[value] : value;
+        });
+        return scheme;
     }
 
     private entityToModule(route: string, entityDefinition: any) {

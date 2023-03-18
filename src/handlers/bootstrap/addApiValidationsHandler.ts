@@ -43,7 +43,7 @@ export default class AddApiValidationsHandler
             } else
                 validationFunctions["resource." + propertyOrValidationName] = this.getScriptFunction(value as string);
         };
-        return async (resource: any) => await this.validateResource(validationFunctions, apiContex, variables, resource);
+        return async (user: any, resource: any) => await this.validateResource(validationFunctions, user, apiContex, variables, resource);
     }
 
     AddPropertyValidations(functions: any, propertyValidations: any, validationFunctions: any, isValidateUndefined: boolean, propertyName: string) {
@@ -56,10 +56,10 @@ export default class AddApiValidationsHandler
         });
     }
 
-    async validateResource(validationFunctions: any, apiContex: ApiContex, variables: any, resource: any) {
+    async validateResource(validationFunctions: any, user: any, apiContex: ApiContex, variables: any, resource: any) {
         const errors = [];
         const variablesValue: any = {};
-        const context = { ...apiContex, input: resource, variables: variablesValue };
+        const context = { ...apiContex, user: user, input: resource, variables: variablesValue };
         for (let [variablename, func] of Object.entries(variables)) {
             const value = await (func as any)(context);
             variablesValue[variablename] = value;

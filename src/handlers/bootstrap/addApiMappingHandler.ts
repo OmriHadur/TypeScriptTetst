@@ -21,31 +21,33 @@ export default class AddApiMappingHandler
     async addApiMapping(api: ApiDefinition, apiContex: ApiContex) {
         const createScripts = scriptsBuilder.definitionToScript(api.mapping.createToEntity);
         api.mapCreateToEntity =
-            (createResource: any) => this.map(createResource, api.types.create, createScripts, apiContex);
+            (user: any, createResource: any) => this.map(user, createResource, api.types.create, createScripts, apiContex);
 
         const alterScripts = scriptsBuilder.definitionToScript(api.mapping.alterToEntity);
         api.mapAlterToEntity =
-            (alterResource: any) => this.map(alterResource, api.types.alter, alterScripts, apiContex);
+            (user: any, alterResource: any) => this.map(user, alterResource, api.types.alter, alterScripts, apiContex);
 
         const resourceScripts = scriptsBuilder.definitionToScript(api.mapping.entityToResource);
         api.mapEntityToResource =
-            async (entity: any) => {
-                const resource = await this.map(entity, api.types.resource, resourceScripts, apiContex)
+            async (user: any, entity: any) => {
+                const resource = await this.map(user, entity, api.types.resource, resourceScripts, apiContex)
                 await this.mapNested(api, resource, entity);
                 return resource;
             };
 
-        api.mapEntitiesToResources = async (entities: any[]) => {
+        api.mapEntitiesToResources = async (user: any, entities: any[]) => {
+            if (!entities)
+                return [];
             const resources = [entities.length];
             for (let i = 0; i < entities.length; i++)
-                resources[i] = await api.mapEntityToResource(entities[i]);
+                resources[i] = await api.mapEntityToResource(user, entities[i]);
             return resources;
         }
     }
 
-    async map(input: any, entityType: any, scripts: any, apisContext: ApiContex) {
+    async map(user: any, input: any, entityType: any, scripts: any, apisContext: ApiContex) {
         const output: any = {};
-        const context = { ...apisContext, input: input };
+        const context = { ...apisContext, user: user, input: input };
         for (let propertyScript in scripts)
             output[propertyScript] = await scriptsBuilder.runScript(scripts[propertyScript], context)
         for (let property in entityType)

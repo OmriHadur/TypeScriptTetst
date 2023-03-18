@@ -4,8 +4,8 @@ import IMediator from "../../../mediator/interfaces/mediator";
 import AddApiRoutesReqeust from "../../../messeges/api/routes/addApiRoutesReqeust";
 import Unit from "../../../mediator/Data/unit";
 import { AlterOperation, ExpressRequest } from "../../../types/apiRelated";
-import sendToMediator from "../../../helpers/sendApiReqeustToMediator";
 import AlterResourcesRequest from "../../../messeges/api/batch/alterResourcesRequest";
+import sendToMediator from "../../../controllers/sendToMediator";
 
 export default class AddApiRoutesBatchHandler
 	implements IRequestHandler<AddApiRoutesReqeust, Unit>

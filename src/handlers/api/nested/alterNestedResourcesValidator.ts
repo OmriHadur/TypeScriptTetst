@@ -15,10 +15,10 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 
 		const errors = [];
 		for (let validator of this.getValidators(request.operation, request.nestedApi))
-			errors.push(await validator(request.resource));
+			errors.push(await validator(request.user, request.resource));
 		if (errors.length > 0)
 			return new ValidationError(errors);
-			
+
 		request.nestedEntities = request.parentEntity[request.nestedApi.route];
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			request.entity = await this.getExistEntity(request);
@@ -34,7 +34,7 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 	getExistEntity(request: AlterNestedResourceRequest) {
 		for (let nestedEntity of request.nestedEntities!) {
 			let isEquals = true;
-			for (let [key] of Object.entries(request.nestedApi.types.create!))
+			for (let [key] of Object.entries(request.nestedApi.types.create))
 				if (nestedEntity[key] != request.resource[key])
 					isEquals = false;
 			if (isEquals)
