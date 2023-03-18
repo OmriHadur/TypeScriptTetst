@@ -23,7 +23,7 @@ export default class AddApiRoutesBatchHandler
 
 		router.put(route,
 			sendToMediator(mediator, (req: ExpressRequest) =>
-				new AlterResourcesRequest(api, AlterOperation.Replace, req.body), () => 201));
+				new AlterResourcesRequest(api, AlterOperation.ReplaceOrCreate, req.body), () => 201));
 
 		router.patch(route,
 			sendToMediator(mediator, (req: ExpressRequest) =>

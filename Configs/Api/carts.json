@@ -1,8 +1,11 @@
 {
 	"types": {
-		"create": {},
+		"create": {
+			"userId": "string"
+		},
 		"alter": {},
 		"entity": {
+			"userId": "string",
 			"cartItems": ["cartItem"]
 		},
 		"resource": {
@@ -12,6 +15,7 @@
 	},
 	"mapping": {
 		"createToEntity": {
+			"userId": "user.id",
 			"createdAt": "functions.now()"
 		},
 		"alterToEntity": {

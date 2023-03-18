@@ -19,7 +19,12 @@ Content-Type: application/json
 # @name get
 GET {{ host }}/users/{{ id }}
 
-### delete
+### delete all
+
+# @name delete
+DELETE  {{ host }}/users
+
+### delete by id
 
 # @name delete
 DELETE  {{ host }}/users/{{ id }}
