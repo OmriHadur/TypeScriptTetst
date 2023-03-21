@@ -8,6 +8,6 @@ export default class CreateResourceHandler
 	messegeType = DeleteAllResourcesRequest.name;
 
 	async handle(request: DeleteAllResourcesRequest): Promise<void> {
-		await request.api.module.deleteMany();
+		await request.api.database.module.deleteMany();
 	}
 }

@@ -9,7 +9,7 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 	messegeType = AlterNestedResourceRequest.name;
 
 	async validate?(request: AlterNestedResourceRequest): Promise<Error | void> {
-		request.parentEntity = await request.parentApi.module.findById(request.parentId);
+		request.parentEntity = await request.parentApi.database.module.findById(request.parentId);
 		if (!request.parentEntity)
 			return new NotFoundError(request.parentId);
 
@@ -22,7 +22,7 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
-		request.nestedEntities = request.parentEntity[request.nestedApi.route];
+		request.nestedEntities = request.parentEntity[request.nestedApi.name];
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			request.entity = await this.getExistEntity(request);
 			if (request.entity && request.operation == AlterOperation.Create)

@@ -1,51 +1,37 @@
 {
-	"types": {
-		"create": {
-			"barcode": "string"
-		},
-		"alter": {
-			"info": "productInfo",
-			"measurements": "measurements",
-			"imageUrl": "string",
-			"price": "number"
-		},
-		"entity": {
-			"barcode": "string",
-			"info": "productInfo",
-			"measurements": "measurements",
-			"imageUrl": "string",
-			"price": "number"
-		},
-		"resource": {
-			"id": "string",
-			"barcode": "string",
-			"info": "productInfo",
-			"measurements": "measurements",
-			"imageUrl": "string",
-			"price": "number"
-		}
-	},
-	"mapping": {
-		"createToEntity": {
-			"createdAt": "functions.now()"
-		},
-		"alterToEntity": {
-			"alteredAt": "functions.now()"
-		},
-		"entityToResource": {
-			"id": "input._id"
-		}
-	},
-	"validations": {
-		"create": {
-			"variables": {},
+	"create": {
+		"input": {
 			"barcode": {
 				"required": true,
-				"lengthExact": 13
+				"length": [13, 13]
 			}
 		},
-		"alter": {
-			"variables": {}
+		"entity": {
+			"barcode": {
+				"type": "string",
+				"isUniqe": true
+			}
 		}
+	},
+	"alter": {
+		"input": {
+			"info": "required",
+			"measurements": "required",
+			"price": "positive"
+		},
+		"entity": {
+			"info": "productInfo",
+			"measurements": "measurements",
+			"imageUrl": "string",
+			"price": "number"
+		}
+	},
+	"resource": {
+		"id": "input._id",
+		"barcode": true,
+		"info": true,
+		"measurements": true,
+		"imageUrl": true,
+		"price": true
 	}
 }

@@ -21,8 +21,8 @@ export function maximumLength(value: any, maximumValue: number) {
 	return value?.length < maximumValue;
 }
 
-export function lengthInRange(value: any, range: number[]) {
-	return minimumLength(value, range[0]) && (range.length == 1 || maximumLength(value, range[1]));
+export function length(value: any, range: number[]) {
+	return value && value.length >= range[0] && value.length <= range[1];
 }
 
 export function lengthExact(value: any, length: number) {

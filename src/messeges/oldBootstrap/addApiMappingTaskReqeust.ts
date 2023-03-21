@@ -1,5 +1,5 @@
 import ApiContex from "../../data/apiContex"
-import ApiDefinition from "../../data/apiDefinition"
+import ApiDefinition from "../../data/modules/apiDefinition"
 import Unit from "../../mediator/Data/unit"
 import Request from "../../mediator/interfaces/request"
 

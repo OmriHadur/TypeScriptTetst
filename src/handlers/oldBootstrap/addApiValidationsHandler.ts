@@ -1,19 +1,19 @@
 import ApiContex from "../../data/apiContex";
-import ApiDefinition from "../../data/apiDefinition";
+import ApiDefinition from "../../data/modules/apiDefinition";
 import Unit from "../../mediator/Data/unit";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import PropertyValidationError from "../../Errors/propertyValidationError";
-import AddApiValidationsTaskReqeust from "../../messeges/bootstrap/addApiValidationsTaskReqeust";
+import AddApiValidationsTaskReqeust from "../../messeges/bootstrap/getValidationDefinitionRequest";
 import getFunctions from "../../helpers/getFunctions";
-
+/*
 export default class AddApiValidationsHandler
     implements IRequestHandler<AddApiValidationsTaskReqeust, Unit>
 {
     messegeType = AddApiValidationsTaskReqeust.name;
 
     async handle(request: AddApiValidationsTaskReqeust): Promise<void> {
-        const functions = getFunctions(request.validationFunctions);
+
         request.apiDefinitions.forEach(api => {
             for (let nestedApi of api.nestedApis)
                 this.addApiValidation(nestedApi, request.apiContex, functions);
@@ -88,4 +88,4 @@ export default class AddApiValidationsHandler
             return scriptsBuilder.runScript(script, context);
         };
     }
-}
+}*/

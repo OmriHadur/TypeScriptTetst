@@ -8,7 +8,7 @@ export default class CreateResourceHandler
 	messegeType = GetAllResourcesRequest.name;
 
 	async handle(request: GetAllResourcesRequest, result: Result<any[]>): Promise<void> {
-		const entities = await request.api.module.find();
-		result.value = await request.api.mapEntitiesToResources(request.user, entities);
+		const entities = await request.api.database.module.find();
+		result.value = await request.api.mapping.entitiesToResources(request.user, entities);
 	}
 }

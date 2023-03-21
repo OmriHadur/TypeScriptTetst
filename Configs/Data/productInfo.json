@@ -1,6 +1,22 @@
 {
-	"name": "string",
-	"description": "string",
-	"companyName": "string",
-	"tags": ["String"]
+	"alter": {
+		"input": {
+			"name": "required",
+			"description": "required",
+			"companyName": "required",
+			"tags": "required"
+		},
+		"entity": {
+			"name": "string",
+			"description": "string",
+			"companyName": "string",
+			"tags": ["String"]
+		}
+	},
+	"resource": {
+		"name": true,
+		"description": true,
+		"companyName": true,
+		"tags": true
+	}
 }

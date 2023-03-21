@@ -1,48 +1,41 @@
 {
-    "types": {
-        "create": {
-            "email": "string"
-        },
-        "alter": {
-            "password": "string"
-        },
-        "entity": {
-            "email": "string",
-            "createdAt": "date",
-            "alteredAt": "date"
-        },
-        "resource": {
-            "id": "string",
-            "token": "string"
-        }
-    },
-    "mapping": {
-        "createToEntity": {
-            "createdAt": "functions.now()"
-        },
-        "alterToEntity": {
-            "alteredAt": "functions.now()"
-        },
-        "entityToResource": {
-            "id": "input._id",
-            "token": "functions.createToken(await modules.users.findOne({email:input.email}))"
-        }
-    },
-    "validations": {
-        "create": {
-            "email": {
-                "required": true,
-                "validEmail": true
-            }
-        },
-        "alter": {
-            "variables": {
-                "user": "modules.users.findOne({email:input.email})"
-            },
-            "password": {
-                "required": true
-            },
-            "wrongEmailOrPassword": "functions.isMatch(variables.user?.hashedPassword,input.password)"
-        }
-    }
+	"create": {
+		"input": {
+			"email": {
+				"required": true,
+				"validEmail": true
+			}
+		},
+		"entity": {
+			"email": {
+				"type": "string",
+				"isUniqe": true
+			},
+			"createdAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
+		}
+	},
+	"alter": {
+		"input": {
+			"password": "required"
+		},
+		"variables": {
+			"user": "modules.users.findOne({email:input.email})"
+		},
+		"validations": {
+			"wrongEmailOrPassword": "functions.isMatch(variables.user?.hashedPassword,input.password)"
+		},
+		"entity": {
+			"alteredAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
+		}
+	},
+	"resource": {
+		"id": "input._id",
+		"token": "functions.createToken({input._id,input.email})"
+	}
 }

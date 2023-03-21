@@ -1,10 +1,5 @@
-import Unit from "../../mediator/Data/unit";
-import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import * as scriptsBuilder from '../../helpers/scriptsBuilder';
-import ApiContex from "../../data/apiContex";
-import ApiDefinition from "../../data/apiDefinition";
-import AddApiMappingTaskReqeust from "../../messeges/bootstrap/addApiMappingTaskReqeust";
 
+/*
 export default class AddApiMappingHandler
     implements IRequestHandler<AddApiMappingTaskReqeust, Unit>
 {
@@ -18,7 +13,7 @@ export default class AddApiMappingHandler
         });
     }
 
-    async addApiMapping(api: ApiDefinition, apiContex: ApiContex) {
+    async addApiMapping(definition: ResourceDefinition, apiContex: ApiContex) {
         const createScripts = scriptsBuilder.definitionToScript(api.mapping.createToEntity);
         api.mapCreateToEntity =
             (user: any, createResource: any) => this.map(user, createResource, api.types.create, createScripts, apiContex);
@@ -67,3 +62,4 @@ export default class AddApiMappingHandler
                 resource[nestedApi.route] = await nestedApi.mapEntitiesToResources(user, entity[nestedApi.route]);
     }
 }
+*/

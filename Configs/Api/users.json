@@ -1,56 +1,49 @@
 {
-    "types": {
-        "create": {
-            "email": "string"
-        },
-        "alter": {
-            "password": "string",
-            "name": "string"
-        },
-        "entity": {
-            "email": "string",
-            "name": "string",
-            "hashedPassword": "string",
-            "createdAt": "date",
-            "alteredAt": "date"
-        },
-        "resource": {
-            "id": "string",
-            "email": "string",
-            "name": "string",
-            "token": "string"
-        }
-    },
-    "mapping": {
-        "createToEntity": {
-            "createdAt": "functions.now()"
-        },
-        "alterToEntity": {
-            "hashedPassword": "functions.encrypt(input.password)",
-            "alteredAt": "functions.now()"
-        },
-        "entityToResource": {
-            "id": "input._id",
-            "token": "functions.createToken(input)"
-        }
-    },
-    "validations": {
-        "create": {
-            "email": {
-                "required": true,
-                "validEmail": true
-            }
-        },
-        "alter": {
-            "password": {
-                "required": true,
-                "minimumLength": 5,
-                "upperCase": true
-            },
-            "name": {
-                "required": true,
-                "minimumLength": 2
-            }
-        }
-    }
+	"create": {
+		"input": {
+			"email": {
+				"required": true,
+				"validEmail": true
+			}
+		},
+		"entity": {
+			"email": {
+				"type": "string",
+				"isUniqe": true
+			},
+			"createdAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
+		}
+	},
+	"alter": {
+		"input": {
+			"password": {
+				"required": true,
+				"minimumLength": 5,
+				"upperCase": true
+			},
+			"name": {
+				"required": true,
+				"minimumLength": 2
+			}
+		},
+		"entity": {
+			"name": "string",
+			"hashedPassword": {
+				"type": "string",
+				"value": "functions.encrypt(input.password)"
+			},
+			"alteredAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
+		}
+	},
+	"resource": {
+		"id": "input._id",
+		"email": true,
+		"name": true
+	}
 }

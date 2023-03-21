@@ -1,48 +1,46 @@
 {
-	"types": {
-		"create": {
-			"barcode": "string"
-		},
-		"alter": {
-			"quantity": "number"
-		},
-		"entity": {
-			"barcode": "string",
-			"product": "products",
-			"quantity": "number"
-		},
-		"resource": {
-			"id": "string",
-			"barcode": "string",
-			"product": "products",
-			"quantity": "number"
-		}
-	},
-	"mapping": {
-		"createToEntity": {
-			"product": "modules.products.findOne({barcode:input.barcode})"
-		},
-		"alterToEntity": {},
-		"entityToResource": {
-			"id": "input._id"
-		}
-	},
-	"validations": {
-		"create": {
-			"variables": {
-				"product": "modules.products.findOne({barcode:input.barcode})"
-			},
+	"create": {
+		"input": {
 			"barcode": {
 				"required": true,
-				"lengthExact": 13
-			},
+				"length": [13, 13]
+			}
+		},
+		"variables": {
+			"product": "modules.products.findOne({barcode:input.barcode})"
+		},
+		"validations": {
 			"productNotExist": "variables.product"
 		},
-		"alter": {
-			"variables": {},
-			"quantity": {
-				"positive": true
+		"entity": {
+			"barcode": {
+				"type": "string",
+				"isUniqe": true
+			},
+			"price": {
+				"type": "number",
+				"value": "product.price"
 			}
 		}
+	},
+	"alter": {
+		"input": {
+			"quantity": {
+				"required": true,
+				"positive": true
+			}
+		},
+		"entity": {
+			"quantity": "number",
+			"alteredAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
+		}
+	},
+	"resource": {
+		"id": "input._id",
+		"barcode": true,
+		"quantity": true
 	}
 }

@@ -1,9 +1,11 @@
-import ApiDefinition from "../../data/apiDefinition";
+import ApiDefinition from "../../data/modules/apiDefinition";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import GetApiDefinitionsReqeust from "../../messeges/bootstrap/getApiDefinitionsReqeust";
+import GetApiDefinitionsReqeust from "../../messeges/oldBootstrap/getApiDefinitionsReqeust";
 import Result from "../../mediator/Data/result";
 import IMediator from "../../mediator/interfaces/mediator";
-import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
+import GetApiDefinitionReqeust from "../../messeges/oldBootstrap/getApiDefinitionReqeust";
+
+/*
 export default class GetApiDefinitionsHandler
     implements IRequestHandler<GetApiDefinitionsReqeust, ApiDefinition[]>
 {
@@ -22,3 +24,4 @@ export default class GetApiDefinitionsHandler
         result.value = apiJDefinitions;
     }
 }
+*/

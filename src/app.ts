@@ -4,16 +4,13 @@ import mongoose from 'mongoose';
 import getMessegesHandlers from "./mediator/getMessegesHandlers";
 import Mediator from "./mediator/mediator";
 import folderFactory from "./factories/folderFactory";
-import dataSchemeFactory from "./factories/dataSchemeFactory";
-import ApiDefinition from "./data/apiDefinition";
+import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
+import ServerDefinitions from "./data/modules/serverDefinitions";
+import GetServerConfigRequest from "./messeges/bootstrap/getServerConfigRequest";
+import ServerConfig from "./data/input/serverConfig";
+import GetServerDefinitionsRequest from "./messeges/bootstrap/getServerDefinitionsRequest";
 import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
 import ApiContex from "./data/apiContex";
-import GetApiDefinitionsReqeust from "./messeges/bootstrap/getApiDefinitionsReqeust";
-import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
-import AddApiMappingTaskReqeust from "./messeges/bootstrap/addApiMappingTaskReqeust";
-import AddApiValidationsTaskReqeust from "./messeges/bootstrap/addApiValidationsTaskReqeust";
-import GetNestedApiDefinitionsReqeust from "./messeges/bootstrap/getNestedApiDefinitionsReqeust";
-import Dictionary from "./general/dictionary";
 
 const asyncFunction = async () => {
 
@@ -21,20 +18,15 @@ const asyncFunction = async () => {
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const mediator = new Mediator(messegesHandlers);
 
-	const configs = folderFactory("Configs/");
-	const dataSchemes = dataSchemeFactory(configs.data);
-	const nested: Dictionary<ApiDefinition[]> = await mediator.sendValue(new GetNestedApiDefinitionsReqeust(configs.api, dataSchemes));
-	const apiDefinitions: ApiDefinition[] = await mediator.sendValue(new GetApiDefinitionsReqeust(configs.api, dataSchemes, nested));
-	const apiContex: ApiContex = await mediator.sendValue(new GetApiContexReqeust(apiDefinitions, distFolder.functions));
+	const serverConfig = await mediator.sendValue(new GetServerConfigRequest("Configs/")) as ServerConfig;
+	const serverDefinitions = await mediator.sendValue(new GetServerDefinitionsRequest(serverConfig)) as ServerDefinitions;
+	const apiContexReqeust = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions.apis, distFolder.functions)) as ApiContex;
 
-	await mediator.send(new AddApiMappingTaskReqeust(apiDefinitions, apiContex));
-	await mediator.send(new AddApiValidationsTaskReqeust(apiDefinitions, apiContex, distFolder.validations));
-	
 	const app = express();
 
 	app.use(bodyParser.json());
 
-	await mediator.send(new AddRoutesReqeust(app, apiDefinitions));
+	await mediator.send(new AddRoutesReqeust(app, serverDefinitions.apis));
 
 	app.use((error: any, req: any, res: any, next: any) => {
 		const status = error.status || 500;

@@ -16,10 +16,10 @@ export default class AddApiRoutesCrudHandler
 	async handle(request: AddApiRoutesReqeust, result: Result<Unit>, mediator: IMediator): Promise<void> {
 		const router = request.router;
 		const api = request.api;
-		const parentRoute = "/" + api.route + "/:parentId/";
+		const parentRoute = "/" + api.name + "/:parentId/";
 
-		for (let nestedApi of api.nestedApis) {
-			const route = parentRoute + nestedApi.route;
+		for (let nestedApi of api.nested) {
+			const route = parentRoute + nestedApi.name;
 
 			router.get(route,
 				sendToMediator(mediator, (req: ExpressRequest) =>

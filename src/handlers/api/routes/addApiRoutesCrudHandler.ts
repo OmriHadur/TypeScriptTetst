@@ -19,7 +19,7 @@ export default class AddApiRoutesCrudHandler
 	async handle(request: AddApiRoutesReqeust, result: Result<Unit>, mediator: IMediator): Promise<void> {
 		const router = request.router;
 		const api = request.api;
-		const route = '/' + api.route;
+		const route = '/' + api.name;
 
 		router.get(route,
 			sendToMediator(mediator, () =>

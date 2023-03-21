@@ -1,4 +1,4 @@
-import ApiDefinition from "../../../data/apiDefinition";
+import ApiDefinition from "../../../data/modules/apiDefinition";
 import Request from "../../../mediator/interfaces/request";
 
 export default class GetResourceByIdRequest extends Request<any> {

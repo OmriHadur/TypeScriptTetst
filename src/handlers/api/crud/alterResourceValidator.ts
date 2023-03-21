@@ -19,12 +19,12 @@ export default class AlterResourceValidator
 			return new ValidationError(errors);
 
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
-			const entityData = await request.api.mapCreateToEntity(request.user, request.resource);
+			const entityData = await request.api.mapping.createToEntity(request.user, request.resource);
 			request.entity = await this.getExistEntity(request, entityData);
 			if (request.entity && request.operation == AlterOperation.Create)
 				return new AlreadyExistError();
 		} else {
-			request.entity = await request.api.module.findById(request.resourceId);
+			request.entity = await request.api.database.module.findById(request.resourceId);
 			if (!request.entity)
 				return new NotFoundError(request.resourceId!);
 		}
@@ -32,11 +32,11 @@ export default class AlterResourceValidator
 
 	getExistEntity(request: AlterResourceRequest, entityData: any) {
 		const predicate: any = {};
-		for (let key of request.api.types.unique!)
+		for (let key of request.api.types.unique)
 			predicate[key] = entityData[key];
 		if (Object.keys(predicate).length == 0)
 			return null;
-		return request.api.module.findOne(predicate);
+		return request.api.database.module.findOne(predicate);
 	}
 
 	getValidators = function* getValidators(operation: AlterOperation, api: any) {

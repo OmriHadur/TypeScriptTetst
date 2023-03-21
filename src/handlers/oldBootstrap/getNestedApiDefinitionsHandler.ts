@@ -1,11 +1,11 @@
-import ApiDefinition from "../../data/apiDefinition";
+import ApiDefinition from "../../data/modules/apiDefinition";
 import Dictionary from "../../general/dictionary";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import Result from "../../mediator/Data/result";
-import GetNestedApiDefinitionsReqeust from "../../messeges/bootstrap/getNestedApiDefinitionsReqeust";
+import GetNestedApiDefinitionsReqeust from "../../messeges/oldBootstrap/getNestedApiDefinitionsReqeust";
 import IMediator from "../../mediator/interfaces/mediator";
-import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
-
+import GetApiDefinitionReqeust from "../../messeges/oldBootstrap/getApiDefinitionReqeust";
+/*
 export default class GetNestedApiDefinitionsHandler
     implements IRequestHandler<GetNestedApiDefinitionsReqeust, Dictionary<ApiDefinition[]>>
 {
@@ -27,3 +27,4 @@ export default class GetNestedApiDefinitionsHandler
         result.value = nested;
     }
 }
+*/

@@ -1,4 +1,4 @@
-import ApiDefinition from "../../data/apiDefinition"
+import ApiDefinition from "../../data/modules/apiDefinition"
 import Dictionary from "../../general/dictionary"
 import Request from "../../mediator/interfaces/request"
 

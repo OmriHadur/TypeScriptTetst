@@ -1,6 +1,22 @@
 {
-	"size": "number",
-	"isWeighable": "boolean",
-	"unitOfMeasurement": "string",
-	"quantityInterval": "number"
+	"alter": {
+		"input": {
+			"size": "positive",
+			"isWeighable": "required",
+			"unitOfMeasurement": "required",
+			"quantityInterval": "positive"
+		},
+		"entity": {
+			"size": "number",
+			"isWeighable": "boolean",
+			"unitOfMeasurement": "string",
+			"quantityInterval": "number"
+		}
+	},
+	"resource": {
+		"size": true,
+		"isWeighable": true,
+		"unitOfMeasurement": true,
+		"quantityInterval": true
+	}
 }

@@ -1,29 +1,27 @@
 {
-	"types": {
-		"create": {},
-		"alter": {},
-		"entity": {},
-		"resource": {
-			"id": "string"
+	"create": {
+		"input": {},
+		"variables": {},
+		"validations": {},
+		"entity": {
+			"createdAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
 		}
 	},
-	"mapping": {
-		"createToEntity": {
-			"createdAt": "functions.now()"
-		},
-		"alterToEntity": {
-			"alteredAt": "functions.now()"
-		},
-		"entityToResource": {
-			"id": "input._id"
+	"alter": {
+		"input": {},
+		"variables": {},
+		"validations": {},
+		"entity": {
+			"alteredAt": {
+				"type": "date",
+				"value": "functions.now()"
+			}
 		}
 	},
-	"validations": {
-		"create": {
-			"variables": {}
-		},
-		"alter": {
-			"variables": {}
-		}
+	"resource": {
+		"id": "input._id"
 	}
 }

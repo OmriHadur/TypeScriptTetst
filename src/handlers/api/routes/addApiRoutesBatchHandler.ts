@@ -15,7 +15,7 @@ export default class AddApiRoutesBatchHandler
 	async handle(request: AddApiRoutesReqeust, result: Result<Unit>, mediator: IMediator): Promise<void> {
 		const router = request.router;
 		const api = request.api;
-		const route = '/' + api.route + "/batch";
+		const route = '/' + api.name + "/batch";
 
 		router.post(route,
 			sendToMediator(mediator, (req: ExpressRequest) =>

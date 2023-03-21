@@ -17,7 +17,7 @@ export default class AlterNestedResourcesHandler implements IRequestHandler<Alte
 		await this.alter(request, entity);
 
 		await request.parentEntity.save();
-		result.value = await request.parentApi.mapEntityToResource(request.user, request.parentEntity);
+		result.value = await request.parentApi.mapping.entityToResource(request.user, request.parentEntity);
 	}
 
 	private isShouldCreate(request: AlterNestedResourceRequest) {
@@ -25,12 +25,12 @@ export default class AlterNestedResourcesHandler implements IRequestHandler<Alte
 	}
 
 	private async create(request: AlterNestedResourceRequest) {
-		const entityData = await request.nestedApi.mapCreateToEntity(request.user, request.resource);
-		return new request.nestedApi.module(entityData);
+		const entityData = await request.nestedApi.mapping.createToEntity(request.user, request.resource);
+		return new request.nestedApi.database.module(entityData);
 	}
 
 	private async alter(request: AlterNestedResourceRequest, entity: any) {
-		const entityRepalce = await request.nestedApi.mapAlterToEntity(request.user, request.resource);
+		const entityRepalce = await request.nestedApi.mapping.alterToEntity(request.user, request.resource);
 		Object.entries(entityRepalce).forEach(([key, value]) => {
 			if (!(request.operation == AlterOperation.Update && !value))
 				entity[key] = value;

@@ -1,12 +1,13 @@
-import ApiDefinition from "../../data/apiDefinition";
+import ApiDefinition from "../../data/modules/apiDefinition";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 
 import mongoose from 'mongoose';
 import Result from "../../mediator/Data/result";
-import GetApiDefinitionReqeust from "../../messeges/bootstrap/getApiDefinitionReqeust";
-import TypesDefinition from "../../data/typesDefinition";
-const Scheme = mongoose.Schema;
+import GetApiDefinitionReqeust from "../../messeges/oldBootstrap/getApiDefinitionReqeust";
+import TypesDefinition from "../../data/modules/typesDefinition";
 
+const Scheme = mongoose.Schema;
+/*
 export default class GetApiDefinitionHandler
     implements IRequestHandler<GetApiDefinitionReqeust, ApiDefinition>
 {
@@ -42,3 +43,5 @@ export default class GetApiDefinitionHandler
         return mongoose.model(route, scheme);
     }
 }
+
+*/

@@ -1,4 +1,4 @@
-import ApiDefinition from "../../data/apiDefinition";
+import ApiDefinition from "../../data/modules/apiDefinition";
 import Result from "../../mediator/Data/result";
 import IRequest from "../../mediator/interfaces/request";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
