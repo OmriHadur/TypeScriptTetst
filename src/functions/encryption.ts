@@ -7,5 +7,5 @@ export function encrypt(password: string) {
 export async function isMatch(hashedPassword: string, password: string) {
 	if (!hashedPassword || !password)
 		return false;
-	return bcryptjs.compare(password, hashedPassword);
+		return bcryptjs.compare(password, hashedPassword);
 }

@@ -5,7 +5,7 @@ import Unit from "../../mediator/Data/unit";
 import Request from "../../mediator/interfaces/request"
 
 
-export default class AddValidationDefinitionsRequest extends Request<Unit> {
+export default class AddValidationAndMappingRequest extends Request<Unit> {
     constructor(public serverDefinitions: ServerDefinitions, public serverConfig: ServerConfig, public apiContex: ApiContex) {
         super();
     }

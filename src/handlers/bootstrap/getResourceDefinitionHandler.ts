@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
-import InputConfig from '../../../data/input/inputConfig';
-import ResourceConfig from '../../../data/input/resourceConfig';
-import ResourceDefinition from "../../../data/modules/resourceDefinition";
-import Dictionary from '../../../general/dictionary';
-import Result from "../../../mediator/Data/result";
-import IMediator from '../../../mediator/interfaces/mediator';
-import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import GetResourceDefinitionRequest from "../../../messeges/bootstrap/getResourceDefinitionRequest";
+import InputConfig from '../../data/input/inputConfig';
+import ResourceConfig from '../../data/input/resourceConfig';
+import ResourceDefinition from "../../data/modules/resourceDefinition";
+import Dictionary from '../../general/dictionary';
+import Result from "../../mediator/Data/result";
+import IMediator from '../../mediator/interfaces/mediator';
+import IRequestHandler from "../../mediator/interfaces/requestHandler";
+import GetResourceDefinitionRequest from "../../messeges/bootstrap/getResourceDefinitionRequest";
 
 const Scheme = mongoose.Schema;
 

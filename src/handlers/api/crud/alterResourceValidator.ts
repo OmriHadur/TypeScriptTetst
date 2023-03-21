@@ -14,7 +14,8 @@ export default class AlterResourceValidator
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
 		let errors: any[] = [];
 		for (let validator of this.getValidators(request.operation, request.api))
-			errors = errors.concat(await validator(request.user, request.resource));
+			if (errors.length == 0)
+				errors = errors.concat(await validator(request.user, request.resource));
 
 		if (errors.length > 0)
 			return new ValidationError(errors);

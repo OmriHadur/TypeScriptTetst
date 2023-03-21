@@ -19,7 +19,9 @@
 	},
 	"alter": {
 		"input": {
-			"password": "required"
+			"password": {
+				"required": true
+			}
 		},
 		"variables": {
 			"user": "modules.users.findOne({email:input.email})"
@@ -36,6 +38,6 @@
 	},
 	"resource": {
 		"id": "input._id",
-		"token": "functions.createToken({input._id,input.email})"
+		"token": "functions.createToken({id:input._id,email:input.email})"
 	}
 }

@@ -1,8 +1,8 @@
-import ApiContex from "../../../data/apiContex";
-import getFunctions from "../../../helpers/getFunctions";
-import Result from "../../../mediator/Data/result";
-import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import GetApiContexReqeust from "../../../messeges/bootstrap/getApiContexReqeust";
+import ApiContex from "../../data/apiContex";
+import getFunctions from "../../helpers/getFunctions";
+import Result from "../../mediator/Data/result";
+import IRequestHandler from "../../mediator/interfaces/requestHandler";
+import GetApiContexReqeust from "../../messeges/bootstrap/getApiContexReqeust";
 
 export default class GetApiContexHandler
     implements IRequestHandler<GetApiContexReqeust, ApiContex>
