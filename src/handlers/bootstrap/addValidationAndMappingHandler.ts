@@ -15,8 +15,8 @@ export default class AddValidationAndMappingHandler
     async handle(request: AddValidationAndMappingRequest, result: Result<Unit>, mediator: IMediator): Promise<void> {
         for (let resourceDefinition of request.serverDefinitions.apis) {
             const resourceConfig = request.serverConfig.apis[resourceDefinition.name].input;
-            resourceDefinition.validation = await mediator.sendValue(new GetValidationDefinitionRequest(resourceDefinition, resourceConfig, request.apiContex));
-            resourceDefinition.mapping = await mediator.sendValue(new GetMappingDefinitionRequest(resourceDefinition, resourceConfig, request.apiContex));
+            resourceDefinition.validation = await mediator.sendValue(new GetValidationDefinitionRequest(resourceDefinition, resourceConfig));
+            resourceDefinition.mapping = await mediator.sendValue(new GetMappingDefinitionRequest(resourceDefinition, resourceConfig));
         }
     }
 }

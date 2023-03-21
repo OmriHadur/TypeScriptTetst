@@ -15,7 +15,7 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 
 		let errors: any[] = [];
 		for (let validator of this.getValidators(request.operation, request.nestedApi)) {
-			const validatorErrors = await validator(request.user, request.resource);
+			const validatorErrors = await validator(request.apiContex, request.resource);
 			errors = errors.concat(validatorErrors);
 		}
 

@@ -5,7 +5,7 @@ import AddApiRoutesReqeust from "../../../messeges/api/routes/addApiRoutesReqeus
 import Unit from "../../../mediator/Data/unit";
 import { AlterOperation, ExpressRequest } from "../../../types/apiRelated";
 import AlterResourcesRequest from "../../../messeges/api/batch/alterResourcesRequest";
-import sendToMediator from "../../../controllers/sendToMediator";
+import { send } from "../../../controllers/sendToMediator";
 
 export default class AddApiRoutesBatchHandler
 	implements IRequestHandler<AddApiRoutesReqeust, Unit>
@@ -18,15 +18,15 @@ export default class AddApiRoutesBatchHandler
 		const route = '/' + api.name + "/batch";
 
 		router.post(route,
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourcesRequest(api, AlterOperation.Create, req.body), () => 201));
 
 		router.put(route,
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourcesRequest(api, AlterOperation.ReplaceOrCreate, req.body), () => 201));
 
 		router.patch(route,
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourcesRequest(api, AlterOperation.Update, req.body), () => 201));
 	}
 }

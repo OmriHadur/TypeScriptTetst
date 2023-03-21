@@ -9,7 +9,7 @@ import GetResourceByIdRequest from "../../../messeges/api/crud/getResourceByIdRe
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import DeleteAllResourcesRequest from "../../../messeges/api/crud/deleteAllResourcesRequest";
 import DeleteResourceByIdRequest from "../../../messeges/api/crud/deleteResourceByIdRequest";
-import sendToMediator from "../../../controllers/sendToMediator";
+import { send } from "../../../controllers/sendToMediator";
 
 export default class AddApiRoutesCrudHandler
 	implements IRequestHandler<AddApiRoutesReqeust, Unit>
@@ -22,37 +22,37 @@ export default class AddApiRoutesCrudHandler
 		const route = '/' + api.name;
 
 		router.get(route,
-			sendToMediator(mediator, () =>
+			send(mediator, () =>
 				new GetAllResourcesRequest(api)));
 
 		router.get(route + '/:id',
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new GetResourceByIdRequest(api, req.params.id)));
 
 		router.post(route,
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourceRequest(api, AlterOperation.Create, req.body), () => 201));
 
 		router.put(route + '/:id',
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourceRequest(api, AlterOperation.Replace, req.body, req.params.id)));
 
 		router.put(route,
-			sendToMediator(mediator,
+			send(mediator,
 				(req: ExpressRequest) =>
 					new AlterResourceRequest(api, AlterOperation.ReplaceOrCreate, req.body),
 				(req) => req.entity ? 200 : 201));
 
 		router.patch(route + '/:id',
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new AlterResourceRequest(api, AlterOperation.Update, { ...req.body, ...req.query }, req.params.id)));
 
 		router.delete(route,
-			sendToMediator(mediator, () =>
+			send(mediator, () =>
 				new DeleteAllResourcesRequest(api)));
 
 		router.delete(route + '/:id',
-			sendToMediator(mediator, (req: ExpressRequest) =>
+			send(mediator, (req: ExpressRequest) =>
 				new DeleteResourceByIdRequest(api, req.params.id)));
 	}
 }

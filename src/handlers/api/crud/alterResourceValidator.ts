@@ -14,14 +14,13 @@ export default class AlterResourceValidator
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
 		let errors: any[] = [];
 		for (let validator of this.getValidators(request.operation, request.api))
-			if (errors.length == 0)
-				errors = errors.concat(await validator(request.user, request.resource));
+			errors = errors.concat(await validator(request.apiContex, request.resource));
 
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
-			const entityData = await request.api.mapping.createToEntity(request.user, request.resource);
+			const entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
 			request.entity = await this.getExistEntity(request, entityData);
 			if (request.entity && request.operation == AlterOperation.Create)
 				return new AlreadyExistError();

@@ -12,7 +12,7 @@ export default class AlterResourcesHandler implements IRequestHandler<AlterResou
 		const results = [];
 		for (let resource of request.resources) {
 			const resourceRequest = new AlterResourceRequest(request.api, request.operation, resource, resource.id);
-			resourceRequest.user = request.user;
+			resourceRequest.apiContex = request.apiContex;
 			const result = await mediator.send(resourceRequest);
 			results.push(result.isError() ? result.error : result.value);
 		}

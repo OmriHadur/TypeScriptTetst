@@ -38,6 +38,6 @@
 	},
 	"resource": {
 		"id": "input._id",
-		"token": "functions.createToken({id:input._id,email:input.email})"
+		"token": "functions.createToken({id:variables.user._id,email:input.email})"
 	}
 }

@@ -6,7 +6,7 @@ import Request from "../../mediator/interfaces/request"
 
 
 export default class GetValidationDefinitionRequest extends Request<ValidationDefinition> {
-    constructor(public resourceDefinition: ResourceDefinition, public resourceConfig: ResourceConfig, public apiContex: ApiContex) {
+    constructor(public resourceDefinition: ResourceDefinition, public resourceConfig: ResourceConfig) {
         super();
     }
 }

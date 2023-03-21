@@ -17,18 +17,18 @@ export default class GetMappingDefinitionHandler
         const mappingDefinition = new MappingDefinition();
         const createScripts = scriptsBuilder.definitionToScript(request.resourceConfig.create.entity, true);
         mappingDefinition.createToEntity =
-            (user: any, createResource: any, variablesValue: any) => this.map(user, createResource, request.resourceDefinition.properties.entity, createScripts, variablesValue, request.apiContex);
+            (apiContex: ApiContex, createResource: any) => this.map(apiContex, createResource, request.resourceDefinition.properties.entity, createScripts);
 
         const alterScripts = scriptsBuilder.definitionToScript(request.resourceConfig.alter.entity, true);
         mappingDefinition.alterToEntity =
-            (user: any, alterResource: any, variablesValue: any) => this.map(user, alterResource, request.resourceDefinition.properties.entity, alterScripts, variablesValue, request.apiContex);
+            (apiContex: ApiContex, alterResource: any) => this.map(apiContex, alterResource, request.resourceDefinition.properties.entity, alterScripts);
 
         const resourceScripts = scriptsBuilder.definitionToScript(request.resourceConfig.resource, false);
         mappingDefinition.entityToResource =
-            async (user: any, entity: any, variablesValue: any) => {
-                const resource = await this.map(user, entity, request.resourceDefinition.properties.resource, resourceScripts, variablesValue, request.apiContex);
+            async (apiContex: ApiContex, entity: any) => {
+                const resource = await this.map(apiContex, entity, request.resourceDefinition.properties.resource, resourceScripts);
                 const nested = (request.resourceDefinition as ApiDefinition).nested;
-                await this.mapNested(user, nested, resource, entity);
+                await this.mapNested(apiContex, nested, resource, entity);
                 return resource;
             };
 
@@ -44,11 +44,11 @@ export default class GetMappingDefinitionHandler
         result.value = mappingDefinition;
     }
 
-    async map(user: any, input: any, properties: any, scripts: any, variablesValue: any, apisContext: ApiContex) {
+    async map(apiContex: ApiContex, input: any, properties: any, scripts: any) {
         const output: any = {};
-        const context = { ...apisContext, user: user, input: input, variables: variablesValue };
+        apiContex.input = input;
         for (let [name, script] of Object.entries(scripts))
-            output[name] = await scriptsBuilder.runScript(script, context)
+            output[name] = await scriptsBuilder.runScript(script, apiContex)
         for (let property of properties)
             if (!output[property] && input[property])
                 output[property] = input[property];
