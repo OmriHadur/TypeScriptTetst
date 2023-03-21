@@ -37,7 +37,7 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 	getExistEntity(request: AlterNestedResourceRequest) {
 		for (let nestedEntity of request.nestedEntities!) {
 			let isEquals = true;
-			for (let [key] of Object.entries(request.nestedApi.types.create))
+			for (let [key] of Object.entries(request.nestedApi.properties.create))
 				if (nestedEntity[key] != request.resource[key])
 					isEquals = false;
 			if (isEquals)

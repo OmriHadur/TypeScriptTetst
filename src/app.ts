@@ -11,6 +11,7 @@ import ServerConfig from "./data/input/serverConfig";
 import GetServerDefinitionsRequest from "./messeges/bootstrap/getServerDefinitionsRequest";
 import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
 import ApiContex from "./data/apiContex";
+import AddValidationDefinitionsRequest from "./messeges/bootstrap/addValidationDefinitionsRequest";
 
 const asyncFunction = async () => {
 
@@ -20,7 +21,8 @@ const asyncFunction = async () => {
 
 	const serverConfig = await mediator.sendValue(new GetServerConfigRequest("Configs/")) as ServerConfig;
 	const serverDefinitions = await mediator.sendValue(new GetServerDefinitionsRequest(serverConfig)) as ServerDefinitions;
-	const apiContexReqeust = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions.apis, distFolder.functions)) as ApiContex;
+	const apiContex = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions.apis, distFolder)) as ApiContex;
+	await mediator.sendValue(new AddValidationDefinitionsRequest(serverDefinitions, serverConfig, apiContex));
 
 	const app = express();
 

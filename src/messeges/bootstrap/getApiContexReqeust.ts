@@ -4,7 +4,7 @@ import Dictionary from "../../general/dictionary"
 import Request from "../../mediator/interfaces/request"
 
 export default class GetApiContexReqeust extends Request<ApiContex> {
-    constructor(public apiDefinitions: ApiDefinition[], public functionsFolder: Dictionary<any>) {
+    constructor(public apiDefinitions: ApiDefinition[], public distFolder: Dictionary<any>) {
         super();
     }
 }

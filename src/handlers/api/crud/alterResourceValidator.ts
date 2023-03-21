@@ -4,6 +4,7 @@ import ValidationError from "../../../Errors/validationError";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
+import ApiDefinition from "../../../data/modules/apiDefinition";
 
 export default class AlterResourceValidator
 	implements IRequestHandler<AlterResourceRequest, any>
@@ -32,24 +33,24 @@ export default class AlterResourceValidator
 
 	getExistEntity(request: AlterResourceRequest, entityData: any) {
 		const predicate: any = {};
-		for (let key of request.api.types.unique)
+		for (let key of request.api.properties.unique)
 			predicate[key] = entityData[key];
 		if (Object.keys(predicate).length == 0)
 			return null;
 		return request.api.database.module.findOne(predicate);
 	}
 
-	getValidators = function* getValidators(operation: AlterOperation, api: any) {
+	getValidators = function* getValidators(operation: AlterOperation, api: ApiDefinition) {
 		switch (operation) {
 			case AlterOperation.Create:
 			case AlterOperation.ReplaceOrCreate:
-				yield api.validateCreate;
-				yield api.validateReplace;
+				yield api.validation.create;
+				yield api.validation.replace;
 				break;
 			case AlterOperation.Replace:
-				yield api.validateReplace;
+				yield api.validation.replace;
 			case AlterOperation.Update:
-				yield api.validateUpdate;
+				yield api.validation.update;
 		}
 	}
 }

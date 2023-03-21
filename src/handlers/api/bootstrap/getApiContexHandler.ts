@@ -14,7 +14,8 @@ export default class GetApiContexHandler
         for (let apiDefinition of request.apiDefinitions)
             modules[apiDefinition.name] = apiDefinition.database.module;
 
-        const functions = getFunctions(request.functionsFolder);
-        result.value = new ApiContex(modules, functions);
+        const functions = getFunctions(request.distFolder.functions);
+        const validations = getFunctions(request.distFolder.validations);
+        result.value = new ApiContex(modules, functions, validations);
     }
 }

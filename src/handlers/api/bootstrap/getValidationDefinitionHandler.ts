@@ -1,48 +1,38 @@
-import ApiContex from "../../data/apiContex";
-import ApiDefinition from "../../data/modules/apiDefinition";
-import Unit from "../../mediator/Data/unit";
-import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import * as scriptsBuilder from '../../helpers/scriptsBuilder';
-import PropertyValidationError from "../../Errors/propertyValidationError";
-import AddApiValidationsTaskReqeust from "../../messeges/bootstrap/getValidationDefinitionRequest";
-import getFunctions from "../../helpers/getFunctions";
-/*
-export default class AddApiValidationsHandler
-    implements IRequestHandler<AddApiValidationsTaskReqeust, Unit>
+import ApiContex from "../../../data/apiContex";
+import Unit from "../../../mediator/Data/unit";
+import IRequestHandler from "../../../mediator/interfaces/requestHandler";
+import * as scriptsBuilder from '../../../helpers/scriptsBuilder';
+import PropertyValidationError from "../../../Errors/propertyValidationError";
+import GetValidationDefinitionRequest from "../../../messeges/bootstrap/getValidationDefinitionRequest";
+import Result from "../../../mediator/Data/result";
+import ValidationDefinition from "../../../data/modules/validationDefinition";
+
+export default class GetValidationDefinitionHandler
+    implements IRequestHandler<GetValidationDefinitionRequest, Unit>
 {
-    messegeType = AddApiValidationsTaskReqeust.name;
+    messegeType = GetValidationDefinitionRequest.name;
 
-    async handle(request: AddApiValidationsTaskReqeust): Promise<void> {
-
-        request.apiDefinitions.forEach(api => {
-            for (let nestedApi of api.nestedApis)
-                this.addApiValidation(nestedApi, request.apiContex, functions);
-            this.addApiValidation(api, request.apiContex, functions);
-        });
+    async handle(request: GetValidationDefinitionRequest, result: Result<ValidationDefinition>): Promise<void> {
+        const validation = new ValidationDefinition();
+        validation.create = this.getValidation(request.resourceConfig.create.input, request.apiContex, true);
+        validation.replace = this.getValidation(request.resourceConfig.alter.input, request.apiContex, true);
+        validation.update = this.getValidation(request.resourceConfig.alter.input, request.apiContex, false);
+        result.value = validation;
     }
 
-    addApiValidation(apiDefinition: ApiDefinition, apiContex: ApiContex, functions: any) {
-        apiDefinition.validateCreate = this.getValidation(apiDefinition.validations.create, apiContex, apiDefinition.types.create, true, functions);
-
-        const alterValidation = apiDefinition.validations.alter;
-        const alterType = apiDefinition.types.alter;
-        apiDefinition.validateReplace = this.getValidation(alterValidation, apiContex, alterType, true, functions);
-        apiDefinition.validateUpdate = this.getValidation(alterValidation, apiContex, alterType, false, functions);
-    }
-
-    getValidation(validationDefinition: any, apiContex: ApiContex, typeDefinition: any, isValidateUndefined: boolean, functions: any) {
-        const validationFunctions: any = {};
-        const variables: any = {};
-        for (let [propertyOrValidationName, value] of Object.entries(validationDefinition)) {
-            const isProperty = typeDefinition[propertyOrValidationName] != null;
-            if (isProperty)
-                this.AddPropertyValidations(functions, value, validationFunctions, isValidateUndefined, propertyOrValidationName);
-            else if (propertyOrValidationName == 'variables') {
+    /*            else if (propertyOrValidationName == 'variables') {
                 for (let [variableName, variableScript] of Object.entries(value as any))
                     variables[variableName] = this.getScriptFunction(variableScript as string);
             } else
                 validationFunctions["resource." + propertyOrValidationName] = this.getScriptFunction(value as string);
-        };
+                */
+
+    getValidation(validationDefinition: any, apiContex: ApiContex, isValidateUndefined: boolean) {
+        const validationFunctions: any = {};
+        const variables: any = {};
+        if (validationDefinition)
+            for (let [propertyOrValidationName, value] of Object.entries(validationDefinition))
+                this.AddPropertyValidations(apiContex.validation, value, validationFunctions, isValidateUndefined, propertyOrValidationName);
         return async (user: any, resource: any) => await this.validateResource(validationFunctions, user, apiContex, variables, resource);
     }
 
@@ -88,4 +78,4 @@ export default class AddApiValidationsHandler
             return scriptsBuilder.runScript(script, context);
         };
     }
-}*/
+}

@@ -1,16 +1,16 @@
 import DatabaseDefinition from "./databaseDefinition";
 import MappingDefinition from "./mappingDefinition";
-import TypesDefinition from "./typesDefinition";
+import PropertiesDefinition from "./propertiesDefinition";
 import ValidationDefinition from "./validationDefinition";
 
 export default class ResourceDefinition {
-	types: TypesDefinition;
+	properties: PropertiesDefinition;
 	database: DatabaseDefinition;
 	mapping: MappingDefinition;
 	validation: ValidationDefinition;
 
 	constructor(public name: string) {
-		this.types = new TypesDefinition();
+		this.properties = new PropertiesDefinition();
 		this.mapping = new MappingDefinition();
 		this.validation = new ValidationDefinition();
 		this.database = new DatabaseDefinition();

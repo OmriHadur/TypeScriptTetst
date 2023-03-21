@@ -19,7 +19,7 @@ export default class GetResourceDefinitionHandler
     async handle(request: GetResourceDefinitionRequest, result: Result<ResourceDefinition>, mediator: IMediator): Promise<void> {
         const name = request.name;
         const resourceDefinition = new ResourceDefinition(name);
-        resourceDefinition.types.unique = this.getUnique(request.resourceConfig.create);
+        this.addResourceProperties(request, resourceDefinition);
         const scheme = this.map(request.resourceConfig, request.schemes);
         request.schemes[request.name] = scheme;
         resourceDefinition.database.scheme = scheme;
@@ -27,13 +27,20 @@ export default class GetResourceDefinitionHandler
         result.value = resourceDefinition;
     }
 
-    private getUnique(inputConfig: InputConfig): string[] {
-        const unique = [];
-        if (inputConfig)
-            for (let [key, value] of Object.entries(inputConfig.entity))
-                if (value.isUniqe)
-                    unique.push(key);
-        return unique;
+    private addResourceProperties(request: GetResourceDefinitionRequest, resourceDefinition: ResourceDefinition) {
+        this.addProperties(request.resourceConfig.create?.input, resourceDefinition.properties.create);
+        this.addProperties(request.resourceConfig.create?.entity, resourceDefinition.properties.unique, (v: any) => v.isUniqe);
+        this.addProperties(request.resourceConfig.alter?.input, resourceDefinition.properties.alter);
+        this.addProperties(request.resourceConfig.create?.entity, resourceDefinition.properties.entity);
+        this.addProperties(request.resourceConfig.alter?.entity, resourceDefinition.properties.entity);
+        this.addProperties(request.resourceConfig.resource, resourceDefinition.properties.resource);
+    }
+
+    private addProperties(input: Dictionary<any>, properties: string[], predicate?: any) {
+        if (input)
+            for (let [key, value] of Object.entries(input))
+                if (!predicate || predicate(value))
+                    properties.push(key);
     }
 
 
