@@ -50,8 +50,11 @@ export default class GetValidationDefinitionHandler
 
     getPropertyValidation(propertyValidations: any, isValidateUndefined: boolean, propertyName: string): Dictionary<any> {
         const propertyValidation = new Dictionary<any>();
-        for (let [validationName, validationArg] of Object.entries(propertyValidations))
-            propertyValidation[validationName] = this.getPropertyFunction(isValidateUndefined, validationName, propertyName, validationArg);
+        if (this.isString(propertyValidations))
+            propertyValidation[propertyValidations] = this.getPropertyFunction(isValidateUndefined, propertyValidations, propertyName, {});
+        else
+            for (let [validationName, validationArg] of Object.entries(propertyValidations))
+                propertyValidation[validationName] = this.getPropertyFunction(isValidateUndefined, validationName, propertyName, validationArg);
         return propertyValidation;
     }
 
@@ -93,5 +96,9 @@ export default class GetValidationDefinitionHandler
         return (context: any) => {
             return scriptsBuilder.runScript(script, context);
         };
+    }
+
+    isString(obj: any): obj is string {
+        return typeof obj === "string";
     }
 }

@@ -6,14 +6,7 @@ import Mediator from "./mediator/mediator";
 import folderFactory from "./factories/folderFactory";
 import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
 import ServerDefinitions from "./data/modules/serverDefinitions";
-import GetServerConfigRequest from "./messeges/bootstrap/getServerConfigRequest";
-import ServerConfig from "./data/input/serverConfig";
-import GetServerDefinitionsRequest from "./messeges/bootstrap/getServerDefinitionsRequest";
-import GetApiContexReqeust from "./messeges/bootstrap/getApiContexReqeust";
-import ApiContex from "./data/apiContex";
-import AddValidationAndMappingRequest from "./messeges/bootstrap/AddValidationAndMappingRequest";
-import * as staticObjects from './general/staticObjects';
-import * as sendToMediator from './controllers/sendToMediator';
+import ConfigServerApisRequest from "./messeges/bootstrap/configServerApisRequest";
 
 const asyncFunction = async () => {
 
@@ -21,12 +14,7 @@ const asyncFunction = async () => {
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const mediator = new Mediator(messegesHandlers);
 
-	const serverConfig = await mediator.sendValue(new GetServerConfigRequest("Configs/")) as ServerConfig;
-	const serverDefinitions = await mediator.sendValue(new GetServerDefinitionsRequest(serverConfig)) as ServerDefinitions;
-	const apiContex = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions.apis, distFolder)) as ApiContex;
-	staticObjects.set(apiContex);
-	sendToMediator.setApiContex(apiContex);
-	await mediator.sendValue(new AddValidationAndMappingRequest(serverDefinitions, serverConfig, apiContex));
+	const serverDefinitions = await mediator.sendValue(new ConfigServerApisRequest("./Configs", distFolder)) as ServerDefinitions;
 
 	const app = express();
 

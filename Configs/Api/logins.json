@@ -19,9 +19,7 @@
 	},
 	"alter": {
 		"input": {
-			"password": {
-				"required": true
-			}
+			"password": "required"
 		},
 		"variables": {
 			"user": "modules.users.findOne({email:input.email})"

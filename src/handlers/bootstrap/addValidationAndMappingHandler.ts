@@ -8,7 +8,7 @@ import GetMappingDefinitionRequest from "../../messeges/bootstrap/getMappingDefi
 import GetValidationDefinitionRequest from "../../messeges/bootstrap/getValidationDefinitionRequest";
 
 export default class AddValidationAndMappingHandler
-    implements IRequestHandler<AddValidationAndMappingRequest, ApiContex>
+    implements IRequestHandler<AddValidationAndMappingRequest, Unit>
 {
     messegeType = AddValidationAndMappingRequest.name;
 
