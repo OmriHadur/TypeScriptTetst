@@ -13,7 +13,7 @@
 			},
 			"createdAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		}
 	},
@@ -22,20 +22,20 @@
 			"password": "required"
 		},
 		"variables": {
-			"user": "modules.users.findOne({email:input.email})"
+			"user": "users.findOne({email:input.email})"
 		},
 		"validations": {
-			"wrongEmailOrPassword": "functions.isMatch(variables.user?.hashedPassword,input.password)"
+			"wrongEmailOrPassword": "isMatch(variables.user?.hashedPassword,input.password)"
 		},
 		"entity": {
 			"alteredAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		}
 	},
 	"resource": {
 		"id": "input._id",
-		"token": "functions.createToken({id:variables.user._id,email:input.email})"
+		"token": "createToken({id:variables.user._id,email:input.email})"
 	}
 }

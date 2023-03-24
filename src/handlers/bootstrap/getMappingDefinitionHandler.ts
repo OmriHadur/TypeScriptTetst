@@ -32,12 +32,12 @@ export default class GetMappingDefinitionHandler
                 return resource;
             };
 
-        mappingDefinition.entitiesToResources = async (user: any, entities: any[], variablesValue: any) => {
+        mappingDefinition.entitiesToResources = async (apiContex: ApiContex, entities: any[]) => {
             if (!entities)
                 return [];
             const resources = [entities.length];
             for (let i = 0; i < entities.length; i++)
-                resources[i] = await mappingDefinition.entityToResource(user, entities[i], variablesValue);
+                resources[i] = await mappingDefinition.entityToResource(apiContex, entities[i]);
             return resources;
         }
 

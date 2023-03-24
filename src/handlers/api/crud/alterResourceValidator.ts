@@ -1,10 +1,9 @@
 import NotFoundError from "../../../Errors/notFoundError";
 import AlreadyExistError from "../../../Errors/alreadyExistError";
-import ValidationError from "../../../Errors/validationError";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
-import ApiDefinition from "../../../data/modules/apiDefinition";
+import validateInput from "../common/validateInput";
 
 export default class AlterResourceValidator
 	implements IRequestHandler<AlterResourceRequest, any>
@@ -12,12 +11,9 @@ export default class AlterResourceValidator
 	messegeType = AlterResourceRequest.name;
 
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
-		let errors: any[] = [];
-		for (let validator of this.getValidators(request.operation, request.api))
-			errors = errors.concat(await validator(request.apiContex, request.resource));
-
-		if (errors.length > 0)
-			return new ValidationError(errors);
+		const error = await validateInput(request.apiContex!, request.api, request.operation, request.resource);
+		if (error)
+			return error;
 
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			const entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
@@ -38,19 +34,5 @@ export default class AlterResourceValidator
 		if (Object.keys(predicate).length == 0)
 			return null;
 		return request.api.database.module.findOne(predicate);
-	}
-
-	getValidators = function* getValidators(operation: AlterOperation, api: ApiDefinition) {
-		switch (operation) {
-			case AlterOperation.Create:
-			case AlterOperation.ReplaceOrCreate:
-				yield api.validation.create;
-				yield api.validation.replace;
-				break;
-			case AlterOperation.Replace:
-				yield api.validation.replace;
-			case AlterOperation.Update:
-				yield api.validation.update;
-		}
 	}
 }

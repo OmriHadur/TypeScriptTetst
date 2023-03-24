@@ -17,5 +17,6 @@ export default class GetApiContexHandler
         const functions = getFunctions(request.distFolder.functions);
         const validations = getFunctions(request.distFolder.validations);
         result.value = new ApiContex(modules, functions, validations);
+        result.value = { ...result.value, ...modules, ...functions };
     }
 }

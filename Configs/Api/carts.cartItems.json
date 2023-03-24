@@ -7,7 +7,7 @@
 			}
 		},
 		"variables": {
-			"product": "modules.products.findOne({barcode:input.barcode})"
+			"product": "products.findOne({barcode:input.barcode})"
 		},
 		"validations": {
 			"productNotExist": "variables.product"
@@ -30,15 +30,23 @@
 				"positive": true
 			}
 		},
+		"variables": {
+			"discount": "2",
+			"totalPrice": "variables.product.price * input.quantity - variables.discount"
+		},
 		"entity": {
 			"quantity": "number",
 			"alteredAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
+			},
+			"discount": {
+				"type": "number",
+				"value": "variables.discount"
 			},
 			"totalPrice": {
 				"type": "number",
-				"value": "functions.toCurrency(variables.product.price * input.quantity)"
+				"value": "toCurrency(variables.totalPrice)"
 			}
 		}
 	},
@@ -48,6 +56,7 @@
 		"barcode": true,
 		"quantity": true,
 		"price": true,
+		"discount": true,
 		"totalPrice": true
 	}
 }

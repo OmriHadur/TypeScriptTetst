@@ -13,7 +13,7 @@
 			},
 			"createdAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		}
 	},
@@ -33,11 +33,11 @@
 			"name": "string",
 			"hashedPassword": {
 				"type": "string",
-				"value": "functions.encrypt(input.password)"
+				"value": "encrypt(input.password)"
 			},
 			"alteredAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		}
 	},
