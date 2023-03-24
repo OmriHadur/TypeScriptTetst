@@ -19,7 +19,7 @@
 			},
 			"price": {
 				"type": "number",
-				"value": "product.price"
+				"value": "variables.product.price"
 			}
 		}
 	},
@@ -35,12 +35,19 @@
 			"alteredAt": {
 				"type": "date",
 				"value": "functions.now()"
+			},
+			"totalPrice": {
+				"type": "number",
+				"value": "functions.toCurrency(variables.product.price * input.quantity)"
 			}
 		}
 	},
 	"resource": {
 		"id": "input._id",
+		"alteredAt": true,
 		"barcode": true,
-		"quantity": true
+		"quantity": true,
+		"price": true,
+		"totalPrice": true
 	}
 }

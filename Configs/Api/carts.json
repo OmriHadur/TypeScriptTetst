@@ -23,6 +23,7 @@
 	},
 	"resource": {
 		"id": "input._id",
-		"itemsCount": "functions.sum(input.cartItems,'quantity')"
+		"itemsCount": "functions.sum(input.cartItems,'quantity')",
+		"totalPrice": "functions.toCurrency(functions.sum(input.cartItems,'totalPrice'))"
 	}
 }

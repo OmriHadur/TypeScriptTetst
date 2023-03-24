@@ -1,4 +1,5 @@
-import ApiContex from "../../data/apiContex";
+import ResourceConfig from "../../data/input/resourceConfig";
+import ResourceDefinition from "../../data/modules/resourceDefinition";
 import Result from "../../mediator/Data/result";
 import Unit from "../../mediator/Data/unit";
 import IMediator from "../../mediator/interfaces/mediator";
@@ -14,9 +15,17 @@ export default class AddValidationAndMappingHandler
 
     async handle(request: AddValidationAndMappingRequest, result: Result<Unit>, mediator: IMediator): Promise<void> {
         for (let resourceDefinition of request.serverDefinitions.apis) {
-            const resourceConfig = request.serverConfig.apis[resourceDefinition.name].input;
-            resourceDefinition.validation = await mediator.sendValue(new GetValidationDefinitionRequest(resourceDefinition, resourceConfig));
-            resourceDefinition.mapping = await mediator.sendValue(new GetMappingDefinitionRequest(resourceDefinition, resourceConfig));
+            const config = request.serverConfig.apis[resourceDefinition.name];
+            for (let nestedDefinition of resourceDefinition.nested) {
+                const nestedConfig = config.nested[nestedDefinition.name];
+                await this.addValidationAndMapping(nestedDefinition, nestedConfig, mediator);
+            }
+            await this.addValidationAndMapping(resourceDefinition, config.input, mediator);
         }
+    }
+
+    async addValidationAndMapping(definition: ResourceDefinition, config: ResourceConfig, mediator: IMediator) {
+        definition.validation = await mediator.sendValue(new GetValidationDefinitionRequest(definition, config));
+        definition.mapping = await mediator.sendValue(new GetMappingDefinitionRequest(definition, config));
     }
 }

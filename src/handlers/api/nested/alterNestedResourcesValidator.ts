@@ -4,6 +4,8 @@ import AlterNestedResourceRequest from "../../../messeges/api/nested/alterNested
 import NotFoundError from "../../../Errors/notFoundError";
 import { AlterOperation } from "../../../types/apiRelated";
 import AlreadyExistError from "../../../Errors/alreadyExistError";
+import ApiDefinition from "../../../data/modules/apiDefinition";
+import ResourceDefinition from "../../../data/modules/resourceDefinition";
 
 export default class AlterNestedResourcesValidator implements IRequestHandler<AlterNestedResourceRequest, any> {
 	messegeType = AlterNestedResourceRequest.name;
@@ -23,8 +25,9 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 			return new ValidationError(errors);
 
 		request.nestedEntities = request.parentEntity[request.nestedApi.name];
+		const entityData = await request.nestedApi.mapping.createToEntity(request.apiContex, request.resource);
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
-			request.entity = await this.getExistEntity(request);
+			request.entity = await this.getExistEntity(request, entityData);
 			if (request.entity && request.operation == AlterOperation.Create)
 				return new AlreadyExistError();
 		} else {
@@ -34,28 +37,28 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 		}
 	}
 
-	getExistEntity(request: AlterNestedResourceRequest) {
+	getExistEntity(request: AlterNestedResourceRequest, entityData: any) {
 		for (let nestedEntity of request.nestedEntities!) {
 			let isEquals = true;
-			for (let [key] of Object.entries(request.nestedApi.properties.create))
-				if (nestedEntity[key] != request.resource[key])
+			for (let property of request.nestedApi.properties.unique)
+				if (nestedEntity[property] != entityData[property])
 					isEquals = false;
 			if (isEquals)
 				return nestedEntity;
 		}
 	}
 
-	getValidators = function* getValidators(operation: AlterOperation, api: any) {
+	getValidators = function* getValidators(operation: AlterOperation, api: ResourceDefinition) {
 		switch (operation) {
 			case AlterOperation.Create:
 			case AlterOperation.ReplaceOrCreate:
-				yield api.validateCreate;
-				yield api.validateReplace;
+				yield api.validation.create;
+				yield api.validation.replace;
 				break;
 			case AlterOperation.Replace:
-				yield api.validateReplace;
+				yield api.validation.replace;
 			case AlterOperation.Update:
-				yield api.validateUpdate;
+				yield api.validation.update;
 		}
 	}
 }
