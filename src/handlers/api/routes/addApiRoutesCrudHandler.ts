@@ -41,7 +41,7 @@ export default class AddApiRoutesCrudHandler
 			send(mediator,
 				(req: ExpressRequest) =>
 					new AlterResourceRequest(api, AlterOperation.ReplaceOrCreate, req.body),
-				(req) => req.entity ? 200 : 201));
+				(req) => req.created ? 201 : 200));
 
 		router.patch(route + '/:id',
 			send(mediator, (req: ExpressRequest) =>

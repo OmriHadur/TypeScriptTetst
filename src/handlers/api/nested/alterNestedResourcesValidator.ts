@@ -12,29 +12,33 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 
 	async validate?(request: AlterNestedResourceRequest): Promise<Error | void> {
 
-		request.parentEntity = await request.parentApi.database.module.findById(request.parentId);
-		if (!request.parentEntity)
-			return new NotFoundError(request.parentId);
-		request.apiContex!.input = request.resource;
+		const contex = request.apiContex;
+		contex.input = request.resource;
+		let errors = [];
+		const validation = request.nestedApi.validation;
 
-		let errors = validationHelper.getInputErrors(request.apiContex, request.operation, request.nestedApi.validation);
+		errors = validationHelper.validateInput(contex, request.operation, validation);
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
-		await validationHelper.calVariables(request.apiContex, request.operation, request.nestedApi.validation);
-		let result = await this.getEntity(request);
-		if (result.isError())
-			return result.error;
-		const entity = result.value;
-		request.entity = entity;
-		request.apiContex!.entity = entity;
+		request.parentEntity = await request.parentApi.database.module.findById(request.parentId);
+		if (!request.parentEntity)
+			return new NotFoundError(request.parentId);
 
-		errors = await validationHelper.getGeneralValidation(request.apiContex, request.operation, request.nestedApi.validation);
+		const entityResult = await this.getEntityResult(request);
+		if (entityResult.isError())
+			return entityResult.error;
+		else
+			contex.entity = entityResult.value;
+
+		const validationDefinition = request.operation == AlterOperation.Update ? validation.update : validation.replace;
+		validationDefinition.calVariables(contex);
+		errors = await validationDefinition.validateGeneral(contex);
 		if (errors.length > 0)
 			return new ValidationError(errors);
 	}
 
-	async getEntity(request: AlterNestedResourceRequest): Promise<Result<any>> {
+	async getEntityResult(request: AlterNestedResourceRequest): Promise<Result<any>> {
 		const result = new Result();
 		request.nestedEntities = request.parentEntity[request.nestedApi.name];
 		const entityData = await request.nestedApi.mapping.createToEntity(request.apiContex, request.resource);

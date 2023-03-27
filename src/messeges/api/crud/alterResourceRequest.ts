@@ -3,8 +3,8 @@ import Request from "../../../mediator/interfaces/request";
 import { AlterOperation } from "../../../types/apiRelated";
 
 export default class AlterResourceRequest extends Request<any> {
-    entity?: any;
-
+    created: boolean = false;
+    
     constructor(
         public api: ApiDefinition,
         public operation: AlterOperation,

@@ -8,10 +8,13 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 	messegeType = AlterResourceRequest.name;
 
 	async handle(request: AlterResourceRequest, result: Result<any>): Promise<void> {
-		let entity = request.entity;
+		let entity = request.apiContex.entity;
 
-		if (this.isShouldCreate(request))
-			entity = await this.create(request);
+		if (this.isShouldCreate(request)) {
+			let entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
+			entity = new request.api.database.module(entityData);
+			request.created = true;
+		}
 		await this.alter(request, entity);
 
 		entity = await entity.save();
@@ -19,12 +22,7 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 	}
 
 	private isShouldCreate(request: AlterResourceRequest) {
-		return request.operation == AlterOperation.Create || (request.operation == AlterOperation.ReplaceOrCreate && !request.entity);
-	}
-
-	private async create(request: AlterResourceRequest) {
-		const entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
-		return new request.api.database.module(entityData);
+		return request.operation == AlterOperation.Create || (request.operation == AlterOperation.ReplaceOrCreate && !request.apiContex.entity);
 	}
 
 	private async alter(request: AlterResourceRequest, entity: any) {
