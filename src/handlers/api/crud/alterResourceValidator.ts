@@ -3,7 +3,9 @@ import AlreadyExistError from "../../../Errors/alreadyExistError";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
-import validateInput from "../common/validateInput";
+import Result from "../../../mediator/Data/result";
+import ValidationError from "../../../Errors/validationError";
+import * as validationHelper from "../common/validationHelper"
 
 export default class AlterResourceValidator
 	implements IRequestHandler<AlterResourceRequest, any>
@@ -11,21 +13,39 @@ export default class AlterResourceValidator
 	messegeType = AlterResourceRequest.name;
 
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
-		const error = await validateInput(request.apiContex!, request.api, request.operation, request.resource);
-		if (error)
-			return error;
+		request.apiContex!.input = request.resource;
 
+		let errors = validationHelper.getInputErrors(request.apiContex, request.operation, request.api.validation);
+		if (errors.length > 0)
+			return new ValidationError(errors);
+
+		let result = await this.getEntity(request);
+		if (result.isError())
+			return result.error;
+		const entity = result.value;
+		request.entity = entity;
+		request.apiContex!.entity = entity;
+
+		errors = await validationHelper.getGeneralValidation(request.apiContex, request.operation, request.api.validation);
+		if (errors.length > 0)
+			return new ValidationError(errors);
+	}
+
+	private async getEntity(request: AlterResourceRequest): Promise<Result<any>> {
+		const result = new Result();
 		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
 			const entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
-			request.entity = await this.getExistEntity(request, entityData);
-			if (request.entity && request.operation == AlterOperation.Create)
-				return new AlreadyExistError();
+			result.value = await this.getExistEntity(request, entityData);
+			if (result.value && request.operation == AlterOperation.Create)
+				result.error = new AlreadyExistError();
 		} else {
-			request.entity = await request.api.database.module.findById(request.resourceId);
+			result.value = await request.api.database.module.findById(request.resourceId);
 			if (!request.entity)
-				return new NotFoundError(request.resourceId!);
+				result.error = new NotFoundError(request.resourceId!);
 		}
+		return result;
 	}
+
 
 	getExistEntity(request: AlterResourceRequest, entityData: any) {
 		const predicate: any = {};

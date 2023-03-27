@@ -32,7 +32,7 @@
 		},
 		"variables": {
 			"discount": "2",
-			"totalPrice": "variables.product.price * input.quantity - variables.discount"
+			"totalPrice": "entity.price * input.quantity - variables.discount"
 		},
 		"entity": {
 			"quantity": "number",

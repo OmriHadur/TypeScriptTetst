@@ -1,12 +1,8 @@
+import ResourceValidationDefinition from "./resourceValidationDefinition";
 
 export default class ValidationDefinition {
-	create: any;
-	replace: any;
-	update: any;
-
-	constructor() {
-		this.create = {};
-		this.replace = {};
-		this.update = {};
-	}
+	constructor(
+		public create: ResourceValidationDefinition,
+		public replace: ResourceValidationDefinition,
+		public update: ResourceValidationDefinition) { }
 }

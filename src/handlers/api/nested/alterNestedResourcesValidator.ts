@@ -3,8 +3,7 @@ import AlterNestedResourceRequest from "../../../messeges/api/nested/alterNested
 import NotFoundError from "../../../Errors/notFoundError";
 import { AlterOperation } from "../../../types/apiRelated";
 import AlreadyExistError from "../../../Errors/alreadyExistError";
-import ResourceDefinition from "../../../data/modules/resourceDefinition";
-import validateInput from "../common/validateInput";
+import validateInput from "../common/validationHelper";
 
 export default class AlterNestedResourcesValidator implements IRequestHandler<AlterNestedResourceRequest, any> {
 	messegeType = AlterNestedResourceRequest.name;
@@ -15,8 +14,6 @@ export default class AlterNestedResourcesValidator implements IRequestHandler<Al
 			return new NotFoundError(request.parentId);
 
 		const error = await validateInput(request.apiContex!, request.nestedApi, request.operation, request.resource);
-		if (error)
-			return error;
 
 		request.nestedEntities = request.parentEntity[request.nestedApi.name];
 		const entityData = await request.nestedApi.mapping.createToEntity(request.apiContex, request.resource);
