@@ -19,6 +19,7 @@ export default class AlterResourceValidator
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
+		await validationHelper.calVariables(request.apiContex, request.operation, request.api.validation);
 		let result = await this.getEntity(request);
 		if (result.isError())
 			return result.error;
