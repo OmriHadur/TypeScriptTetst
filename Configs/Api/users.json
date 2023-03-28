@@ -7,10 +7,7 @@
 			}
 		},
 		"entity": {
-			"email": {
-				"type": "string",
-				"isUniqe": true
-			},
+			"email": "string",
 			"createdAt": {
 				"type": "date",
 				"value": "now()"

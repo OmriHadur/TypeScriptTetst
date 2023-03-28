@@ -3,6 +3,7 @@ import Result from "./Data/result";
 import Dictionary from "../general/dictionary";
 import Unit from "./Data/unit";
 import IMediator from "./interfaces/mediator";
+import InternalError from "../Errors/internalError";
 
 export default class Mediator implements IMediator {
 	handlers: Dictionary<any[]>;
@@ -19,28 +20,32 @@ export default class Mediator implements IMediator {
 		const result = new Result<TValue>();
 		let isFinished = false;
 
-		for (let handler of handlers)
-			if (handler.preHandling)
-				handler.preHandling(request);
+		try {
+			for (let handler of handlers)
+				if (handler.preHandling)
+					handler.preHandling(request);
 
-		for (let handler of handlers) {
-			if (!isFinished && handler.validate) {
-				result.error = await handler.validate(request, this);
-				isFinished = result.isError();
+			for (let handler of handlers) {
+				if (!isFinished && handler.validate) {
+					result.error = await handler.validate(request, this);
+					isFinished = result.isError();
+				}
 			}
-		}
-		for (let handler of handlers) {
-			if (!isFinished && handler.handle) {
-				await handler.handle(request, result, this);
-				isFinished = result.isResult();
+			for (let handler of handlers) {
+				if (!isFinished && handler.handle) {
+					await handler.handle(request, result, this);
+					isFinished = result.isResult();
+				}
 			}
+			if (!result.isResult() && !result.isError())
+				result.value = Unit.Instance as TValue;
+			for (let handler of handlers)
+				if (handler.postHandling)
+					handler.postHandling(request, result);
 		}
-		if (!result.isResult() && !result.isError())
-			result.value = Unit.Instance as TValue;
-		for (let handler of handlers)
-			if (handler.postHandling)
-				handler.postHandling(request, result);
-
+		catch (exp: any) {
+			result.error = new InternalError(exp.message);
+		}
 		return result;
 	}
 

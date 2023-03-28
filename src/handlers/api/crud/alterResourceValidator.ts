@@ -4,9 +4,6 @@ import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
 import ValidationError from "../../../Errors/validationError";
-import * as validationHelper from "../common/validationHelper"
-import ValidationDefinition from "../../../data/modules/validationDefinition";
-import ApiContex from "../../../data/apiContex";
 import ApiDefinition from "../../../data/modules/apiDefinition";
 import Result from "../../../mediator/Data/result";
 
@@ -21,7 +18,9 @@ export default class AlterResourceValidator
 		let errors = [];
 		const validation = request.api.validation;
 
-		errors = validationHelper.validateInput(contex, request.operation, validation);
+		if (request.operation == AlterOperation.Create)
+			errors = request.api.validation.create.validateInput(contex);
+		errors = errors.concat(request.api.validation.alter.validateInput(contex));
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
@@ -31,9 +30,9 @@ export default class AlterResourceValidator
 		else
 			contex.entity = entityResult.value;
 
-		const validationDefinition = request.operation == AlterOperation.Update ? validation.update : validation.replace;
-		validationDefinition.calVariables(contex);
-		errors = await validationDefinition.validateGeneral(contex);
+		request.apiContex.isValidateUndefined = request.operation == AlterOperation.Update;
+		await validation.alter.calVariables(contex);
+		errors = await validation.alter.validateGeneral(contex);
 		if (errors.length > 0)
 			return new ValidationError(errors);
 	}

@@ -15,14 +15,13 @@ export default class GetValidationDefinitionHandler
     messegeType = GetValidationDefinitionRequest.name;
 
     async handle(request: GetValidationDefinitionRequest, result: Result<ValidationDefinition>): Promise<void> {
-        const create = this.getValidation(request.resourceConfig.create, true);
-        const replace = this.getValidation(request.resourceConfig.alter, true);
-        const update = this.getValidation(request.resourceConfig.alter, false);
-        result.value = new ValidationDefinition(create, replace, update);
+        const create = this.getValidation(request.resourceConfig.create);
+        const alter = this.getValidation(request.resourceConfig.alter);
+        result.value = new ValidationDefinition(create, alter);
     }
 
-    getValidation(validationConfig: InputConfig, isValidateUndefined: boolean): ResourceValidationDefinition {
-        const propertiesValidation = this.getPropertiesValidation(validationConfig.input, isValidateUndefined);
+    getValidation(validationConfig: InputConfig): ResourceValidationDefinition {
+        const propertiesValidation = this.getPropertiesValidation(validationConfig.input);
         const properties =
             (apiContex: ApiContex) => this.validateProperties(apiContex, propertiesValidation);
 
@@ -62,21 +61,21 @@ export default class GetValidationDefinitionHandler
         }
     }
 
-    private getPropertiesValidation(input: Dictionary<any>, isValidateUndefined: boolean): Dictionary<Dictionary<any>> {
+    private getPropertiesValidation(input: Dictionary<any>): Dictionary<Dictionary<any>> {
         const propertiesValidation = new Dictionary<Dictionary<string>>();
         if (input)
             for (let [propertyName, value] of Object.entries(input))
-                propertiesValidation[propertyName] = this.getPropertyValidation(value, isValidateUndefined, propertyName);
+                propertiesValidation[propertyName] = this.getPropertyValidation(value, propertyName);
         return propertiesValidation;
     }
 
-    private getPropertyValidation(propertyValidations: any, isValidateUndefined: boolean, propertyName: string): Dictionary<any> {
+    private getPropertyValidation(propertyValidations: any, propertyName: string): Dictionary<any> {
         const propertyValidation = new Dictionary<any>();
         if (this.isString(propertyValidations))
-            propertyValidation[propertyValidations] = this.getPropertyFunction(isValidateUndefined, propertyValidations, propertyName, {});
+            propertyValidation[propertyValidations] = this.getPropertyFunction(propertyValidations, propertyName, {});
         else
             for (let [validationName, validationArg] of Object.entries(propertyValidations))
-                propertyValidation[validationName] = this.getPropertyFunction(isValidateUndefined, validationName, propertyName, validationArg);
+                propertyValidation[validationName] = this.getPropertyFunction(validationName, propertyName, validationArg);
         return propertyValidation;
     }
 
@@ -89,9 +88,9 @@ export default class GetValidationDefinitionHandler
         return errors;
     }
 
-    private getPropertyFunction(isValidateUndefined: boolean, validationName: string, propertyName: string, validationArg: any) {
+    private getPropertyFunction(validationName: string, propertyName: string, validationArg: any) {
         return (context: ApiContex) => {
-            if (!isValidateUndefined && !context.input[propertyName])
+            if (!context.isValidateUndefined && !context.input[propertyName])
                 return true;
             const validationFunction = context.validations[validationName];
             return validationFunction(context.input[propertyName], validationArg);

@@ -13,10 +13,7 @@
 			"productNotExist": "variables.product"
 		},
 		"entity": {
-			"barcode": {
-				"type": "string",
-				"isUniqe": true
-			},
+			"barcode": "string",
 			"price": {
 				"type": "number",
 				"value": "variables.product.price"
