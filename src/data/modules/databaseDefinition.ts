@@ -1,5 +1,6 @@
 
 export default class DatabaseDefinition {
-	scheme: any;
-	module: any;
+	constructor(public scheme: any, public module: any) {
+
+	}
 }

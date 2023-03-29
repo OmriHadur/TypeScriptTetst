@@ -1,7 +1,7 @@
 import ApiContex from "../../data/apiContex";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
-import PropertyValidationError from "../../Errors/propertyValidationError";
+import PropertyValidationError from "../../errors/propertyValidationError";
 import GetValidationDefinitionRequest from "../../messeges/bootstrap/getValidationDefinitionRequest";
 import Result from "../../mediator/Data/result";
 import ValidationDefinition from "../../data/modules/validationDefinition";

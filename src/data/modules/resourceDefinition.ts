@@ -12,6 +12,6 @@ export default class ResourceDefinition {
 	constructor(public name: string) {
 		this.properties = new PropertiesDefinition();
 		this.mapping = new MappingDefinition();
-		this.database = new DatabaseDefinition();
+		this.database = new DatabaseDefinition(null, null);
 	}
 }

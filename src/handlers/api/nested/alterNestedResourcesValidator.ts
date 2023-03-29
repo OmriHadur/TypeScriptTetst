@@ -1,10 +1,10 @@
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
-import NotFoundError from "../../../Errors/notFoundError";
-import ValidationError from "../../../Errors/validationError";
+import NotFoundError from "../../../errors/notFoundError";
+import ValidationError from "../../../errors/validationError";
 import AlterNestedResourceRequest from "../../../messeges/api/nested/alterNestedResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
 import ResourceDefinition from "../../../data/modules/resourceDefinition";
-import AlreadyExistError from "../../../Errors/alreadyExistError";
+import AlreadyExistError from "../../../errors/alreadyExistError";
 
 export default class AlterNestedResourceValidator implements IRequestHandler<AlterNestedResourceRequest, any> {
 	messegeType = AlterNestedResourceRequest.name;

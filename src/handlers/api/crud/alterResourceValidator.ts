@@ -1,9 +1,9 @@
-import NotFoundError from "../../../Errors/notFoundError";
-import AlreadyExistError from "../../../Errors/alreadyExistError";
+import NotFoundError from "../../../errors/notFoundError";
+import AlreadyExistError from "../../../errors/alreadyExistError";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
 import { AlterOperation } from "../../../types/apiRelated";
-import ValidationError from "../../../Errors/validationError";
+import ValidationError from "../../../errors/validationError";
 import ApiDefinition from "../../../data/modules/apiDefinition";
 import Result from "../../../mediator/Data/result";
 
@@ -21,6 +21,7 @@ export default class AlterResourceValidator
 
 		if (isCreate)
 			errors = validation.create.validateInput(request.apiContex);
+
 		errors = errors.concat(validation.alter.validateInput(request.apiContex, request.operation == AlterOperation.Update));
 		if (errors.length > 0)
 			return new ValidationError(errors);
@@ -41,7 +42,7 @@ export default class AlterResourceValidator
 		}
 		request.apiContex.entity = request.entity;
 
-		errors = await validation.alter.validateGeneral(request.apiContex);
+		errors = await validation.alter?.validateGeneral(request.apiContex);
 		if (errors.length > 0)
 			return new ValidationError(errors);
 	}

@@ -14,9 +14,9 @@
 		},
 		"entity": {
 			"barcode": "string",
-			"price": {
-				"type": "number",
-				"value": "variables.product.price"
+			"product": {
+				"type": "products",
+				"value": "variables.product"
 			}
 		}
 	},
@@ -29,7 +29,7 @@
 		},
 		"variables": {
 			"discount": "2",
-			"totalPrice": "entity.price * input.quantity - variables.discount"
+			"totalPrice": "entity.product.price * input.quantity - variables.discount"
 		},
 		"entity": {
 			"quantity": "number",
@@ -52,7 +52,7 @@
 		"alteredAt": true,
 		"barcode": true,
 		"quantity": true,
-		"price": true,
+		"product": true,
 		"discount": true,
 		"totalPrice": true
 	}

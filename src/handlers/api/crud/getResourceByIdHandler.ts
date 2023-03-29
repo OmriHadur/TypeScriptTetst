@@ -1,4 +1,4 @@
-import NotFoundError from "../../../Errors/notFoundError";
+import NotFoundError from "../../../errors/notFoundError";
 import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import GetResourceByIdRequest from "../../../messeges/api/crud/getResourceByIdRequest";
