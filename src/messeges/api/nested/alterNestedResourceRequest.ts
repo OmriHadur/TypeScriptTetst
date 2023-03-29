@@ -1,6 +1,7 @@
 import ApiDefinition from "../../../data/modules/apiDefinition";
 import ResourceDefinition from "../../../data/modules/resourceDefinition";
 import Request from "../../../mediator/interfaces/request";
+import { AlterOperation } from "../../../types/apiRelated";
 
 export default class AlterNestedResourceRequest extends Request<any> {
     parentEntity?: any;
@@ -13,8 +14,8 @@ export default class AlterNestedResourceRequest extends Request<any> {
         public nestedApi: ResourceDefinition,
         public parentId: string,
         public resource: any,
-        public resourceId?: string,
-        public isOnlyUpdate: boolean = false) {
+        public operation: AlterOperation,
+        public resourceId?: string) {
         super();
     }
 }

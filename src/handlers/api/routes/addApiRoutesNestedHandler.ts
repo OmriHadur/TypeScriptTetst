@@ -4,10 +4,9 @@ import IMediator from "../../../mediator/interfaces/mediator";
 import AddApiRoutesReqeust from "../../../messeges/api/routes/addApiRoutesReqeust";
 import Unit from "../../../mediator/Data/unit";
 import { send } from "../../../controllers/sendToMediator";
-import { ExpressRequest } from "../../../types/apiRelated";
+import { AlterOperation, ExpressRequest } from "../../../types/apiRelated";
 import GetNestedResourcesRequest from "../../../messeges/api/nested/getNestedResourcesRequest";
-import CreateOrReplaceNestedResourceRequest from "../../../messeges/api/nested/createNestedResourceRequest";
-import ReplaceOrUpdateNestedResourceRequest from "../../../messeges/api/nested/alterNestedResourceRequest";
+import AlterNestedResourceRequest from "../../../messeges/api/nested/alterNestedResourceRequest";
 
 export default class AddApiRoutesCrudHandler
 	implements IRequestHandler<AddApiRoutesReqeust, Unit>
@@ -28,19 +27,19 @@ export default class AddApiRoutesCrudHandler
 
 			router.post(route,
 				send(mediator, (req: ExpressRequest) =>
-					new CreateOrReplaceNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, true)));
+					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Create)));
 
 			router.put(route,
 				send(mediator, (req: ExpressRequest) =>
-					new CreateOrReplaceNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, false)));
+					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.ReplaceOrCreate)));
 
 			router.put(route + "/:nestedId",
 				send(mediator, (req: ExpressRequest) =>
-					new ReplaceOrUpdateNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, req.params.nestedId, true)));
+					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Replace, req.params.nestedId)));
 
 			router.patch(route + "/:nestedId",
 				send(mediator, (req: ExpressRequest) =>
-					new ReplaceOrUpdateNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, req.params.nestedId, false)));
+					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Update, req.params.nestedId)));
 		}
 	}
 }

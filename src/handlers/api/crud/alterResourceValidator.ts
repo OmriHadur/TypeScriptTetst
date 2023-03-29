@@ -13,52 +13,37 @@ export default class AlterResourceValidator
 	messegeType = AlterResourceRequest.name;
 
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
-		const contex = request.apiContex;
-		contex.input = request.resource;
-		let errors = [];
 		const validation = request.api.validation;
+		request.apiContex.input = request.resource;
+		let errors = [];
 
-		if (request.operation == AlterOperation.Create)
-			errors = request.api.validation.create.validateInput(contex);
-		errors = errors.concat(request.api.validation.alter.validateInput(contex));
+		const isCreate = (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate);
+
+		if (isCreate)
+			errors = validation.create.validateInput(request.apiContex);
+		errors = errors.concat(validation.alter.validateInput(request.apiContex, request.operation == AlterOperation.Update));
 		if (errors.length > 0)
 			return new ValidationError(errors);
 
-		const entityResult = await this.getEntityResult(request);
-		if (entityResult.isError())
-			return entityResult.error;
-		else
-			contex.entity = entityResult.value;
-
-		request.apiContex.isValidateUndefined = request.operation == AlterOperation.Update;
-		await validation.alter.calVariables(contex);
-		errors = await validation.alter.validateGeneral(contex);
-		if (errors.length > 0)
-			return new ValidationError(errors);
-	}
-
-	async getEntityResult(request: AlterResourceRequest) {
-		const result = new Result();
-		if (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate) {
-			request.api.validation.create.calVariables(request.apiContex);
-			let errors = await request.api.validation.create.validateGeneral(request.apiContex);
+		if (isCreate) {
+			errors = await validation.create.validateGeneral(request.apiContex);
 			if (errors.length > 0)
-				result.error = new ValidationError(errors);
-			else {
-				let entity = await request.api.mapping.createToEntity(request.apiContex, request.resource);
-				entity = await this.getExistEntity(request.api, entity);
-				if (request.operation == AlterOperation.Create) {
-					if (entity)
-						result.error = new AlreadyExistError();
-				} else
-					result.value = entity;
-			}
+				return new ValidationError(errors);
+
+			request.entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
+			request.entity = await this.getExistEntity(request.api, request.entityData);
+			if (request.entity && request.operation == AlterOperation.Create)
+				return new AlreadyExistError();
 		} else {
-			result.value = await request.api.database.module.findById(request.resourceId);
-			if (!result.value)
-				result.error = new NotFoundError(request.resourceId!);
+			request.entity = await request.api.database.module.findById(request.resourceId);
+			if (!request.entity)
+				return new NotFoundError(request.requestId);
 		}
-		return result;
+		request.apiContex.entity = request.entity;
+
+		errors = await validation.alter.validateGeneral(request.apiContex);
+		if (errors.length > 0)
+			return new ValidationError(errors);
 	}
 
 	getExistEntity(api: ApiDefinition, entityData: any) {

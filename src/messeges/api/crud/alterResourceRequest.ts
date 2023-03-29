@@ -4,7 +4,9 @@ import { AlterOperation } from "../../../types/apiRelated";
 
 export default class AlterResourceRequest extends Request<any> {
     created: boolean = false;
-    
+    entityData?: any;
+    entity?: any;
+
     constructor(
         public api: ApiDefinition,
         public operation: AlterOperation,
