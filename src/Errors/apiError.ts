@@ -1,11 +1,11 @@
 
 export default class ApiError extends Error {
 	status: number;
-	errors: any[];
+	error: any;
 
-	constructor(status: number, errors: any[]) {
-		super(JSON.stringify(errors));
+	constructor(status: number, error: any) {
+		super(JSON.stringify(error));
 		this.status = status;
-		this.errors = errors;
+		this.error = error;
 	}
 }

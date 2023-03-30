@@ -15,20 +15,21 @@ export default class AlterResourceValidator
 	async validate?(request: AlterResourceRequest): Promise<Error | void> {
 		const validation = request.api.validation;
 		request.apiContex.input = request.resource;
-		let errors = [];
+		let errors = {};
 
 		const isCreate = (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate);
 
 		if (isCreate)
-			errors = validation.create.validateInput(request.apiContex);
+			errors = validation.create.validateInput(request.apiContex, true);
 
-		errors = errors.concat(validation.alter.validateInput(request.apiContex, request.operation == AlterOperation.Update));
-		if (errors.length > 0)
+		const alterErorrs = validation.alter.validateInput(request.apiContex, request.operation != AlterOperation.Update);
+		errors = { ...errors, ...alterErorrs };
+		if (Object.keys(errors).length > 0)
 			return new ValidationError(errors);
 
 		if (isCreate) {
 			errors = await validation.create.validateGeneral(request.apiContex);
-			if (errors.length > 0)
+			if (Object.keys(errors).length > 0)
 				return new ValidationError(errors);
 
 			request.entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
@@ -43,7 +44,7 @@ export default class AlterResourceValidator
 		request.apiContex.entity = request.entity;
 
 		errors = await validation.alter?.validateGeneral(request.apiContex);
-		if (errors.length > 0)
+		if (Object.keys(errors).length > 0)
 			return new ValidationError(errors);
 	}
 

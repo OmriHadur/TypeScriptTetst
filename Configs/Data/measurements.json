@@ -1,8 +1,14 @@
 {
+	"create": {
+		"input": {},
+		"variables": {},
+		"validations": {},
+		"entity": {}
+	},
 	"alter": {
 		"input": {
 			"size": "positive",
-			"isWeighable": "required",
+			"isWeighable": "boolean",
 			"unitOfMeasurement": "required",
 			"quantityInterval": "positive"
 		},

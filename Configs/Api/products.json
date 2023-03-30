@@ -12,8 +12,14 @@
 	},
 	"alter": {
 		"input": {
-			"info": "required",
-			"measurements": "required",
+			"info": {
+				"required": true,
+				"type": "productInfo"
+			},
+			"measurements": {
+				"required": true,
+				"type": "measurements"
+			},
 			"price": "positive"
 		},
 		"entity": {
