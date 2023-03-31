@@ -8,6 +8,8 @@ export default class ResourceDefinition {
 	database: DatabaseDefinition;
 	mapping: MappingDefinition;
 	validation!: ValidationDefinition;
+	postCreate!: any;
+	postAlter!: any;
 
 	constructor(public name: string) {
 		this.properties = new PropertiesDefinition();

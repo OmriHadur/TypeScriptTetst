@@ -5,32 +5,30 @@ import Result from "../../mediator/Data/result";
 import Unit from "../../mediator/Data/unit";
 import IMediator from "../../mediator/interfaces/mediator";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import AddValidationAndMappingRequest from "../../messeges/bootstrap/AddValidationAndMappingRequest";
-import GetMappingDefinitionRequest from "../../messeges/bootstrap/getMappingDefinitionRequest";
-import GetValidationDefinitionRequest from "../../messeges/bootstrap/getValidationDefinitionRequest";
+import AddToDefinitionRequest from "../../messeges/bootstrap/addToDefinitionRequest";
+import AddToDefinitionsRequest from "../../messeges/bootstrap/addToDefinitionsRequest";
 
-export default class AddValidationAndMappingHandler
-    implements IRequestHandler<AddValidationAndMappingRequest, Unit>
+export default class AddToDefinitionsHandler
+    implements IRequestHandler<AddToDefinitionsRequest, Unit>
 {
-    messegeType = AddValidationAndMappingRequest.name;
+    messegeType = AddToDefinitionsRequest.name;
 
-    async handle(request: AddValidationAndMappingRequest, result: Result<Unit>, mediator: IMediator): Promise<void> {
+    async handle(request: AddToDefinitionsRequest, result: Result<Unit>, mediator: IMediator): Promise<void> {
         for (let resourceDefinition of request.serverDefinitions.datas) {
             const config = request.serverConfig.data[resourceDefinition.name];
-            await this.addValidationAndMapping(resourceDefinition, config, mediator,request.serverDefinitions);
+            await this.addValidationAndMapping(resourceDefinition, config, mediator, request.serverDefinitions);
         }
         for (let resourceDefinition of request.serverDefinitions.apis) {
             const config = request.serverConfig.apis[resourceDefinition.name];
             for (let nestedDefinition of resourceDefinition.nested) {
                 const nestedConfig = config.nested[nestedDefinition.name];
-                await this.addValidationAndMapping(nestedDefinition, nestedConfig, mediator,request.serverDefinitions);
+                await this.addValidationAndMapping(nestedDefinition, nestedConfig, mediator, request.serverDefinitions);
             }
             await this.addValidationAndMapping(resourceDefinition, config.input, mediator, request.serverDefinitions);
         }
     }
 
     async addValidationAndMapping(definition: ResourceDefinition, config: ResourceConfig, mediator: IMediator, serverDefinitions: ServerDefinitions) {
-        definition.validation = await mediator.sendValue(new GetValidationDefinitionRequest(definition, config, serverDefinitions));
-        definition.mapping = await mediator.sendValue(new GetMappingDefinitionRequest(definition, config));
+        await mediator.send(new AddToDefinitionRequest(definition, config, serverDefinitions));
     }
 }

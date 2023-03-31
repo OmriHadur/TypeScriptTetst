@@ -1,14 +1,17 @@
 {
 	"create": {
 		"input": {
-			"addressId": "required"
+			"addressId": "validId"
 		},
 		"variables": {
-			"address": "addresses.findById(input.addressId)"
+			"address": "addresses.findById(input.addressId)",
+			"cart": "carts.findOne({userId:user.id})"
 		},
 		"validations": {
 			"addressNotExist": "variables.address",
-			"addressNotOwned": "variables.address.userId == user.id || user.isAdmin"
+			"addressNotOwned": "variables.address?.userId == user.id || user.isAdmin",
+			"cartNotExist": "variables.cart",
+			"cartHasNoItems": "variables.cart?.itemsCount > 0"
 		},
 		"entity": {
 			"userId": {
@@ -25,6 +28,9 @@
 				"type": "date",
 				"value": "now()"
 			}
+		},
+		"post": {
+			"cleanCart": "carts.findByIdAndDelete(variables.cart._id)"
 		}
 	},
 	"alter": {

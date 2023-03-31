@@ -2,23 +2,24 @@ import ApiContex from "../../data/apiContex";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import PropertyValidationError from "../../errors/propertyValidationError";
-import GetValidationDefinitionRequest from "../../messeges/bootstrap/getValidationDefinitionRequest";
 import Result from "../../mediator/Data/result";
 import ValidationDefinition from "../../data/modules/validationDefinition";
 import InputConfig from "../../data/input/inputConfig";
 import Dictionary from "../../general/dictionary";
 import ResourceValidationDefinition from "../../data/modules/resourceValidationDefinition";
 import ServerDefinitions from "../../data/modules/serverDefinitions";
+import AddToDefinitionRequest from "../../messeges/bootstrap/addToDefinitionRequest";
+import Unit from "../../mediator/Data/unit";
 
-export default class GetValidationDefinitionHandler
-    implements IRequestHandler<GetValidationDefinitionRequest, ValidationDefinition>
+export default class AddValidationToDefinitionHandler
+    implements IRequestHandler<AddToDefinitionRequest, Unit>
 {
-    messegeType = GetValidationDefinitionRequest.name;
+    messegeType = AddToDefinitionRequest.name;
 
-    async handle(request: GetValidationDefinitionRequest, result: Result<ValidationDefinition>): Promise<void> {
+    async handle(request: AddToDefinitionRequest): Promise<void> {
         const create = this.getValidation(request.resourceConfig.create, true, request.server);
         const alter = this.getValidation(request.resourceConfig.alter, false, request.server);
-        result.value = new ValidationDefinition(create, alter);
+        request.resourceDefinition.validation = new ValidationDefinition(create, alter);
     }
 
     getValidation(validationConfig: InputConfig, isCreate: boolean, server: ServerDefinitions): ResourceValidationDefinition {

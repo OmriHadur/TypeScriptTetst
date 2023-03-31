@@ -34,9 +34,15 @@ export function lengthExact(value: any, length: number) {
 
 const upperCaseRegex = /^(.*[A-Z].*)$/;
 export function upperCase(value: any) {
-	return upperCaseRegex.exec(value) != null;;
+	return upperCaseRegex.exec(value) != null;
 }
 
 export function boolean(value: any) {
 	return value == true || value == false;
+}
+
+const validIdRegex = /^[0-9a-fA-F]{24}$/;
+
+export function validId(value: string) {
+	return validIdRegex.exec(value) != null;
 }

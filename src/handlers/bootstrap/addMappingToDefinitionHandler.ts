@@ -1,19 +1,18 @@
 import ApiDefinition from "../../data/modules/apiDefinition";
 import MappingDefinition from "../../data/modules/mappingDefinition";
-import Result from "../../mediator/Data/result";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
-import GetMappingDefinitionRequest from "../../messeges/bootstrap/getMappingDefinitionRequest";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import ApiContex from "../../data/apiContex";
 import ResourceDefinition from "../../data/modules/resourceDefinition";
+import AddToDefinitionRequest from "../../messeges/bootstrap/addToDefinitionRequest";
+import Unit from "../../mediator/Data/unit";
 
-export default class GetMappingDefinitionHandler
-    implements IRequestHandler<GetMappingDefinitionRequest, MappingDefinition>
+export default class AddMappingToDefinitionHandler
+    implements IRequestHandler<AddToDefinitionRequest, Unit>
 {
-    messegeType = GetMappingDefinitionRequest.name;
+    messegeType = AddToDefinitionRequest.name;
 
-    async handle(request: GetMappingDefinitionRequest, result: Result<MappingDefinition>): Promise<void> {
-
+    async handle(request: AddToDefinitionRequest): Promise<void> {
         const mappingDefinition = new MappingDefinition();
         const createScripts = scriptsBuilder.definitionToScript(request.resourceConfig.create.entity, true);
         mappingDefinition.createToEntity =
@@ -41,7 +40,7 @@ export default class GetMappingDefinitionHandler
             return resources;
         }
 
-        result.value = mappingDefinition;
+        request.resourceDefinition.mapping = mappingDefinition;
     }
 
     async map(apiContex: ApiContex, input: any, properties: any, scripts: any) {

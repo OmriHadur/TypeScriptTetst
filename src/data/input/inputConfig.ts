@@ -5,6 +5,7 @@ export default class InputConfig {
 		public input: Dictionary<any>,
 		public variables: Dictionary<string>,
 		public validations: Dictionary<string>,
-		public entity: Dictionary<any>
+		public entity: Dictionary<any>,
+		public post: Dictionary<string>
 	) { }
 }

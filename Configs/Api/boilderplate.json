@@ -8,7 +8,8 @@
 				"type": "date",
 				"value": "functions.now()"
 			}
-		}
+		},
+		"post": {}
 	},
 	"alter": {
 		"input": {},
@@ -19,7 +20,8 @@
 				"type": "date",
 				"value": "functions.now()"
 			}
-		}
+		},
+		"post": {}
 	},
 	"resource": {
 		"id": "input._id",

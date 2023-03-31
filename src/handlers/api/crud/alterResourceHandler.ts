@@ -10,17 +10,22 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 	messegeType = AlterResourceRequest.name;
 
 	async handle(request: AlterResourceRequest, result: Result<any>): Promise<void> {
-		let entity = request.apiContex.entity;
-
 		if (!request.entity) {
 			let entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
-			entity = new request.api.database.module(entityData);
+			request.apiContex.entity = new request.api.database.module(entityData);
 			request.created = true;
+
 		}
 
-		await this.alter(request.api, request.apiContex, request.resource, request.operation, entity);
-		entity = await entity.save();
-		result.value = await request.api.mapping.entityToResource(request.apiContex, entity);
+		await this.alter(request.api, request.apiContex, request.resource, request.operation, request.apiContex.entity);
+		request.apiContex.entity = await request.apiContex.entity.save();
+
+		if (request.created && request.api.postCreate)
+			await request.api.postCreate(request.apiContex);
+		if (request.api.postAlter)
+			await request.api.postAlter(request.apiContex);
+
+		result.value = await request.api.mapping.entityToResource(request.apiContex, request.apiContex.entity);
 	}
 
 	private async alter(api: ResourceDefinition, contex: ApiContex, resource: any, operation: AlterOperation, entity: any) {
