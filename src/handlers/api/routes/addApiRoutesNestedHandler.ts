@@ -21,25 +21,20 @@ export default class AddApiRoutesCrudHandler
 		for (let nestedApi of api.nested) {
 			const route = parentRoute + nestedApi.name;
 
-			router.get(route,
-				send(mediator, (req: ExpressRequest) =>
-					new GetNestedResourcesRequest(api, nestedApi, req.params.parentId)));
+			router.get(route, send(mediator, (req: ExpressRequest) =>
+				new GetNestedResourcesRequest(api, nestedApi, req.params.parentId)));
 
-			router.post(route,
-				send(mediator, (req: ExpressRequest) =>
-					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Create)));
+			router.post(route, send(mediator, (req: ExpressRequest) =>
+				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Create)));
 
-			router.put(route,
-				send(mediator, (req: ExpressRequest) =>
-					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.ReplaceOrCreate)));
+			router.put(route, send(mediator, (req: ExpressRequest) =>
+				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.ReplaceOrCreate)));
 
-			router.put(route + "/:nestedId",
-				send(mediator, (req: ExpressRequest) =>
-					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Replace, req.params.nestedId)));
+			router.put(route + "/:nestedId", send(mediator, (req: ExpressRequest) =>
+				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Replace, req.params.nestedId)));
 
-			router.patch(route + "/:nestedId",
-				send(mediator, (req: ExpressRequest) =>
-					new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Update, req.params.nestedId)));
+			router.patch(route + "/:nestedId", send(mediator, (req: ExpressRequest) =>
+				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Update, req.params.nestedId)));
 		}
 	}
 }

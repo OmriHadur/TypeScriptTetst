@@ -17,16 +17,13 @@ export default class AddApiRoutesBatchHandler
 		const api = request.api;
 		const route = '/' + api.name + "/batch";
 
-		router.post(route,
-			send(mediator, (req: ExpressRequest) =>
-				new AlterResourcesRequest(api, AlterOperation.Create, req.body), () => 201));
+		router.post(route, send(mediator, (req: ExpressRequest) =>
+			new AlterResourcesRequest(api, AlterOperation.Create, req.body), () => 201));
 
-		router.put(route,
-			send(mediator, (req: ExpressRequest) =>
-				new AlterResourcesRequest(api, AlterOperation.ReplaceOrCreate, req.body), () => 201));
+		router.put(route, send(mediator, (req: ExpressRequest) =>
+			new AlterResourcesRequest(api, AlterOperation.ReplaceOrCreate, req.body), () => 201));
 
-		router.patch(route,
-			send(mediator, (req: ExpressRequest) =>
-				new AlterResourcesRequest(api, AlterOperation.Update, req.body), () => 201));
+		router.patch(route, send(mediator, (req: ExpressRequest) =>
+			new AlterResourcesRequest(api, AlterOperation.Update, req.body), () => 201));
 	}
 }

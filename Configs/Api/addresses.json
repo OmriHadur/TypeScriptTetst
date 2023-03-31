@@ -22,6 +22,7 @@
 	},
 	"resource": {
 		"id": "input._id",
+		"userId": true,
 		"city": true,
 		"street": true,
 		"number": true

@@ -2,7 +2,7 @@ import Unit from "../../../mediator/Data/unit";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import DeleteAllResourcesRequest from "../../../messeges/api/crud/deleteAllResourcesRequest";
 
-export default class CreateResourceHandler
+export default class DeleteAllResourcesHandler
 	implements IRequestHandler<DeleteAllResourcesRequest, Unit>
 {
 	messegeType = DeleteAllResourcesRequest.name;

@@ -1,5 +1,15 @@
 {
 	"create": {
+		"input": {
+			"addressId": "required"
+		},
+		"variables": {
+			"address": "addresses.findById(input.addressId)"
+		},
+		"validations": {
+			"addressNotExist": "variables.address",
+			"addressNotOwned": "variables.address.userId == user.id || user.isAdmin"
+		},
 		"entity": {
 			"userId": {
 				"type": "string",

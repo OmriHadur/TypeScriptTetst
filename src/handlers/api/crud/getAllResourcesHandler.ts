@@ -2,7 +2,7 @@ import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import GetAllResourcesRequest from "../../../messeges/api/crud/getAllResourcesRequest";
 
-export default class CreateResourceHandler
+export default class GetAllResourcesHandler
 	implements IRequestHandler<GetAllResourcesRequest, any[]>
 {
 	messegeType = GetAllResourcesRequest.name;
