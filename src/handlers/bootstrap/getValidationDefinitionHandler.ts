@@ -78,22 +78,25 @@ export default class GetValidationDefinitionHandler
         else
             for (let [validationName, validationArg] of Object.entries(propertyValidations)) {
                 if (validationName == 'type') {
-                    const config = server.datas.find(d => d.name == validationArg)!;
-                    const validation = isCreate ? config.validation.create : config.validation.alter;
-                    propertyValidation[validationName] = (context: ApiContex, isValidateUndefined: boolean) => {
-                        const input = context.input;
-                        if (!input[propertyName])
-                            return true;
-                        context.input = input[propertyName];
-                        const result = validation.validateInput(context, isValidateUndefined);
-                        context.input = input;
-                        return result;
-                    }
+                    propertyValidation[validationName] = this.getDataFunction(server, validationArg, isCreate, propertyName);
                 } else
                     propertyValidation[validationName] = this.getPropertyFunction(validationName, propertyName, validationArg);
             }
-
         return propertyValidation;
+    }
+
+    private getDataFunction(server: ServerDefinitions, validationArg: unknown, isCreate: boolean, propertyName: string) {
+        const config = server.datas.find(d => d.name == validationArg)!;
+        const validation = isCreate ? config.validation.create : config.validation.alter;
+        return (context: ApiContex, isValidateUndefined: boolean) => {
+            const input = context.input;
+            if (!input[propertyName])
+                return true;
+            context.input = input[propertyName];
+            const result = validation.validateInput(context, isValidateUndefined);
+            context.input = input;
+            return result;
+        };
     }
 
     private validateProperties(apiContex: ApiContex, propertiesValidation: Dictionary<Dictionary<any>>, isValidateUndefined: boolean) {

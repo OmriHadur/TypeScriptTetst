@@ -1,3 +1,5 @@
+import ApiContex from "../../../data/apiContex";
+import ResourceDefinition from "../../../data/modules/resourceDefinition";
 import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import AlterResourceRequest from "../../../messeges/api/crud/alterResourceRequest";
@@ -16,15 +18,15 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 			request.created = true;
 		}
 
-		await this.alter(request, entity);
+		await this.alter(request.api, request.apiContex, request.resource, request.operation, entity);
 		entity = await entity.save();
 		result.value = await request.api.mapping.entityToResource(request.apiContex, entity);
 	}
 
-	private async alter(request: AlterResourceRequest, entity: any) {
-		const entityRepalce = await request.api.mapping.alterToEntity(request.apiContex, request.resource);
+	private async alter(api: ResourceDefinition, contex: ApiContex, resource: any, operation: AlterOperation, entity: any) {
+		const entityRepalce = await api.mapping.alterToEntity(contex, resource);
 		Object.entries(entityRepalce).forEach(([key, value]) => {
-			if (!(request.operation == AlterOperation.Update && !value))
+			if (!(operation == AlterOperation.Update && !value))
 				entity[key] = value;
 		});
 	}

@@ -16,12 +16,14 @@
 				"minimumLength": 5
 			},
 			"companyName": "required",
+			"size": "positive",
 			"tags": "required"
 		},
 		"entity": {
 			"name": "string",
 			"description": "string",
 			"companyName": "string",
+			"size": "number",
 			"tags": ["String"]
 		}
 	},
@@ -29,6 +31,7 @@
 		"name": true,
 		"description": true,
 		"companyName": true,
+		"size": true,
 		"tags": true
 	}
 }

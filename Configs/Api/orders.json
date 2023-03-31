@@ -1,0 +1,34 @@
+{
+	"create": {
+		"entity": {
+			"userId": {
+				"type": "string",
+				"isUniqe": true,
+				"value": "user.id"
+			},
+			"cart": {
+				"type": "carts",
+				"isUniqe": true,
+				"value": "carts.findOne({userId:user.id})"
+			},
+			"createdAt": {
+				"type": "date",
+				"value": "now()"
+			}
+		}
+	},
+	"alter": {
+		"entity": {
+			"alteredAt": {
+				"type": "date",
+				"value": "now()"
+			}
+		}
+	},
+	"resource": {
+		"id": "input._id",
+		"cart": true,
+		"createdAt": true,
+		"alteredAt": true
+	}
+}

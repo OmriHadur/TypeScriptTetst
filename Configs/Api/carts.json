@@ -6,24 +6,24 @@
 				"isUniqe": true,
 				"value": "user.id"
 			},
-			"cartItems": ["cartItem"],
-			"createdAt": {
-				"type": "date",
-				"value": "now()"
-			}
+			"cartItems": ["cartItem"]
 		}
 	},
 	"alter": {
 		"entity": {
-			"alteredAt": {
-				"type": "date",
-				"value": "now()"
+			"itemsCount": {
+				"type": "number",
+				"value": "sum(input.cartItems,'quantity')"
+			},
+			"totalPrice": {
+				"type": "number",
+				"value": "sum(input.cartItems,'totalPrice')"
 			}
 		}
 	},
 	"resource": {
 		"id": "input._id",
-		"itemsCount": "sum(input.cartItems,'quantity')",
-		"totalPrice": "toCurrency(sum(input.cartItems,'totalPrice'))"
+		"itemsCount": true,
+		"totalPrice": "toCurrency(input.totalPrice)"
 	}
 }

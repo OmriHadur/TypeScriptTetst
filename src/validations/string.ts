@@ -1,3 +1,4 @@
+import { range } from "./number";
 
 export function required(value: any) {
 	return value ? true : false;
@@ -23,9 +24,8 @@ export function maximumLength(value: any, maximum: number) {
 		return { maximum: maximum };
 }
 
-export function length(value: any, range: number[]) {
-	if (!value || value.length < range[0] || value.length > range[1])
-		return { minimum: range[0], maximum: range[1] };
+export function length(value: any, rangeValue: number[]) {
+	return range(value.length, rangeValue);
 }
 
 export function lengthExact(value: any, length: number) {
