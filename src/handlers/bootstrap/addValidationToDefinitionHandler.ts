@@ -2,7 +2,6 @@ import ApiContex from "../../data/apiContex";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import * as scriptsBuilder from '../../helpers/scriptsBuilder';
 import PropertyValidationError from "../../errors/propertyValidationError";
-import Result from "../../mediator/Data/result";
 import ValidationDefinition from "../../data/modules/validationDefinition";
 import InputConfig from "../../data/input/inputConfig";
 import Dictionary from "../../general/dictionary";
@@ -79,15 +78,15 @@ export default class AddValidationToDefinitionHandler
         else
             for (let [validationName, validationArg] of Object.entries(propertyValidations)) {
                 if (validationName == 'type') {
-                    propertyValidation[validationName] = this.getDataFunction(server, validationArg, isCreate, propertyName);
+                    propertyValidation[validationName] = this.getDataFunction(server, validationArg as string, isCreate, propertyName);
                 } else
                     propertyValidation[validationName] = this.getPropertyFunction(validationName, propertyName, validationArg);
             }
         return propertyValidation;
     }
 
-    private getDataFunction(server: ServerDefinitions, validationArg: unknown, isCreate: boolean, propertyName: string) {
-        const config = server.datas.find(d => d.name == validationArg)!;
+    private getDataFunction(server: ServerDefinitions, validationArg: string, isCreate: boolean, propertyName: string) {
+        const config = server.datasDic[validationArg];
         const validation = isCreate ? config.validation.create : config.validation.alter;
         return (context: ApiContex, isValidateUndefined: boolean) => {
             const input = context.input;

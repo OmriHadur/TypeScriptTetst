@@ -7,7 +7,7 @@
 			}
 		},
 		"variables": {
-			"product": "products.findOne({barcode:input.barcode})"
+			"product": "findOne(products,{barcode:input.barcode})"
 		},
 		"validations": {
 			"productNotExist": "variables.product"

@@ -3,7 +3,7 @@ import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import IMediator from "../../../mediator/interfaces/mediator";
 import AddApiRoutesReqeust from "../../../messeges/api/routes/addApiRoutesReqeust";
 import Unit from "../../../mediator/Data/unit";
-import { send } from "../../../controllers/sendToMediator";
+import sendToMediator from "../../../controllers/sendToMediator";
 import { AlterOperation, ExpressRequest } from "../../../types/apiRelated";
 import GetNestedResourcesRequest from "../../../messeges/api/nested/getNestedResourcesRequest";
 import AlterNestedResourceRequest from "../../../messeges/api/nested/alterNestedResourceRequest";
@@ -21,19 +21,19 @@ export default class AddApiRoutesCrudHandler
 		for (let nestedApi of api.nested) {
 			const route = parentRoute + nestedApi.name;
 
-			router.get(route, send(mediator, (req: ExpressRequest) =>
+			router.get(route, sendToMediator(mediator, (req: ExpressRequest) =>
 				new GetNestedResourcesRequest(api, nestedApi, req.params.parentId)));
 
-			router.post(route, send(mediator, (req: ExpressRequest) =>
+			router.post(route, sendToMediator(mediator, (req: ExpressRequest) =>
 				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Create)));
 
-			router.put(route, send(mediator, (req: ExpressRequest) =>
+			router.put(route, sendToMediator(mediator, (req: ExpressRequest) =>
 				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.ReplaceOrCreate)));
 
-			router.put(route + "/:nestedId", send(mediator, (req: ExpressRequest) =>
+			router.put(route + "/:nestedId", sendToMediator(mediator, (req: ExpressRequest) =>
 				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Replace, req.params.nestedId)));
 
-			router.patch(route + "/:nestedId", send(mediator, (req: ExpressRequest) =>
+			router.patch(route + "/:nestedId", sendToMediator(mediator, (req: ExpressRequest) =>
 				new AlterNestedResourceRequest(api, nestedApi, req.params.parentId, req.body, AlterOperation.Update, req.params.nestedId)));
 		}
 	}

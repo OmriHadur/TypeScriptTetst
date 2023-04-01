@@ -16,16 +16,16 @@ export default class GetServerDefinitionsHandler
     messegeType = GetServerDefinitionsRequest.name;
 
     handle(request: GetServerDefinitionsRequest, result: Result<ServerDefinitions>, mediator: IMediator): void {
-        const serverDefinitions = new ServerDefinitions();
-
+        const datas: ResourceDefinition[] = [];
         for (let [name, dataConfig] of Object.entries(request.serverConfig.data)) {
             const resourceDefinition = this.getResourceDefinition(mediator, request.schemes, name, dataConfig);
-            serverDefinitions.datas.push(resourceDefinition);
+            datas.push(resourceDefinition);
         }
 
+        const apis: ApiDefinition[] = [];
         for (let [name, apiConfig] of Object.entries(request.serverConfig.apis)) {
             const apiDefinition = this.getResourceDefinition(mediator, request.schemes, name, apiConfig.input) as ApiDefinition;
-            serverDefinitions.apis.push(apiDefinition);
+            apis.push(apiDefinition);
 
             apiDefinition.nested = [];
             for (let [name, nestedConfig] of Object.entries(apiConfig.nested)) {
@@ -34,7 +34,7 @@ export default class GetServerDefinitionsHandler
             }
         }
 
-        result.value = serverDefinitions;
+        result.value = new ServerDefinitions(apis, datas);
     }
 
     getResourceDefinition(mediator: IMediator, scheme: Dictionary<any>, name: string, resourceConfig: ResourceConfig): ResourceDefinition {

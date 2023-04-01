@@ -8,8 +8,8 @@ import ConfigServerApisRequest from "../../messeges/bootstrap/configServerApisRe
 import GetApiContexReqeust from "../../messeges/bootstrap/getApiContexReqeust";
 import GetServerConfigRequest from "../../messeges/bootstrap/getServerConfigRequest";
 import GetServerDefinitionsRequest from "../../messeges/bootstrap/getServerDefinitionsRequest";
-import * as sendToMediator from '../../controllers/sendToMediator';
 import Dictionary from "../../general/dictionary";
+import { set } from "../../general/static";
 import GetServerSchemesRequests from "../../messeges/bootstrap/getServerDatabaseDefinitionsRequest";
 import AddToDefinitionsRequest from "../../messeges/bootstrap/addToDefinitionsRequest";
 
@@ -23,8 +23,9 @@ export default class ConfigServerApisHandler
         const schemes = mediator.sendSync(new GetServerSchemesRequests(serverConfig)).value as Dictionary<any>;
         const serverDefinitions = mediator.sendSync(new GetServerDefinitionsRequest(serverConfig, schemes)).value as ServerDefinitions;
         await mediator.sendValue(new AddToDefinitionsRequest(serverDefinitions, serverConfig));
-        const apiContex = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions.apis, request.distFolder)) as ApiContex;
-        sendToMediator.setApiContex(apiContex);
+        const apiContex = await mediator.sendValue(new GetApiContexReqeust(serverDefinitions, request.distFolder)) as ApiContex;
+        set(serverDefinitions);
+        set(apiContex, ApiContex.name);
         result.value = serverDefinitions;
     }
 }

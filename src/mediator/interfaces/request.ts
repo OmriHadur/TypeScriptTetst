@@ -5,7 +5,7 @@ export default class Request<TValue> {
     public requestId: string;
     public apiContex!: ApiContex;
 
-    constructor() {
-        this.requestId = uuidv4();
+    constructor(requestId?: string) {
+        this.requestId = requestId ?? uuidv4();
     }
 }

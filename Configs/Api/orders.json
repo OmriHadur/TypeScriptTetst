@@ -4,8 +4,8 @@
 			"addressId": "validId"
 		},
 		"variables": {
-			"address": "addresses.findById(input.addressId)",
-			"cart": "carts.findOne({userId:user.id})"
+			"address": "getById(addresses,input.addressId)",
+			"cart": "findOne(carts,{userId:user.id})"
 		},
 		"validations": {
 			"addressNotExist": "variables.address",
@@ -19,10 +19,10 @@
 				"isUniqe": true,
 				"value": "user.id"
 			},
-			"cart": {
+			"cart": {	
 				"type": "carts",
 				"isUniqe": true,
-				"value": "carts.findOne({userId:user.id})"
+				"value": "findOne(carts,{userId:user.id})"
 			},
 			"createdAt": {
 				"type": "date",
@@ -30,7 +30,7 @@
 			}
 		},
 		"post": {
-			"cleanCart": "carts.findByIdAndDelete(variables.cart._id)"
+			"cleanCart": "deleteById(carts,variables.cart._id)"
 		}
 	},
 	"alter": {

@@ -7,13 +7,14 @@ import folderFactory from "./factories/folderFactory";
 import AddRoutesReqeust from "./messeges/api/routes/addRoutesReqeust";
 import ServerDefinitions from "./data/modules/serverDefinitions";
 import ConfigServerApisRequest from "./messeges/bootstrap/configServerApisRequest";
+import { set } from "./general/static"
 
 const asyncFunction = async () => {
 
 	const distFolder = folderFactory("./dist", "../");
 	const messegesHandlers = await getMessegesHandlers(distFolder.handlers);
 	const mediator = new Mediator(messegesHandlers);
-
+	set(mediator);
 	const serverDefinitions = await mediator.sendValue(new ConfigServerApisRequest("./Configs", distFolder)) as ServerDefinitions;
 
 	const app = express();

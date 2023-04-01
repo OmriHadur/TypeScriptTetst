@@ -8,7 +8,7 @@ export default class GetAllResourcesHandler
 	messegeType = GetAllOwnedResourcesRequest.name;
 
 	async handle(request: GetAllOwnedResourcesRequest, result: Result<any[]>): Promise<void> {
-		const entities = await request.api.database.module.find({ userId: request.apiContex.user.id });
+		const entities = await request.api.database.module.find({ userId: request.apiContex.user?.id });
 		result.value = await request.api.mapping.entitiesToResources(request.apiContex, entities);
 	}
 }
