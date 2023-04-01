@@ -1,4 +1,4 @@
-import GetByIdRequest from "../../../messeges/persistence/mongo/getByIdRequest";
+import GetByIdRequest from "../../../messeges/persistence/getByIdRequest";
 import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import { get } from "../../../general/static";

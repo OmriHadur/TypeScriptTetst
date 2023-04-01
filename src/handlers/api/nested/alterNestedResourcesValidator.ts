@@ -40,7 +40,7 @@ export default class AlterNestedResourceValidator implements IRequestHandler<Alt
 		} else {
 			request.entity = request.nestedEntities!.find(e => e._id == request.resourceId);
 			if (!request.entity)
-				return new NotFoundError(request.requestId);
+				return new NotFoundError(request.resourceId!);
 		}
 		request.apiContex.entity = request.entity ?? request.entityData;
 

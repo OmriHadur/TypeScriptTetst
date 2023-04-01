@@ -1,9 +1,10 @@
+import consoleWrite from "../../general/consoleWrite";
 import Stopwatch from "../../general/stopwatch";
-import IRequest from "../../mediator/interfaces/request";
+import Request from "../../mediator/Data/request";
 import IRequestHandler from "../../mediator/interfaces/requestHandler";
 
 export default class PreformanceHandler<
-	TRequest extends IRequest<TValue>,
+	TRequest extends Request<TValue>,
 	TValue
 > implements IRequestHandler<TRequest, TValue>
 {
@@ -15,11 +16,7 @@ export default class PreformanceHandler<
 
 	postHandling?(request: TRequest): void {
 		const elapsedTime = this.stopwatchs[request.requestId].stop();
-		console.log(this.prefix(request) + `took ${elapsedTime} ms`);
+		consoleWrite(request, "time", elapsedTime);
 		delete this.stopwatchs[request.requestId];
-	}
-
-	private prefix(request: TRequest) {
-		return `${new Date().toISOString()} - ${request.constructor.name} - ${request.requestId}: `;
 	}
 }

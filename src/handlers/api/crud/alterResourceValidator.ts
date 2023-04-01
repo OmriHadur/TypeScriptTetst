@@ -5,7 +5,6 @@ import AlterResourceRequest from "../../../messeges/api/crud/alterResourceReques
 import { AlterOperation } from "../../../types/apiRelated";
 import ValidationError from "../../../errors/validationError";
 import ApiDefinition from "../../../data/modules/apiDefinition";
-import Result from "../../../mediator/Data/result";
 
 export default class AlterResourceValidator
 	implements IRequestHandler<AlterResourceRequest, any>
@@ -39,7 +38,7 @@ export default class AlterResourceValidator
 		} else {
 			request.entity = await request.api.database.module.findById(request.resourceId);
 			if (!request.entity)
-				return new NotFoundError(request.requestId);
+				return new NotFoundError(request.resourceId!);
 		}
 		request.apiContex.entity = request.entity;
 

@@ -10,8 +10,8 @@ export default class DeleteResourceByIdHandler
 	messegeType = DeleteResourceByIdRequest.name;
 
 	async handle(request: DeleteResourceByIdRequest, result: Result<Unit>): Promise<void> {
-		const found = await request.api.database.module.findByIdAndDelete(request.requestId);
+		const found = await request.api.database.module.findByIdAndDelete(request.resourceId);
 		if (!found)
-			result.error = new NotFoundError(request.requestId);
+			result.error = new NotFoundError(request.resourceId);
 	}
 }

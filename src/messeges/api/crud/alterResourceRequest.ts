@@ -1,8 +1,8 @@
 import ApiDefinition from "../../../data/modules/apiDefinition";
-import Request from "../../../mediator/interfaces/request";
+import ApiRequest from "../../../data/apiRequest";
 import { AlterOperation } from "../../../types/apiRelated";
 
-export default class AlterResourceRequest extends Request<any> {
+export default class AlterResourceRequest extends ApiRequest<any> {
     created: boolean = false;
     entityData?: any;
     entity?: any;

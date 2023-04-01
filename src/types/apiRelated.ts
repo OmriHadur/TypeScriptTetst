@@ -1,7 +1,6 @@
-import IRequest from "../mediator/interfaces/request";
+import ApiRequest from "../data/apiRequest";
 
-
-export type GetRequestFunction = (req: ExpressRequest) => IRequest<any>;
+export type GetRequestFunction = (req: ExpressRequest) => ApiRequest<any>;
 
 export type ExpressRequest = {
     body: any;

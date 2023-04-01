@@ -1,8 +1,8 @@
 import ApiDefinition from "../../../data/modules/apiDefinition";
-import Request from "../../../mediator/interfaces/request";
+import ApiRequest from "../../../data/apiRequest";
 
-export default class GetResourceByIdRequest extends Request<any> {
-    constructor(public api: ApiDefinition, public requestId: string) {
+export default class GetResourceByIdRequest extends ApiRequest<any> {
+    constructor(public api: ApiDefinition, public resourceId: string) {
         super();
     }
 }

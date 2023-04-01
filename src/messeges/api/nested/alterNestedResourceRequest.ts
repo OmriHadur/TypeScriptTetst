@@ -1,9 +1,9 @@
 import ApiDefinition from "../../../data/modules/apiDefinition";
 import ResourceDefinition from "../../../data/modules/resourceDefinition";
-import Request from "../../../mediator/interfaces/request";
+import ApiRequest from "../../../data/apiRequest";
 import { AlterOperation } from "../../../types/apiRelated";
 
-export default class AlterNestedResourceRequest extends Request<any> {
+export default class AlterNestedResourceRequest extends ApiRequest<any> {
     parentEntity?: any;
     nestedEntities?: any[];
     entityData?: any;

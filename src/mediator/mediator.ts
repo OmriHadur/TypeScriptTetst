@@ -1,9 +1,9 @@
-import IRequest from "./interfaces/request";
 import Result from "./Data/result";
 import Dictionary from "../general/dictionary";
 import Unit from "./Data/unit";
 import IMediator from "./interfaces/mediator";
 import InternalError from "../errors/internalError";
+import Request from "./Data/request";
 
 export default class Mediator implements IMediator {
 	handlers: Dictionary<any[]>;
@@ -13,7 +13,7 @@ export default class Mediator implements IMediator {
 		this.handlers = handlers;
 		this.generalHandlers = handlers["*"];
 	}
-	sendSync<TRequest extends IRequest<TValue>, TValue>(request: TRequest): Result<TValue> {
+	sendSync<TRequest extends Request<TValue>, TValue>(request: TRequest): Result<TValue> {
 		const typeName = request.constructor.name;
 		const handlers = this.generalHandlers.concat(this.handlers[typeName]);
 		const result = new Result<TValue>();
@@ -48,7 +48,7 @@ export default class Mediator implements IMediator {
 		return result;
 	}
 
-	async send<TRequest extends IRequest<TValue>, TValue>(request: TRequest): Promise<Result<TValue>> {
+	async send<TRequest extends Request<TValue>, TValue>(request: TRequest): Promise<Result<TValue>> {
 		const typeName = request.constructor.name;
 		const handlers = this.generalHandlers.concat(this.handlers[typeName]);
 		const result = new Result<TValue>();
@@ -84,7 +84,7 @@ export default class Mediator implements IMediator {
 		return result;
 	}
 
-	async sendValue<TRequest extends IRequest<TValue>, TValue>(request: TRequest): Promise<TValue> {
+	async sendValue<TRequest extends Request<TValue>, TValue>(request: TRequest): Promise<TValue> {
 		return (await this.send(request)).value as TValue;
 	}
 }

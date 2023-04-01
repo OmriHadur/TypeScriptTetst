@@ -9,10 +9,10 @@ export default class GetResourceByIdHandler
 	messegeType = GetResourceByIdRequest.name;
 
 	async handle(request: GetResourceByIdRequest, result: Result<any>): Promise<void> {
-		const entity = await request.api.database.module.findById(request.requestId);
+		const entity = await request.api.database.module.findById(request.resourceId);
 		if (entity)
 			result.value = await request.api.mapping.entityToResource(request.apiContex, entity);
 		else
-			result.error = new NotFoundError(request.requestId);
+			result.error = new NotFoundError(request.resourceId);
 	}
 }

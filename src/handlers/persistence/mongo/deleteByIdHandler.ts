@@ -2,7 +2,7 @@ import Result from "../../../mediator/Data/result";
 import IRequestHandler from "../../../mediator/interfaces/requestHandler";
 import { get } from "../../../general/static";
 import ServerDefinitions from "../../../data/modules/serverDefinitions";
-import DeleteByIdRequest from "../../../messeges/persistence/mongo/deleteByIdRequest";
+import DeleteByIdRequest from "../../../messeges/persistence/deleteByIdRequest";
 
 const definitions = () => get(ServerDefinitions.name) as ServerDefinitions;
 

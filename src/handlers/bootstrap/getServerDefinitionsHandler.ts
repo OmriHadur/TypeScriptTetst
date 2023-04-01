@@ -5,7 +5,6 @@ import ServerDefinitions from "../../data/modules/serverDefinitions";
 import Dictionary from "../../general/dictionary";
 import Result from "../../mediator/Data/result";
 import IMediator from "../../mediator/interfaces/mediator";
-import IRequestHandler from "../../mediator/interfaces/requestHandler";
 import ISyncRequestHandler from "../../mediator/interfaces/syncRequestHandler";
 import GetResourceDefinitionRequest from "../../messeges/bootstrap/getResourceDefinitionRequest";
 import GetServerDefinitionsRequest from "../../messeges/bootstrap/getServerDefinitionsRequest";

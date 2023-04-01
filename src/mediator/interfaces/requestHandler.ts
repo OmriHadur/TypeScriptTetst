@@ -1,8 +1,8 @@
-import IRequest from "./request";
 import IMediator from "./mediator";
 import Result from "../Data/result";
+import Request from "../Data/request";
 
-export default interface IRequestHandler<TRequest extends IRequest<TValue>, TValue> {
+export default interface IRequestHandler<TRequest extends Request<TValue>, TValue> {
 	messegeType?: string;
 
 	preHandling?(request: TRequest): void;

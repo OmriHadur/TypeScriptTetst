@@ -1,8 +1,8 @@
 import ApiDefinition from "../../../data/modules/apiDefinition";
 import ResourceDefinition from "../../../data/modules/resourceDefinition";
-import Request from "../../../mediator/interfaces/request";
+import ApiRequest from "../../../data/apiRequest";
 
-export default class GetNestedResourcesRequest extends Request<any[]> {
+export default class GetNestedResourcesRequest extends ApiRequest<any[]> {
     constructor(
         public parentApi: ApiDefinition,
         public nestedApi: ResourceDefinition,

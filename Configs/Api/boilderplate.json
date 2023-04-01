@@ -6,7 +6,7 @@
 		"entity": {
 			"createdAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		},
 		"post": {}
@@ -18,7 +18,7 @@
 		"entity": {
 			"alteredAt": {
 				"type": "date",
-				"value": "functions.now()"
+				"value": "now()"
 			}
 		},
 		"post": {}
