@@ -6,6 +6,7 @@ export default class AlterResourceRequest extends ApiRequest<any> {
     created: boolean = false;
     entityData?: any;
     entity?: any;
+    isCreate: boolean;
 
     constructor(
         public api: ApiDefinition,
@@ -13,5 +14,6 @@ export default class AlterResourceRequest extends ApiRequest<any> {
         public resource: any,
         public resourceId?: string) {
         super();
+        this.isCreate = (operation == AlterOperation.Create || operation == AlterOperation.ReplaceOrCreate);
     }
 }

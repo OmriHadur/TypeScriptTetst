@@ -8,6 +8,7 @@ export default class AlterNestedResourceRequest extends ApiRequest<any> {
     nestedEntities?: any[];
     entityData?: any;
     entity?: any;
+    isCreate: boolean;
 
     constructor(
         public parentApi: ApiDefinition,
@@ -17,5 +18,6 @@ export default class AlterNestedResourceRequest extends ApiRequest<any> {
         public operation: AlterOperation,
         public resourceId?: string) {
         super();
+        this.isCreate = (operation == AlterOperation.Create || operation == AlterOperation.ReplaceOrCreate);
     }
 }

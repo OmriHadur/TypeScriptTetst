@@ -25,7 +25,6 @@ export default class Database {
 		return this.send(DeleteByIdRequest, contex, entityId);
 	}
 
-	private send = (type: any, contex: ApiContex, arg1?: any, arg2?: any, arg3?: any) =>
+	private send = async (type: any, contex: ApiContex, arg1?: any, arg2?: any, arg3?: any) =>
 		this._mediator.sendValue(new type(contex, this._api, arg1, arg2, arg3));
-
 }

@@ -18,6 +18,13 @@ export default class AlterNestedResourcesHandler implements IRequestHandler<Alte
 		await this.alter(request.parentApi, request.apiContex, request.parentEntity, request.operation, request.parentEntity);
 		await request.parentEntity.save();
 		const parentEntity = await request.parentApi.mapping.entityToResource(request.apiContex, request.parentEntity);
+
+
+		if (request.entity && request.nestedApi.postCreate)
+			await request.nestedApi.postCreate(request.apiContex);
+		if (request.nestedApi.postAlter)
+			await request.nestedApi.postAlter(request.apiContex);
+
 		result.value = parentEntity;
 	}
 

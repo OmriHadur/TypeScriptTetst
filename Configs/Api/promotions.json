@@ -1,23 +1,30 @@
 {
 	"create": {
 		"input": {
-			"name": "required"
+			"barcode": "required"
 		},
-		"variables": {},
-		"validations": {},
+		"variables": {
+			"product": "products.findOne(contex,{barcode:input.barcode})"
+		},
+		"validations": {
+			"productNotExist": "variables.product"
+		},
 		"entity": {
-			"name": "string"
+			"barcode": "string"
 		},
 		"post": {}
 	},
 	"alter": {
 		"input": {
+			"name": "required",
+			"description": "required",
 			"amount": "positive",
 			"discount": "positive"
 		},
-		"variables": {},
-		"validations": {},
+
 		"entity": {
+			"name": "string",
+			"description": "string",
 			"amount": "number",
 			"discount": "number"
 		},
@@ -25,7 +32,9 @@
 	},
 	"resource": {
 		"id": "input._id",
+		"barcode": true,
 		"name": true,
+		"description": true,
 		"amount": true,
 		"discount": true
 	}

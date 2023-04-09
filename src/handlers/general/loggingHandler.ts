@@ -8,7 +8,7 @@ export default class LogginMessegeHandler<
 	TValue
 > implements IRequestHandler<TRequest, TValue>
 {
-	private isFull: boolean = false;
+	private isFull: boolean = true;
 
 	preHandling(request: TRequest): void {
 		consoleWrite(request, "started", this.isFull ? request : null);

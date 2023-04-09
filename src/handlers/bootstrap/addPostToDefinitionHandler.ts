@@ -11,14 +11,12 @@ export default class AddPostToDefinitionHandler
     messegeType = AddToDefinitionRequest.name;
 
     async handle(request: AddToDefinitionRequest): Promise<void> {
-        if (request.resourceConfig.create.post)
-            request.resourceDefinition.postCreate = this.getFunction(request.resourceConfig.create.post);
-        if (request.resourceConfig.alter.post)
-            request.resourceDefinition.postAlter = this.getFunction(request.resourceConfig.alter.post);
+        request.resourceDefinition.postCreate = this.getFunction(request.resourceConfig.create.post);
+        request.resourceDefinition.postAlter = this.getFunction(request.resourceConfig.alter.post);
     }
 
     getFunction(config: Dictionary<string>) {
-        if (config) {
+        if (config && Object.keys(config).length > 0) {
             const scripts: any[] = [];
             for (let [, script] of Object.entries(config))
                 scripts.push(scriptsBuilder.stringToScript(script));

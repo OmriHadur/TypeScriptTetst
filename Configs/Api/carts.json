@@ -6,7 +6,8 @@
 				"isUniqe": true,
 				"value": "user.id"
 			},
-			"cartItems": ["cartItem"]
+			"cartItems": ["cartItem"],
+			"promotions": ["promotions"]
 		}
 	},
 	"alter": {

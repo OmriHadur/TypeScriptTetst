@@ -6,6 +6,7 @@ export default class ApiContex {
 	variables: any;
 	input?: any;
 	entity?: any;
+	parentEntity?: any;
 	apiId: any;
 
 	constructor(public routes: any, public functions: any, public validations: any, public mediator: IMediator) {

@@ -71,8 +71,6 @@ export default class Mediator implements IMediator {
 					isFinished = result.isResult();
 				}
 			}
-			if (!result.isResult() && !result.isError())
-				result.value = Unit.Instance as TValue;
 			for (let handler of handlers)
 				if (handler.postHandling)
 					handler.postHandling(request, result);

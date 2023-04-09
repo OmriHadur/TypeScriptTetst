@@ -14,9 +14,7 @@ export default class AlterNestedResourceValidator implements IRequestHandler<Alt
 		request.apiContex.input = request.resource;
 		let errors = {};
 
-		const isCreate = (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate);
-
-		if (isCreate)
+		if (request.isCreate)
 			errors = validation.create.validateInput(request.apiContex);
 		const alterErorrs = validation.alter.validateInput(request.apiContex, request.operation != AlterOperation.Update);
 		errors = { ...errors, ...alterErorrs };
@@ -28,7 +26,7 @@ export default class AlterNestedResourceValidator implements IRequestHandler<Alt
 			return new NotFoundError(request.parentId);
 		request.nestedEntities = request.parentEntity[request.nestedApi.name];
 
-		if (isCreate) {
+		if (request.isCreate) {
 			errors = await validation.create.validateGeneral(request.apiContex);
 			if (Object.keys(errors).length > 0)
 				return new ValidationError(errors);
@@ -43,6 +41,7 @@ export default class AlterNestedResourceValidator implements IRequestHandler<Alt
 				return new NotFoundError(request.resourceId!);
 		}
 		request.apiContex.entity = request.entity ?? request.entityData;
+		request.apiContex.parentEntity = request.parentEntity;
 
 		errors = await validation.alter.validateGeneral(request.apiContex);
 		if (Object.keys(errors).length > 0)

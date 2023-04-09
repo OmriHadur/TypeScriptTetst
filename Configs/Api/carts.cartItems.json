@@ -28,7 +28,9 @@
 			}
 		},
 		"variables": {
-			"discount": "2",
+			"promotion": "promotions.findOne({barcode:input.barcode})",
+			"aligible": "variables.promotion && input.quantity >= variables.promotion.amount",
+			"discount": "variables.aligible ? variables.promotion.discount : 0",
 			"totalPrice": "entity.product.price * input.quantity - variables.discount"
 		},
 		"entity": {
@@ -41,6 +43,10 @@
 				"type": "number",
 				"value": "variables.discount"
 			},
+			"promotion": {
+				"type": "string",
+				"value": "variables.promotion.description"
+			},
 			"totalPrice": {
 				"type": "number",
 				"value": "toCurrency(variables.totalPrice)"
@@ -52,6 +58,7 @@
 		"alteredAt": true,
 		"barcode": true,
 		"quantity": true,
+		"promotion": true,
 		"product": true,
 		"discount": true,
 		"totalPrice": true

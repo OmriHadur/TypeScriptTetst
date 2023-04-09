@@ -29,6 +29,8 @@ export default class AddToDefinitionsHandler
     }
 
     async addValidationAndMapping(definition: ResourceDefinition, config: ResourceConfig, mediator: IMediator, serverDefinitions: ServerDefinitions) {
-        await mediator.send(new AddToDefinitionRequest(definition, config, serverDefinitions));
+        const result = await mediator.send(new AddToDefinitionRequest(definition, config, serverDefinitions));
+        if (result.isError())
+            throw result.error;
     }
 }

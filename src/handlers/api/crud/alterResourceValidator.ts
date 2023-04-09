@@ -16,9 +16,7 @@ export default class AlterResourceValidator
 		request.apiContex.input = request.resource;
 		let errors = {};
 
-		const isCreate = (request.operation == AlterOperation.Create || request.operation == AlterOperation.ReplaceOrCreate);
-
-		if (isCreate)
+		if (request.isCreate)
 			errors = validation.create.validateInput(request.apiContex, true);
 
 		const alterErorrs = validation.alter.validateInput(request.apiContex, request.operation != AlterOperation.Update);
@@ -26,7 +24,7 @@ export default class AlterResourceValidator
 		if (Object.keys(errors).length > 0)
 			return new ValidationError(errors);
 
-		if (isCreate) {
+		if (request.isCreate) {
 			errors = await validation.create.validateGeneral(request.apiContex);
 			if (Object.keys(errors).length > 0)
 				return new ValidationError(errors);
