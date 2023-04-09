@@ -25,6 +25,7 @@ export default class GetResourceDefinitionHandler
         this.addProperties(request.resourceConfig.create?.input, resourceDefinition.properties.create);
         this.addProperties(request.resourceConfig.create?.input, resourceDefinition.properties.unique);
         this.addProperties(request.resourceConfig.create?.entity, resourceDefinition.properties.unique, (v: any) => v.isUniqe);
+        this.addProperties(request.resourceConfig.alter?.entity, resourceDefinition.properties.unique, (v: any) => v.isUniqe);
         this.addProperties(request.resourceConfig.alter?.input, resourceDefinition.properties.alter);
         this.addProperties(request.resourceConfig.create?.entity, resourceDefinition.properties.entity);
         this.addProperties(request.resourceConfig.alter?.entity, resourceDefinition.properties.entity);

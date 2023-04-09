@@ -5,7 +5,7 @@
 		},
 		"variables": {
 			"address": "addresses.getById(contex,input.addressId)",
-			"cart": "carts.findOne(contex,{userId:user.id})"
+			"cart": "carts.findOne(contex, { userId: user.id })"
 		},
 		"validations": {
 			"addressNotExist": "variables.address",

@@ -19,7 +19,7 @@
 			"password": "required"
 		},
 		"variables": {
-			"user": "users.findOne({email:input.email})"
+			"user": "users.findOne(contex,{email:input.email})"
 		},
 		"validations": {
 			"wrongEmailOrPassword": "isMatch(variables.user?.hashedPassword,input.password)"

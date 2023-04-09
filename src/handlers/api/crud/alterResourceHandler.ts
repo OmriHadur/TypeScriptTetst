@@ -14,10 +14,10 @@ export default class AlterResourceHandler implements IRequestHandler<AlterResour
 			let entityData = await request.api.mapping.createToEntity(request.apiContex, request.resource);
 			request.apiContex.entity = new request.api.database.module(entityData);
 			request.created = true;
-
 		}
 
 		await this.alter(request.api, request.apiContex, request.resource, request.operation, request.apiContex.entity);
+		
 		request.apiContex.entity = await request.apiContex.entity.save();
 
 		if (request.created && request.api.postCreate)

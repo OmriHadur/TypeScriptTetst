@@ -1,4 +1,3 @@
-import CircularJSON from "circular-json";
 import consoleWrite from "../../general/consoleWrite";
 import Request from "../../mediator/Data/request";
 import Result from "../../mediator/Data/result";
@@ -17,7 +16,7 @@ export default class LogginMessegeHandler<
 
 	postHandling?(request: TRequest, result: Result<TValue>): void {
 		const event = result.error ? "error" : "finished";
-		const content = this.isFull ? (result.error ? result.error.message : result.value) : null;
+		const content = result.error ? result.error : (this.isFull ? result.value : null);
 		consoleWrite(request, event, content);
 	}
 }

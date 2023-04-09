@@ -1,0 +1,32 @@
+{
+	"create": {
+		"input": {
+			"name": "required"
+		},
+		"variables": {},
+		"validations": {},
+		"entity": {
+			"name": "string"
+		},
+		"post": {}
+	},
+	"alter": {
+		"input": {
+			"amount": "positive",
+			"discount": "positive"
+		},
+		"variables": {},
+		"validations": {},
+		"entity": {
+			"amount": "number",
+			"discount": "number"
+		},
+		"post": {}
+	},
+	"resource": {
+		"id": "input._id",
+		"name": true,
+		"amount": true,
+		"discount": true
+	}
+}

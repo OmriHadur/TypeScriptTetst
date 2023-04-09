@@ -5,7 +5,7 @@ export default (request: any, event: string, content?: any) => {
 	const apiId = request.apiContex?.apiId;
 	if (apiId)
 		messege.apiId = apiId;
-	messege.data = new Date().toISOString();
+	messege.data = new Date();
 	messege.name = request.constructor.name;
 	messege.requestId = request.requestId;
 	messege.event = event;
